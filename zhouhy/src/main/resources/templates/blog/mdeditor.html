@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>blog编辑器1</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="description" content=""/>
+	<meta name="author" content=""/>
+
+	<!-- Jquery -->
+	<script th:src="@{/zhou/js/jquery.min.js}"></script>
+	<!--blog ide-->
+	<script th:src="@{/blog/js/editormd.min.js}"></script>
+	<!-- blog ide -->
+	<link th:href="@{/blog/css/editormd.min.css}" rel="stylesheet"/>
+	<!-- Bootstrap core CSS -->
+	<link href="/zhou/css/bootstrap.min.css" th:href="@{/zhou/css/bootstrap.min.css}" rel="stylesheet" />
+	<!-- index -->
+	<link href="/index/css/index.min.css" th:href="@{/index/css/index.min.css}" rel="stylesheet" />
+	<!-- layer +layui -->
+	<script th:src="@{/zhou/plugins/layer/layer.js}"></script>
+	<script th:src="@{/zhou/plugins/layui/layui.all.js}"></script>
+	<link th:href="@{/zhou/plugins/layui/css/layui.css}" rel="stylesheet" />
+
+</head>
+
+<body class="overflow-hidden">
+<div class="padding-md">
+	<ul class="breadcrumb">
+		<li><span class="primary-font"><i class="icon-home"></i></span><a href="#"> 主页</a></li>
+		<li id="navLi2">写博客</li>
+	</ul>
+	<div style="margin: 10px;">
+		<input type="text" id="title" class="form-control" style="width:80%;background-color: #f6f6f6;margin-right: 10px;float:left;height:40px;font-size:25px;font-family: 微软雅黑;border:0px;"/>
+		<button type="button" id="postedBtn" class="btn btn-default btn-sm" style="height:40px;font-size:20px;line-height: 20px;">发表博客</button>
+	</div>
+
+	<div class="editormd" id="test-editormd" style="margin-left: 10px;;height: 1000px">
+		<textarea class="editormd-markdown-textarea" style="margin-left: 10px;"></textarea>
+		<!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
+		<!--<textarea class="editormd-html-textarea" id="content"></textarea>-->
+	</div>
+</div>
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+var testEditor;
+var id = [[${id}]];
+$(function(){
+    init();
+});
+function init() {
+    //    调用编辑器
+    if(id!=""&&id!=null){
+        $.ajax({
+            url: "/blog/getBlogContent",
+            dataType:"json",
+            type:"post",
+            data:{"id":id},
+            success: function (data) {
+                initEdit(data.md);
+                $("#navLi2").html("编辑博客");
+                $("#title").val(data.blog.title);
+            }
+        });
+	}else {
+        initEdit("");
+	}
+
+
+    $("#postedBtn").click(function () {
+        var title = $("#title").val();
+        if(title==""){
+            layer.msg("标题不能为空！！！");
+            return;
+        }
+        //var content = $("#content").val();
+        var content = testEditor.getMarkdown();
+        if(content==""){
+            layer.msg("博客内容不能为空！！！");
+            return;
+        }
+        if(id!=""&&id!=null){
+            modifyBlog(id,title,content);
+		}else {
+            postBlog(title,content);
+		}
+
+    });
+}
+function modifyBlog(blogId,title,content) {
+    $.ajax({
+        url: "/blog/modifyBlog",
+        dataType:"text",
+        type:"post",
+        data:{"title":title,"content":content,"id":blogId},
+        success: function (data) {
+            layer.msg("修改成功！！！");
+            window.location.href="/blog/blog?id="+data;
+        },
+        error:function (error) {
+            layer.msg("修改失败");
+        }
+    });
+}
+function postBlog(title,content) {
+    $.ajax({
+        url: "/blog/postBlog",
+        dataType:"text",
+        type:"post",
+        data:{"title":title,"content":content},
+        success: function (data) {
+            layer.msg("发布成功！！！");
+            window.location.href="/blog/blog?id="+data;
+        },
+        error:function (error) {
+            layer.msg("发布失败");
+        }
+    });
+}
+function initEdit(md) {
+    testEditor = editormd("test-editormd", {
+        width: "100%",
+        height: 800,
+        path: '/blog/lib/',
+        //theme : "dark",   //styl//previewTheme : "dark",  //styl//editorTheme : "pastel-on-dark",  //styl
+        markdown: md,
+        codeFold: true,//syncScrolling : false,
+        //saveHTMLToTextarea: true,    // 保存 HTML 到 Textarea
+        searchReplace: true,//watch : false,                // 关闭实时预览
+        htmlDecode: "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启//toolbar  : false,             //关闭工具栏//previewCodeHighlight : false, // 关闭预览 HTML 的代码块高亮，默认开启
+        emoji: true,
+        taskList: true,
+        tocm: true,         // Using [TOCM]
+        tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+        flowChart: true,             // 开启流程图支持，默认关闭
+        sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,//dialogLockScreen : false,   // 设置弹出层对话框不锁屏，全局通用，默认为true//dialogShowMask : false,     // 设置弹出层对话框显示透明遮罩层，全局通用，默认为true//dialogDraggable : false,    // 设置弹出层对话框不可拖动，全局通用，默认为true//dialogMaskOpacity : 0.4,    // 设置透明遮罩层的透明度，全局通用，默认值为0.1//dialogMaskBgColor : "#000", // 设置透明遮罩层的背景颜色，全局通用，默认为#fff
+        imageUpload: true,
+        imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+        imageUploadURL: "/blog/editormdUploadFile",
+        //onload: function () {
+        //console.log('onload', this);
+        //this.fullscreen();//this.unwatch();//this.watch().fullscreen();//this.setMarkdown("#PHP");//this.width("100%");//this.height(480);//this.resize("100%", 640);
+        //}
+    });
+}
+/*]]>*/
+</script>
+</body>
+</html>

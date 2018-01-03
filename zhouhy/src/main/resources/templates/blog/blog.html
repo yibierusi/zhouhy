@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>show</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="description" content=""/>
+	<meta name="author" content=""/>
+
+	<!-- blog ide -->
+	<link th:href="@{/blog/css/editormd.min.css}" rel="stylesheet"/>
+	<!-- Bootstrap core CSS -->
+	<link href="/zhou/css/bootstrap.min.css" th:href="@{/zhou/css/bootstrap.min.css}" rel="stylesheet" />
+	<!-- index -->
+	<link href="/index/css/index.min.css" th:href="@{/index/css/index.min.css}" rel="stylesheet" />
+
+	<!-- Jquery -->
+	<script th:src="@{/zhou/js/jquery.min.js}"></script>
+	<!--blog ide-->
+	<script th:src="@{/blog/js/editormd.min.js}"></script>
+	<script th:src="@{/blog/lib/marked.min.js}"></script>
+	<script th:src="@{/blog/lib/prettify.min.js}"></script>
+	<script th:src="@{/blog/lib/raphael.min.js}"></script>
+	<script th:src="@{/blog/lib/underscore.min.js}"></script>
+	<script th:src="@{/blog/lib/sequence-diagram.min.js}"></script>
+	<script th:src="@{/blog/lib/flowchart.min.js}"></script>
+	<script th:src="@{/blog/lib/jquery.flowchart.min.js}"></script>
+	<!-- layer +layui -->
+	<script th:src="@{/zhou/plugins/layer/layer.js}"></script>
+	<script th:src="@{/zhou/plugins/layui/layui.all.js}"></script>
+	<link th:href="@{/zhou/plugins/layui/css/layui.css}" rel="stylesheet" />
+
+
+</head>
+
+<body class="overflow-hidden">
+<div class="padding-md">
+	<ul class="breadcrumb">
+		<li><span class="primary-font"><i class="icon-home"></i></span><a href="#"> 主页</a></li>
+		<li>博客</li>
+	</ul>
+	<div style="margin: 10px;">
+		<div class="page-title" id="title" style="margin: 10px;"></div>
+		<i class="fa fa-calendar" style="margin-left: 20px;"></i><span class="sub-header" style="margin-left: 5px;margin-right: 20px;" id="createTime"></span>
+		<i class="layui-icon">&#xe705;</i><span class="sub-header" style="margin-left: 5px;margin-right: 20px;" id="readCount"></span>
+		<i class="layui-icon">&#xe611;</i><span class="sub-header" style="margin-left: 5px;margin-right: 20px;" id="commentCount"></span>
+	</div>
+	<div id="test-editormd-view">
+		<textarea style="display:none;" id="md" name="test-editormd-markdown-doc"></textarea>
+	</div>
+</div>
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script th:inline="javascript">
+	/*<![CDATA[*/
+    var id = [[${id}]];
+    $(function() {
+        getBlogContent();
+        addReadCount();
+    });
+	function getBlogContent(){
+        $.ajax({
+            url: "/blog/getBlogContent",
+            dataType:"json",
+            type:"post",
+            data:{"id":id},
+            success: function (data) {
+                var testEditormdView = editormd.markdownToHTML("test-editormd-view", {
+                    markdown:data.md,
+                    htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                    emoji           : true,
+                    taskList        : true,
+                    tex             : true,  // 默认不解析
+                    flowChart       : true,  // 默认不解析
+                    sequenceDiagram : true,  // 默认不解析
+                });
+
+//                var testEditormdView = editormd.markdownToHTML("test-editormd-view", {
+//                    markdown: data.md,//+ "\r\n" + $("#append-test").text(),
+//                    htmlDecode: true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+//                    htmlDecode: "style,script,iframe",  // you can filter tags decode
+//                    toc             : true,
+//                    tocm: true,    // Using [TOCM]
+//                    tocContainer: "#custom-toc-container", // 自定义 ToC 容器层
+//                    //gfm             : false,
+//                    //tocDropdown     : true,
+//                    // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+//                    emoji: true,
+//                    taskList: true,
+//                    tex: true,  // 默认不解析
+//                    flowChart: true,  // 默认不解析
+//                    sequenceDiagram: true,  // 默认不解析
+//                });
+                var blog = data.blog;
+                $("#title").html(blog.title);
+                $("#createTime").html(new Date(blog.createTime).toLocaleString());
+                $("#readCount").html(blog.readCount);
+                $("#commentCount").html(blog.commentCount);
+            }
+        });
+	}
+	function addReadCount(){
+        $.ajax({
+            url: "/blog/modifyBlogReadCountById",
+            dataType:"json",
+            type:"post",
+            data:{"id":id},
+            success: function (data) {}
+        });
+	}
+	/*]]>*/
+</script>
+</body>
+</html>

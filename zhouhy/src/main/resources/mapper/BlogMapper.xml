@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.blog.dao.BlogMapper">
+
+    <sql id="blogColumns">
+        a.id as "id",
+        a.title as "title",
+        a.content as "content",
+        a.author_id as "authorId",
+        a.read_count as "readCount",
+        a.comment_count as "commentCount",
+        a.create_time as "createTime",
+        a.update_time as "updateTime",
+        a.del_flag as "delFlag"
+    </sql>
+
+    <insert id="addBlog">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+        　　　　select blog_seq.nextval from dual
+        </selectKey>
+        insert into blog(id,title,content,author_id,create_time)
+        values(#{id},#{title},#{content},#{sysUser.id},sysdate)
+    </insert>
+
+    <select id="queryBlogById" resultType="com.zhou.blog.domain.Blog">
+        SELECT <include refid="blogColumns"/>
+        ,su.id as "sysUser.id",su.username as "sysUser.username"
+        FROM blog a,sys_user su
+        where a.author_id=su.id and a.id=#{id} and a.del_flag = '0'
+    </select>
+
+    <select id="queryBlogByIdAndUserId" resultType="com.zhou.blog.domain.Blog">
+        SELECT <include refid="blogColumns"/>
+        ,su.id as "sysUser.id",su.username as "sysUser.username"
+        FROM blog a,sys_user su
+        where a.author_id=su.id and a.id=#{id} and a.author_id=#{userId} and a.del_flag = '0'
+    </select>
+
+    <select id="queryBlogListByAuthorId" resultType="com.zhou.blog.domain.Blog">
+        SELECT <include refid="blogColumns"/>
+            ,su.id as "sysUser.id",su.username as "sysUser.username"
+        FROM blog a,sys_user su
+        where a.author_id=su.id and a.AUTHOR_ID=#{authorId} and a.del_flag = '0' ORDER BY a.CREATE_TIME DESC
+    </select>
+
+    <update id="modifyBlogReadCountById">
+      update blog set read_count = read_count + 1 where id = #{id}
+    </update>
+
+    <update id="modifyBlog">
+      update blog set title=#{title},update_time=sysdate where id=#{id}
+    </update>
+
+    <update id="deleteBlog">
+        update blog a set a.del_flag = '1' where a.id = #{id} and a.author_id = #{userId}
+    </update>
+
+</mapper>
