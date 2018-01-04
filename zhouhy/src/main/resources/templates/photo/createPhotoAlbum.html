@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>创建相册</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="description" content=""/>
+	<meta name="author" content=""/>
+
+
+	<!-- Jquery -->
+	<script th:src="@{/zhou/js/jquery.min.js}"></script>
+	<!-- Bootstrap core CSS -->
+	<link href="/zhou/css/bootstrap.min.css" th:href="@{/zhou/css/bootstrap.min.css}" rel="stylesheet" />
+	<!-- Bootstrap -->
+	<script src="/zhou/js/bootstrap.min.js" th:src="@{/zhou/js/bootstrap.min.js}"></script>
+	<!-- Slimscroll -->
+	<script src="/zhou/js/jquery.slimscroll.min.js" th:src="@{/zhou/js/jquery.slimscroll.min.js}"></script>
+	<!-- index -->
+	<link href="/index/css/index.min.css" th:href="@{/index/css/index.min.css}" rel="stylesheet" />
+	<script th:src="@{/index/js/index.js}"></script>
+
+	<link href="/zhou/css/font-awesome.min.css" th:href="@{/zhou/css/font-awesome.min.css}" rel="stylesheet" />
+
+	<!-- layer  -->
+	<script th:src="@{/zhou/plugins/layer/layer.js}"></script>
+
+</head>
+
+
+<body class="overflow-hidden">
+<div class="padding-md">
+	<div class="smart-widget">
+		<div class="smart-widget-header">
+			创建相册
+			<span class="smart-widget-option">
+				<span class="refresh-icon-animated">
+					<i class="fa fa-circle-o-notch fa-spin"></i>
+				</span>
+				<a href="#" class="widget-toggle-hidden-option">
+					<i class="fa fa-cog"></i>
+				</a>
+				<a href="#" class="widget-collapse-option" data-toggle="collapse">
+					<i class="fa fa-chevron-up"></i>
+				</a>
+				<a href="#" class="widget-refresh-option">
+					<i class="fa fa-refresh"></i>
+				</a>
+				<a id="closeLayer"><i class="fa fa-times"></i></a>
+			</span>
+		</div>
+		<div class="smart-widget-inner">
+			<div class="smart-widget-hidden-section">
+				<ul class="widget-color-list clearfix">
+					<li style="background-color:#20232b;" data-color="widget-dark"></li>
+					<li style="background-color:#4c5f70;" data-color="widget-dark-blue"></li>
+					<li style="background-color:#23b7e5;" data-color="widget-blue"></li>
+					<li style="background-color:#2baab1;" data-color="widget-green"></li>
+					<li style="background-color:#edbc6c;" data-color="widget-yellow"></li>
+					<li style="background-color:#fbc852;" data-color="widget-orange"></li>
+					<li style="background-color:#e36159;" data-color="widget-red"></li>
+					<li style="background-color:#7266ba;" data-color="widget-purple"></li>
+					<li style="background-color:#f5f5f5;" data-color="widget-light-grey"></li>
+					<li style="background-color:#fff;" data-color="reset"></li>
+				</ul>
+			</div>
+			<div class="smart-widget-body">
+				<form class="form-horizontal">
+					<div class="form-group">
+						<label for="photoAlbumName" class="col-lg-2 control-label">相册名称</label>
+						<div class="col-lg-10">
+							<input type="email" class="form-control" id="photoAlbumName" placeholder="相册名称"></input>
+						</div><!-- /.col -->
+					</div><!-- /form-group -->
+					<div class="form-group">
+						<label for="photoAlbumContent" class="col-lg-2 control-label">相册简介</label>
+						<div class="col-lg-10">
+							<textarea id="photoAlbumContent" class="form-control" rows="3" placeholder="相册简介"></textarea>
+						</div><!-- /.col -->
+					</div><!-- /form-group -->
+
+					<div class="form-group">
+						<div class="col-lg-offset-2 col-lg-10" style="margin-right: 10px">
+							<button type="button" id="create" class="btn btn-success btn-sm">创建</button>
+							<button type="button" class="btn btn-default btn-sm">取消</button>
+						</div><!-- /.col -->
+					</div><!-- /form-group -->
+				</form>
+			</div>
+		</div><!-- ./smart-widget-inner -->
+	</div><!-- ./smart-widget -->
+
+</div><!-- ./padding-md -->
+
+<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+
+<script th:inline="javascript">
+	/*<![CDATA[*/
+    $(function(){
+        sysBingFunc();
+        bingFunc();
+    });
+
+    function bingFunc(){
+		$("#closeLayer").click(function(){
+			//当你在iframe页面关闭自身时
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+		});
+
+		$("#create").click(function(){
+			var photoAlbumName = $("#photoAlbumName").val();
+			var photoAlbumContent = $("#photoAlbumContent").val();
+            layer.tips('相册名字不能为空！', '#create');
+
+		});
+    }
+    function sysBingFunc(){
+
+    }
+	/*]]>*/
+</script>
+</body>
+</html>

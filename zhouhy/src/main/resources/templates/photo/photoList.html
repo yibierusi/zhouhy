@@ -7,17 +7,16 @@
 	<meta name="description" content=""/>
 	<meta name="author" content=""/>
 
-
 	<!-- Jquery -->
 	<script th:src="@{/zhou/js/jquery.min.js}"></script>
-
 	<!-- Bootstrap core CSS -->
 	<link href="/zhou/css/bootstrap.min.css" th:href="@{/zhou/css/bootstrap.min.css}" rel="stylesheet" />
 	<!-- index -->
 	<link href="/index/css/index.min.css" th:href="@{/index/css/index.min.css}" rel="stylesheet" />
-
 	<link href="/zhou/css/font-awesome.min.css" th:href="@{/zhou/css/font-awesome.min.css}" rel="stylesheet" />
 
+	<!-- layer +layui -->
+	<script th:src="@{/zhou/plugins/layer/layer.js}"></script>
 
 </head>
 
@@ -27,7 +26,7 @@
 	<div class="gallery-filter m-top-md">
 		<ul class="clearfix">
 			<li class="active"><a>所有相册</a></li>
-			<li><a>创建相册</a></li>
+			<li id="createPhotoAlbum"><a>创建相册</a></li>
 			<li><a>Friends</a></li>
 			<!--<li><button class="layui-btn layui-btn-sm layui-btn-normal"></button></li>-->
 		</ul>
@@ -38,7 +37,7 @@
 				<a class="gallery-remove"><i class="fa fa-times"></i></a>
 				<img src="/blog/images/profile3.jpg" alt=""/>
 				<div class="gallery-title">
-					Gallery's Name
+					相册名字
 				</div>
 				<div class="gallery-overlay">
 					<a href="images/gallery/gallery1.jpg" class="gallery-action enlarged-photo"><i class="fa fa-search-plus fa-lg" style="margin-top: 10px"></i></a>
@@ -58,6 +57,28 @@
 <script th:inline="javascript">
 	/*<![CDATA[*/
     $(function()	{
+        //sysBingFunc();
+        bingFunc();
+    });
+
+    function bingFunc(){
+		$("#createPhotoAlbum").click(function(){
+            layer.open({
+                type: 2,
+                title: [""],
+                closeBtn: 0,
+                shade: [0.1],//背景透明度
+                area: ['70%', '50%'],//弹出页面的大小
+                shift: 2,
+                shadeClose: true,
+                content: ['/photo/createPhotoAlbumView'],
+                end: function () {           //关闭弹出层触发
+                   // todo 刷新当前页面
+                }
+            });
+		})
+	};
+    function sysBingFunc(){
         $(".enlarged-photo").colorbox({
             rel:'gallery-group1',
             maxWidth: '85%'
@@ -98,7 +119,7 @@
                 itemSelector: '.gallery-item'
             });
         });
-    });
+    }
 	/*]]>*/
 </script>
 </body>

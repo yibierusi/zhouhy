@@ -32,8 +32,8 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <!--生成Model类存放位置-->
-        <javaModelGenerator targetPackage="com" targetProject="src/main/java">
+        <!--生成domain类存放位置-->
+        <javaModelGenerator targetPackage="com.zhou.photo.domain" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -48,14 +48,14 @@
                 type="ANNOTATEDMAPPER",生成Java Model 和基于注解的Mapper对象
                 type="XMLMAPPER",生成SQLMap XML文件和独立的Mapper接口
         -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com" targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.zhou.photo.dao" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
         <!--生成对应表及类名
         去掉Mybatis Generator生成的一堆 example
         -->
-        <table tableName="blog" domainObjectName="b" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        <table tableName="photo_album" domainObjectName="PhotoAlbum" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
             <generatedKey column="id" sqlStatement="oracle" identity="true"/>
         </table>
     </context>

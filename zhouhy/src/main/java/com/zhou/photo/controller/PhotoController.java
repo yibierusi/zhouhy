@@ -28,19 +28,26 @@ import java.util.Map;
 @RequestMapping("photo")
 public class PhotoController {
 
-    @RequestMapping(value = "/photoList")
-    public ModelAndView photoList(HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping(value = "/photoListView")
+    public ModelAndView photoList(){
         ModelAndView mav = new ModelAndView("/photo/photoList");
         return mav;
     }
 
-    @RequestMapping(value = "/uploadPhoto")
-    public ModelAndView gotoUploadPhoto(HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping(value = "/uploadPhotoView")
+    public ModelAndView gotoUploadPhoto(){
         ModelAndView mav = new ModelAndView("/photo/uploadPhoto");
         return mav;
     }
+
+    @RequestMapping(value = "/createPhotoAlbumView")
+    public ModelAndView gotoCreatePhotoAlbum(){
+        ModelAndView mav = new ModelAndView("/photo/createPhotoAlbum");
+        return mav;
+    }
+
     @ResponseBody
-    @RequestMapping(value = "/uploadPhoto1")
+    @RequestMapping(value = "/uploadPhoto")
     public String uploadPhoto(HttpServletRequest req){
         MultipartFile mf = null;
         File mff = null;
