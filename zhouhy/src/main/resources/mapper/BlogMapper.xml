@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhou.blog.dao.BlogMapper">
+    <resultMap id="BaseResultMap" type="com.zhou.blog.domain.Blog">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="TITLE" jdbcType="VARCHAR" property="title" />
+        <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+        <result column="AUTHOR_ID" jdbcType="VARCHAR" property="authorId" />
+        <result column="READ_COUNT" jdbcType="DECIMAL" property="readCount" />
+        <result column="COMMENT_COUNT" jdbcType="DECIMAL" property="commentCount" />
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="DEL_FLAG" jdbcType="CHAR" property="delFlag" />
+    </resultMap>
 
     <sql id="blogColumns">
         a.id as "id",
@@ -16,10 +30,11 @@
 
     <insert id="addBlog">
         <selectKey keyProperty="id" resultType="String" order="BEFORE">
-        　　　　select blog_seq.nextval from dual
+             select blog_seq.nextval from dual
         </selectKey>
         insert into blog(id,title,content,author_id,create_time)
-        values(#{id},#{title},#{content},#{sysUser.id},sysdate)
+        values(#{id},#{title},#{content},#{
+        sysUser.id},sysdate)
     </insert>
 
     <select id="queryBlogById" resultType="com.zhou.blog.domain.Blog">

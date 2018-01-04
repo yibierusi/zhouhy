@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.photo.dao.PhotoMapper">
+  <resultMap id="BaseResultMap" type="com.zhou.photo.domain.Photo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="PHOTO_ALBUM_ID" jdbcType="VARCHAR" property="photoAlbumId" />
+    <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <result column="PATH" jdbcType="VARCHAR" property="path" />
+    <result column="SUFFIX" jdbcType="VARCHAR" property="suffix" />
+    <result column="SIZE1" jdbcType="VARCHAR" property="size1" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="READ_COUNT" jdbcType="DECIMAL" property="readCount" />
+    <result column="COMMENT_COUNT" jdbcType="DECIMAL" property="commentCount" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="DEL_FLAG" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+</mapper>

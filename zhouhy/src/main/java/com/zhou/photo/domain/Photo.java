@@ -1,33 +1,32 @@
-package com.zhou.blog.domain;
-
-
-import com.zhou.index.domain.SysUser;
+package com.zhou.photo.domain;
 
 import java.util.Date;
 import javax.persistence.*;
 
-/**
- * Title：
- * Description：
- *
- * @author: zhouhy
- * @create 2017-11-12 20:53
- **/
-@Table(name = "BLOG")
-public class Blog {
+@Table(name = "PHOTO")
+public class Photo {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
-    @Column(name = "TITLE")
-    private String title;
+    @Column(name = "PHOTO_ALBUM_ID")
+    private String photoAlbumId;
+
+    @Column(name = "NAME")
+    private String name;
+
+    @Column(name = "PATH")
+    private String path;
+
+    @Column(name = "SUFFIX")
+    private String suffix;
+
+    @Column(name = "SIZE1")
+    private String size1;
 
     @Column(name = "CONTENT")
     private String content;
-
-    @Column(name = "AUTHOR_ID")
-    private String authorId;
 
     @Column(name = "READ_COUNT")
     private Long readCount;
@@ -59,17 +58,73 @@ public class Blog {
     }
 
     /**
-     * @return TITLE
+     * @return PHOTO_ALBUM_ID
      */
-    public String getTitle() {
-        return title;
+    public String getPhotoAlbumId() {
+        return photoAlbumId;
     }
 
     /**
-     * @param title
+     * @param photoAlbumId
      */
-    public void setTitle(String title) {
-        this.title = title == null ? null : title.trim();
+    public void setPhotoAlbumId(String photoAlbumId) {
+        this.photoAlbumId = photoAlbumId == null ? null : photoAlbumId.trim();
+    }
+
+    /**
+     * @return NAME
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name
+     */
+    public void setName(String name) {
+        this.name = name == null ? null : name.trim();
+    }
+
+    /**
+     * @return PATH
+     */
+    public String getPath() {
+        return path;
+    }
+
+    /**
+     * @param path
+     */
+    public void setPath(String path) {
+        this.path = path == null ? null : path.trim();
+    }
+
+    /**
+     * @return SUFFIX
+     */
+    public String getSuffix() {
+        return suffix;
+    }
+
+    /**
+     * @param suffix
+     */
+    public void setSuffix(String suffix) {
+        this.suffix = suffix == null ? null : suffix.trim();
+    }
+
+    /**
+     * @return SIZE1
+     */
+    public String getSize1() {
+        return size1;
+    }
+
+    /**
+     * @param size1
+     */
+    public void setSize1(String size1) {
+        this.size1 = size1 == null ? null : size1.trim();
     }
 
     /**
@@ -84,20 +139,6 @@ public class Blog {
      */
     public void setContent(String content) {
         this.content = content == null ? null : content.trim();
-    }
-
-    /**
-     * @return AUTHOR_ID
-     */
-    public String getAuthorId() {
-        return authorId;
-    }
-
-    /**
-     * @param authorId
-     */
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId == null ? null : authorId.trim();
     }
 
     /**

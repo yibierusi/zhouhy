@@ -1,8 +1,11 @@
 package com.zhou.blog.dao;
 
 import com.zhou.blog.domain.Blog;
+import com.MyMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.jmx.export.annotation.ManagedNotifications;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -13,8 +16,7 @@ import java.util.List;
  * @author: zhouhy
  * @create 2017-11-12 20:55
  **/
-@Mapper
-public interface BlogMapper {
+public interface BlogMapper extends MyMapper<Blog>{
     void addBlog(Blog blog);
 
     Blog queryBlogById(String id);

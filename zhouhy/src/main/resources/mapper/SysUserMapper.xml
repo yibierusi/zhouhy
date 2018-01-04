@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhou.index.dao.SysUserMapper">
+    <resultMap id="BaseResultMap" type="com.zhou.index.domain.SysUser">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+        <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+        <result column="NICKNAME" jdbcType="VARCHAR" property="nickname" />
+        <result column="SEX" jdbcType="VARCHAR" property="sex" />
+        <result column="BIRTH_DATE" jdbcType="DATE" property="birthDate" />
+        <result column="ICO" jdbcType="VARCHAR" property="ico" />
+        <result column="SIGNATURE" jdbcType="VARCHAR" property="signature" />
+        <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+        <result column="PHONE" jdbcType="VARCHAR" property="phone" />
+        <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+        <result column="USER_TYPE" jdbcType="VARCHAR" property="userType" />
+        <result column="USER_STATE" jdbcType="VARCHAR" property="userState" />
+        <result column="LOGIN_TIME" jdbcType="DATE" property="loginTime" />
+        <result column="LOGIN_IP" jdbcType="VARCHAR" property="loginIp" />
+        <result column="REGISTERED_TIME" jdbcType="DATE" property="registeredTime" />
+        <result column="REGISTERED_IP" jdbcType="VARCHAR" property="registeredIp" />
+        <result column="UPDATE_BY" jdbcType="VARCHAR" property="updateBy" />
+        <result column="UPDATE_DATE" jdbcType="DATE" property="updateDate" />
+        <result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
+        <result column="DEL_FLAG" jdbcType="CHAR" property="delFlag" />
+    </resultMap>
 
     <select id="querySysUserByUsernameAndPassword" resultType="com.zhou.index.domain.SysUser">
         select * from sys_user where username=#{username} and password=#{password}
