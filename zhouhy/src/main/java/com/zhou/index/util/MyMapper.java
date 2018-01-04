@@ -1,4 +1,4 @@
-package com;
+package com.zhou.index.util;
 
 
 import tk.mybatis.mapper.common.Mapper;

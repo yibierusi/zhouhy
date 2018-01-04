@@ -1,6 +1,7 @@
 package com.zhou.index.util;
 
 import com.zhou.blog.controller.BlogController;
+import com.zhou.photo.controller.PhotoController;
 
 /**
  * Title：
@@ -13,7 +14,7 @@ public enum EnumUtil {
     BLOG_PATH("0", "./src/main/resources/public/upload/blog/"),
     BLOG_CLASS_PATH("1", BlogController.class.getResource("/").getPath()+"public/upload/blog/"),
     PHOTOT_PATH("0", "./src/main/resources/public/upload/photo/"),
-    PHOTO_CLASS_PATH("1", BlogController.class.getResource("/").getPath()+"public/upload/photo/"),
+    PHOTO_CLASS_PATH("1", PhotoController.class.getResource("/").getPath()+"public/upload/photo/"),
 
     DATE_FULL_FORMAT("2", "yyyyMMddHHmmss");
 

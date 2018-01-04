@@ -1,11 +1,8 @@
 package com.zhou.blog.dao;
 
 import com.zhou.blog.domain.Blog;
-import com.MyMapper;
-import org.apache.ibatis.annotations.Mapper;
+import com.zhou.index.util.MyMapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.jmx.export.annotation.ManagedNotifications;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

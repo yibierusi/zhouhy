@@ -1,6 +1,6 @@
 package com.zhou;
 
-import com.MyMapper;
+import com.zhou.index.util.MyMapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

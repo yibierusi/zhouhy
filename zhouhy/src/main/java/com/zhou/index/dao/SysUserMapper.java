@@ -1,9 +1,8 @@
 package com.zhou.index.dao;
 
-import com.MyMapper;
+import com.zhou.index.util.MyMapper;
 import com.zhou.index.domain.SysUser;
 import org.apache.ibatis.annotations.*;
-import org.springframework.stereotype.Repository;
 
 /**
  * Title：
