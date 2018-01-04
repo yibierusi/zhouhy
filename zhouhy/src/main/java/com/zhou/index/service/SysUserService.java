@@ -9,7 +9,7 @@ import com.zhou.index.domain.SysUser;
  * @author: zhouhy
  * @create 2017-11-09 11:51
  **/
-public interface SysUserService {
+public interface SysUserService extends IService<SysUser>{
     SysUser querySysUserByUsernameAndPassword(String username, String password);
 
     String queryUserIdByUsernameAndPassword(String username, String password);

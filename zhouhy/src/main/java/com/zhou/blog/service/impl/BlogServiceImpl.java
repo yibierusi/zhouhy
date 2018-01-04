@@ -3,6 +3,7 @@ package com.zhou.blog.service.impl;
 import com.zhou.blog.dao.BlogMapper;
 import com.zhou.blog.domain.Blog;
 import com.zhou.blog.service.BlogService;
+import com.zhou.index.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.List;
  * @create 2017-11-12 20:58
  **/
 @Service
-public class BlogServiceImpl implements BlogService{
+public class BlogServiceImpl extends BaseService<Blog> implements BlogService{
     @Autowired
     BlogMapper dao;
 

@@ -29,10 +29,10 @@
     </resultMap>
 
     <select id="querySysUserByUsernameAndPassword" resultType="com.zhou.index.domain.SysUser">
-        select * from sys_user where username=#{username} and password=#{password}
+        select * from sys_user where username=#{username} and password=#{password} and del_flag = '0'
     </select>
 
     <select id="queryUserIdByUsernameAndPassword" resultType="String">
-        select id from sys_user where username=#{username} and password=#{password}
+        select id from sys_user where username=#{username} and password=#{password} and del_flag = '0'
     </select>
 </mapper>

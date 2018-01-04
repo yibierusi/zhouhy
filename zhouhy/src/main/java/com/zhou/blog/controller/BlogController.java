@@ -57,7 +57,7 @@ public class BlogController {
         ModelAndView mav = new ModelAndView("/blog/blog");
         SysUser su=(SysUser)request.getSession().getAttribute("sysUser");
         Blog blog = blogService.queryBlogByIdAndUserId(id,su.getId());
-        if(!(blog==null||blog.getId()==null||blog.getId().equals(""))){
+        if(!(blog==null||blog.getId()==null||"".equals(blog.getId()))){
             mav.addObject("id",id);
         }
         return mav;

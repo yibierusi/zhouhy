@@ -1,6 +1,7 @@
 package com.zhou.blog.service;
 
 import com.zhou.blog.domain.Blog;
+import com.zhou.index.service.IService;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * @author: zhouhy
  * @create 2017-11-12 20:56
  **/
-public interface BlogService {
+public interface BlogService extends IService<Blog>{
 
     void addBlog(Blog blog);
 
