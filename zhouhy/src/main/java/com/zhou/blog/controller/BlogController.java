@@ -92,7 +92,7 @@ public class BlogController {
         FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text()+su.getUsername()+"/md/"+ctmLong+".md",b.getContent());
 
         b.setContent(ctmLong+".md");
-        //b.setSysUser(su);
+        b.setSysUser(su);
         blogService.addBlog(b);
         return b.getId();
     }

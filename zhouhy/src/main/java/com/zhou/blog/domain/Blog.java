@@ -43,6 +43,16 @@ public class Blog {
 
     @Column(name = "DEL_FLAG")
     private String delFlag;
+    @Transient
+    private SysUser sysUser;
+
+    public SysUser getSysUser() {
+        return sysUser;
+    }
+
+    public void setSysUser(SysUser sysUser) {
+        this.sysUser = sysUser;
+    }
 
     /**
      * @return ID
