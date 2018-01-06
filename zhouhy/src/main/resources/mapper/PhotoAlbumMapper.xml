@@ -10,6 +10,7 @@
     <result column="CONTENT" jdbcType="VARCHAR" property="content" />
     <result column="AUTHOR_ID" jdbcType="VARCHAR" property="authorId" />
     <result column="PHOTO_ID" jdbcType="VARCHAR" property="photoId" />
+    <result column="PHOTO_PATH" jdbcType="VARCHAR" property="photoPath" />
     <result column="READ_COUNT" jdbcType="DECIMAL" property="readCount" />
     <result column="COMMENT_COUNT" jdbcType="DECIMAL" property="commentCount" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />

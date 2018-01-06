@@ -4,9 +4,10 @@ name varchar2(100 byte) not null,
 content varchar2(1000 byte),
 author_id varchar2(100 byte),
 photo_id varchar2(100 byte),
+photo_path varchar2(100 byte),
 read_count number(10) default 0,
 comment_count number(10) default 0,
-create_time timestamp,
+create_time timestamp default sysdate,
 update_time timestamp,
 del_flag	char(1 byte) default '0'
 );
@@ -15,6 +16,7 @@ comment on column photo_album.name is '相册名字';
 comment on column photo_album.content is '相册介绍';
 comment on column photo_album.author_id is '相册所属人ID';
 comment on column photo_album.photo_id is '相册封面照片ID';
+comment on column photo_album.photo_path is '相册封面照片地址';
 comment on column photo_album.read_count is '阅读数';
 comment on column photo_album.comment_count is '评论数';
 comment on column photo_album.create_time is '创建时间';

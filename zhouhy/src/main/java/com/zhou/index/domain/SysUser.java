@@ -17,7 +17,7 @@ import java.util.Date;
 public class SysUser {
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
     private String id;
 
     @Column(name = "USERNAME")

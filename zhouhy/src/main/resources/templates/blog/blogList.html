@@ -8,6 +8,9 @@
 	<meta name="author" content=""/>
 	<!--公共CSS、JS-->
 	<script src="/zhou/include/include.js" th:src="@{/zhou/include/include.js}"/>
+	<!--layui-->
+	<script th:src="@{/zhou/plugins/layui/layui.all.js}"></script>
+	<link th:href="@{/zhou/plugins/layui/css/layui.css}" rel="stylesheet" />
 </head>
 
 <body class="overflow-hidden">
@@ -76,11 +79,11 @@
                 type:"post",
                 data:{"id":id},
                 success: function (data) {
-                    if(data=="1"){
-                        layer.msg("删除成功");
-                        window.location.href="/blog/blogList";
+                    if(data==1||data=="1"){
+                        layer.msg("删除成功",{icon:1});
+                        init();
 					}else{
-                        layer.msg("删除失败");
+                        layer.msg("删除失败",{icon:2});
 					}
                 }
             });

@@ -162,7 +162,7 @@ public class BlogController {
 
             String url = "/upload/blog/"+su.getUsername()+"/images/";
             //下面response返回的json格式是editor.md所限制的，规范输出就OK
-            response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"http://127.0.0.1:80"+url+fileName+"\"}");
+            response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\""+EnumUtil.OBJECT_IP+":"+EnumUtil.OBJECT_PROT+""+url+fileName+"\"}");
         } catch (Exception e) {
             try {
                 e.printStackTrace();

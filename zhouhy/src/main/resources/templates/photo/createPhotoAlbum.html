@@ -110,8 +110,28 @@
 
 		$("#create").click(function(){
 			var photoAlbumName = $("#photoAlbumName").val();
+			if(photoAlbumName==null||photoAlbumName==""){
+                layer.msg('相册名字不能为空！', {icon:0});
+                return ;
+			}
 			var photoAlbumContent = $("#photoAlbumContent").val();
-            layer.tips('相册名字不能为空！', '#create');
+            if(photoAlbumContent==null||photoAlbumContent==""){
+                layer.msg('相册简介不能为空！', {icon:0});
+                return ;
+            }
+            $.ajax({
+                url: "/photoAlbum/createPhotoAlbum",
+                dataType: "json",
+                type: "post",
+                data: {"name": photoAlbumName,"content":photoAlbumContent},
+                success: function (data) {
+					if(data.code==0){
+						layer.msg("相册创建成功！！！",{icon:1});
+                        setTimeout('$("#closeLayer").trigger("click");','1000')
+					}
+                }
+            });
+
 
 		});
     }

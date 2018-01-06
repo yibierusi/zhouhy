@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Photo {
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
     private String id;
 
     @Column(name = "PHOTO_ALBUM_ID")

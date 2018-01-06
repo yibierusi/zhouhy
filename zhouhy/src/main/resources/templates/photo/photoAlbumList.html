@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8"/>
-	<title>图片列表</title>
+	<title>相册列表</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta name="description" content=""/>
 	<meta name="author" content=""/>
@@ -26,8 +26,8 @@
 <div class="padding-md">
 	<div class="gallery-filter m-top-md">
 		<ul class="clearfix">
-			<li class="active"><a>所有图片</a></li>
-			<li id="uploadPhoto"><a>上传图片</a></li>
+			<li class="active"><a>所有相册</a></li>
+			<li id="createPhotoAlbum"><a>创建相册</a></li>
 			<!--<li><button class="layui-btn layui-btn-sm layui-btn-normal"></button></li>-->
 		</ul>
 	</div>
@@ -41,14 +41,13 @@
 ================================================== -->
 <script th:inline="javascript">
 	/*<![CDATA[*/
-	var photoAlbumId = /*[[${photoAlbumId}]]*/;
     $(function()	{
         bingFunc();
         init();
     });
 	function init(){
         $.ajax({
-            url: "/photoAlbum/getMyselfPhotoList/"+photoAlbumId,
+            url: "/photoAlbum/getMyselfPhotoAlbumList",
             dataType: "json",
             type: "post",
             success: function (data) {
@@ -56,25 +55,25 @@
 				    var list = data.obj;
 				    var str = '';
 					for(var i=0;i<list.length;i++){
-                     	str += '<div class="gallery-item">';
+                     	str += '<div class="gallery-item" onclick="enterPhotoAlbum(\''+list[i].id+'\')">';
 						str += '	<div class="gallery-wrapper">';
 						str += '		<a class="gallery-remove"><i class="fa fa-times"></i></a>';
-						str += '			<img src="'+list[i].path+'" alt=""/>';
+						str += '			<img src="'+list[i].photoPath+'" alt=""/>';
 						str += '			<div class="gallery-title">'+list[i].name+'</div>';
 						str += '	</div>';
 						str += '</div>';
 					}
 					$("#photoAlbumList").html(str);
-				}else if(data.code==3){
+				}else if(data.code==2){
                     layer.msg(data.msg,{icon:0});
 				}else if(data.code==1){
-				    layer.msg("获取图片列表失败",{icon:2});
+				    layer.msg("获取相册列表失败",{icon:2});
 				}
             }
         });
 	}
     function bingFunc(){
-		$("#uploadPhoto").click(function(){
+		$("#createPhotoAlbum").click(function(){
             layer.open({
                 type: 2,
                 title: [""],
@@ -83,13 +82,16 @@
                 area: ['70%', '50%'],//弹出页面的大小
                 shift: 2,
                 shadeClose: true,
-                content: ['/photoAlbum/uploadPhotoView/'+photoAlbumId],
+                content: ['/photoAlbum/createPhotoAlbumView'],
                 end: function () {           //关闭弹出层触发
 					init();
                 }
             });
 		})
 	};
+	function enterPhotoAlbum(id){
+       window.location.href="photoListView/"+id;
+	}
 
 	/*]]>*/
 </script>

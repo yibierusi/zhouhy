@@ -18,7 +18,7 @@
 	<!-- index -->
 	<link href="/index/css/index.min.css" th:href="@{/index/css/index.min.css}" rel="stylesheet" />
 	<!-- layer +layui -->
-	<script th:src="@{/zhou/plugins/layer/layer.js}"></script>
+	<!--<script th:src="@{/zhou/plugins/layer/layer.js}"></script>-->
 	<script th:src="@{/zhou/plugins/layui/layui.all.js}"></script>
 	<link th:href="@{/zhou/plugins/layui/css/layui.css}" rel="stylesheet" />
 
@@ -76,13 +76,13 @@ function init() {
     $("#postedBtn").click(function () {
         var title = $("#title").val();
         if(title==""){
-            layer.msg("标题不能为空！！！");
+            layer.msg("标题不能为空！！！",{icon:0});
             return;
         }
         //var content = $("#content").val();
         var content = testEditor.getMarkdown();
         if(content==""){
-            layer.msg("博客内容不能为空！！！");
+            layer.msg("博客内容不能为空！！！",{icon:0});
             return;
         }
         if(id!=""&&id!=null){
@@ -100,11 +100,11 @@ function modifyBlog(blogId,title,content) {
         type:"post",
         data:{"title":title,"content":content,"id":blogId},
         success: function (data) {
-            layer.msg("修改成功！！！");
+            layer.msg("修改成功！！！",{icon:1});
             window.location.href="/blog/blog?id="+data;
         },
         error:function (error) {
-            layer.msg("修改失败");
+            layer.msg("修改失败",{icon:2});
         }
     });
 }
@@ -115,11 +115,11 @@ function postBlog(title,content) {
         type:"post",
         data:{"title":title,"content":content},
         success: function (data) {
-            layer.msg("发布成功！！！");
+            layer.msg("发布成功！！！",{icon:1});
             window.location.href="/blog/blog?id="+data;
         },
         error:function (error) {
-            layer.msg("发布失败");
+            layer.msg("发布失败",{icon:2});
         }
     });
 }

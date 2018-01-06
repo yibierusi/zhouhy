@@ -49,8 +49,3 @@
 	<!-- index -->
 	document.write('<script src="/index/js/index.js" th:src="@{/index/js/index.js}"></script>');
 	document.write('<script src="/index/js/index_dashboard.js" th:src="@{/index/js/index_dashboard.js}"></script>');
-	<!-- layer +layui -->
-	document.write('<script th:src="@{/zhou/plugins/layer/layer.js}"></script>');
-	document.write('<script th:src="@{/zhou/plugins/layui/layui.all.js}"></script>');
-	document.write('<link th:href="@{/zhou/plugins/layui/css/layui.css}" rel="stylesheet" />');
-

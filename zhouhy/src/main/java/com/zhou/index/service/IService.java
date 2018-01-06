@@ -26,5 +26,9 @@ public interface IService<T> {
 
     List<T> selectByExample(Object example);
 
+    int insertSelective(T entity);
+
+    List<T> select(T entity);
+
     //TODO 其他...
 }

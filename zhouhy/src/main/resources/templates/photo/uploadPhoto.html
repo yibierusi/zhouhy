@@ -20,7 +20,6 @@
 	<script th:src="@{/photo/fileinput/themes/fa/theme.js}"></script>
 	<link href="/zhou/css/font-awesome.min.css" th:href="@{/zhou/css/font-awesome.min.css}" rel="stylesheet" />
 
-
 </head>
 
 <body>
@@ -37,9 +36,10 @@
 
 <script th:inline="javascript">
 	/*<![CDATA[*/
+    var photoAlbumId = /*[[${photoAlbumId}]]*/;
     $("#file").fileinput({
         theme: 'fa',
-        uploadUrl: 'uploadPhoto', // you must set a valid URL here else you will get an error
+        uploadUrl: '/photoAlbum/uploadPhoto/'+photoAlbumId, // you must set a valid URL here else you will get an error
         allowedFileExtensions: ['jpg', 'png', 'gif'],
         overwriteInitial: false,
         maxFileSize: 1000,

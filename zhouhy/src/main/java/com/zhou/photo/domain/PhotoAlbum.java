@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class PhotoAlbum {
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(generator = "UUID")
     private String id;
 
     @Column(name = "NAME")
@@ -21,6 +21,9 @@ public class PhotoAlbum {
 
     @Column(name = "PHOTO_ID")
     private String photoId;
+
+    @Column(name = "PHOTO_PATH")
+    private String photoPath;
 
     @Column(name = "READ_COUNT")
     private Long readCount;
@@ -105,6 +108,20 @@ public class PhotoAlbum {
      */
     public void setPhotoId(String photoId) {
         this.photoId = photoId == null ? null : photoId.trim();
+    }
+
+    /**
+     * @return PHOTO_PATH
+     */
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    /**
+     * @param photoPath
+     */
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath == null ? null : photoPath.trim();
     }
 
     /**

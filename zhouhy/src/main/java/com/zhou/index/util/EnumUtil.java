@@ -11,12 +11,15 @@ import com.zhou.photo.controller.PhotoController;
  * @create 2017-11-13 14:51
  **/
 public enum EnumUtil {
-    BLOG_PATH("0", "./src/main/resources/public/upload/blog/"),
-    BLOG_CLASS_PATH("1", BlogController.class.getResource("/").getPath()+"public/upload/blog/"),
-    PHOTOT_PATH("0", "./src/main/resources/public/upload/photo/"),
-    PHOTO_CLASS_PATH("1", PhotoController.class.getResource("/").getPath()+"public/upload/photo/"),
+    BLOG_PATH("1", "./src/main/resources/public/upload/blog/"),
+    BLOG_CLASS_PATH("2", BlogController.class.getResource("/").getPath()+"public/upload/blog/"),
+    PHOTOT_PATH("3", "./src/main/resources/public/upload/photo/"),
+    PHOTO_CLASS_PATH("4", PhotoController.class.getResource("/").getPath()+"public/upload/photo/"),
 
-    DATE_FULL_FORMAT("2", "yyyyMMddHHmmss");
+    OBJECT_IP("127","127.0.0.1"),
+    OBJECT_PROT("80","80"),
+
+    DATE_FULL_FORMAT("99", "yyyyMMddHHmmss");
 
     private String value;
     private String text;

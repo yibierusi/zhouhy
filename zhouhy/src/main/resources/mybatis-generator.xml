@@ -56,7 +56,7 @@
         去掉Mybatis Generator生成的一堆 example
         -->
         <table tableName="photo_album" domainObjectName="PhotoAlbum" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
-            <generatedKey column="id" sqlStatement="oracle" identity="true"/>
+            <!--<generatedKey column="id" sqlStatement="oracle" identity="true"/>-->
         </table>
     </context>
 </generatorConfiguration>

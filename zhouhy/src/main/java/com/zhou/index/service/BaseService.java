@@ -33,6 +33,7 @@ public abstract class BaseService<T> implements IService<T> {
         return mapper.insert(entity);
     }
 
+
     @Override
     public int delete(Object key) {
         //说明：根据主键字段进行删除，方法参数必须包含完整的主键属性
@@ -56,5 +57,17 @@ public abstract class BaseService<T> implements IService<T> {
         //说明：根据Example条件进行查询
         //重点：这个查询支持通过Example类指定查询列，通过selectProperties方法指定查询列
         return mapper.selectByExample(example);
+    }
+    @Override
+    public int insertSelective(T entity){
+        //说明：保存一个实体，null的属性不会保存
+        return mapper.insertSelective(entity);
+    }
+
+    @Override
+    public List<T> select(T entity){
+        //       用于查询多条符合条件的数据,如果无查询条件就设置为null,表示查询所有的数据；
+        //        如果要设置条件，就实例化user，设置条件即可
+        return mapper.select(entity);
     }
 }
