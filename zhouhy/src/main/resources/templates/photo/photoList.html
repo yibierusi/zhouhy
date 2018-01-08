@@ -58,7 +58,7 @@
 					for(var i=0;i<list.length;i++){
                      	str += '<div class="gallery-item">';
 						str += '	<div class="gallery-wrapper">';
-						str += '		<a class="gallery-remove"><i class="fa fa-times"></i></a>';
+						str += '		<a class="gallery-remove" onclick="deletePhoto(\''+list[i].id+'\')"><i class="fa fa-times"></i></a>';
 						str += '			<img src="'+list[i].path+'" alt=""/>';
 						str += '			<div class="gallery-title">'+list[i].name+'</div>';
 						str += '	</div>';
@@ -78,7 +78,7 @@
             layer.open({
                 type: 2,
                 title: [""],
-                closeBtn: 0,
+                closeBtn: 1,
                 shade: [0.1],//背景透明度
                 area: ['70%', '50%'],//弹出页面的大小
                 shift: 2,
@@ -90,6 +90,22 @@
             });
 		})
 	};
+
+	function deletePhoto(photoId){
+        $.ajax({
+            url: "/photoAlbum/deletePhoto/" + photoId,
+            dataType: "json",
+            type: "post",
+            success: function (data) {
+				if(data.code==0){
+				    layer.msg("删除成功！！！",{icon:1});
+                    init();
+				}else if(data.code==1){
+                    layer.msg("删除失败！！！",{icon:0});
+				}
+            }
+        });
+	}
 
 	/*]]>*/
 </script>

@@ -22,6 +22,7 @@ import com.zhou.photo.domain.PhotoAlbum;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -177,21 +178,23 @@ public class PhotoController {
         if (null != multipartFiles && multipartFiles.size() > 0) {
             mf = multipartFiles.get(0);
 
-            String tempPath = su.getUsername()+"/"+photoAlbumId+"/"+ctmLong+"_"+mf.getOriginalFilename();
+            String fileName = mf.getOriginalFilename();
+            String suffix = FileUtil.getFileSuffix(fileName);
+            String tempPath = su.getUsername()+"/"+photoAlbumId+"/"+ctmLong+"."+ suffix;
             String realPath = EnumUtil.PHOTOT_PATH.text()+tempPath;
             String classPath = EnumUtil.PHOTO_CLASS_PATH.text()+tempPath;
             File source = FileUtil.mkdirParentFile(realPath);
             File source1 = FileUtil.mkdirParentFile(classPath);
-            String url = EnumUtil.OBJECT_IP+":"+EnumUtil.OBJECT_PROT+"/upload/photo/"+tempPath;
+            String url = "/upload/photo/"+tempPath;
             try {
                 FileUtils.copyInputStreamToFile(mf.getInputStream(), source);
                 FileUtils.copyInputStreamToFile(mf.getInputStream(), source1);
                 Photo photo = new Photo();
                 photo.setPhotoAlbumId(photoAlbumId);
-                photo.setName(mf.getName());
+                photo.setName(FileUtil.removeFileSuffix(fileName));
                 photo.setPath(url);
                 //photo.setSize1(mf.getSize());
-                photo.setSuffix(FileUtil.getFileSuffix(mf.getOriginalFilename()));
+                photo.setSuffix(suffix);
                 photoService.insertSelective(photo);
 
             } catch (Exception e) {
@@ -202,6 +205,26 @@ public class PhotoController {
             }
         }
         return "";
+    }
+    /*
+    * @作者：zhouhy
+    * @描述：删除图片
+    * @时间：2018/1/5  10:33
+    */
+    @ResponseBody
+    @RequestMapping(value = "/deletePhoto/{photoId}")
+    public String deletePhoto(@PathVariable String photoId,HttpServletRequest req){
+        Result result = new Result();
+        Photo photo = new Photo();
+        photo.setId(photoId);
+        photo.setDelFlag(EnumUtil.DELETED.value());
+        photo.setUpdateTime(new Date());
+        photoService.updateByPrimaryKeySelective(photo);
+
+
+        result.setCode(MsgEnumUtil.SUCCESS.code());
+        result.setMsg(MsgEnumUtil.SUCCESS.msg());
+        return JSON.toJSONString(result);
     }
 
 

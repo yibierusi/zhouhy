@@ -18,7 +18,6 @@ public class PhotoAlbumServiceImpl extends BaseService<PhotoAlbum> implements Ph
     private PhotoAlbumMapper dao;
 
     public void test(){
-        
     }
 
 }

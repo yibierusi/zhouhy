@@ -30,5 +30,7 @@ public interface IService<T> {
 
     List<T> select(T entity);
 
+    int updateByPrimaryKeySelective(T entity);
+
     //TODO 其他...
 }

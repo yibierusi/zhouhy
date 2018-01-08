@@ -78,6 +78,13 @@ public class FileUtil {
         return suffix;
     }
 
+    //去除文件后缀名
+    public static String removeFileSuffix(String fileName){
+        String split[] = fileName.split("\\.",-1);
+        String suffix = split[split.length-1];
+        return fileName.split("."+suffix,-1)[0];
+    }
+
     //创建一个文件  若其父目录不存在 则创建
     public static File mkdirParentFile(String filePath){
         File f = new File(filePath);

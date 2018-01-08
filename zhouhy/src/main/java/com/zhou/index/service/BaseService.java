@@ -70,4 +70,10 @@ public abstract class BaseService<T> implements IService<T> {
         //        如果要设置条件，就实例化user，设置条件即可
         return mapper.select(entity);
     }
+
+    @Override
+    public int updateByPrimaryKeySelective(T entity){
+        //根据主键进行更新  为null的字段 不更新；
+        return mapper.updateByPrimaryKeySelective(entity);
+    }
 }
