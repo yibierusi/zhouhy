@@ -6,7 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
 
 @EnableEurekaClient
 @SpringBootApplication
@@ -21,8 +24,9 @@ public class EurekaclientApplication {
 	@Value("${server.port}")
 	String port;
 	@RequestMapping("/test")
-	public String home(@RequestParam String name) {
+	public String home(@RequestParam String name, HttpServletResponse res) {
 		System.out.println("========================");
+		res.setHeader("Access-Control-Allow-Origin", "*");
 		return "hi "+name+",i am from port:" +port;
 	}
 }
