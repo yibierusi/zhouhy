@@ -1,8 +1,5 @@
 package com.zhou.index.util;
 
-import com.zhou.blog.controller.BlogController;
-import com.zhou.photo.controller.PhotoController;
-
 /**
  * Title：
  * Description：
