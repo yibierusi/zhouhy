@@ -23,6 +23,9 @@ public class Blog {
     @GeneratedValue(generator = "UUID")
     private String id;
 
+    @Transient
+    private SysUser sysUser;
+
     /**
      * 博客标题
      */
@@ -222,6 +225,14 @@ public class Blog {
      */
     public String getDelFlag() {
         return delFlag;
+    }
+
+    public SysUser getSysUser() {
+        return sysUser;
+    }
+
+    public void setSysUser(SysUser sysUser) {
+        this.sysUser = sysUser;
     }
 
     /**
