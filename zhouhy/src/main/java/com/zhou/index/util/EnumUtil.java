@@ -11,28 +11,28 @@ import com.zhou.photo.controller.PhotoController;
  * @create 2017-11-13 14:51
  **/
 public enum EnumUtil {
-    BLOG_PATH("21", "./src/main/resources/public/upload/blog/"),
-    BLOG_CLASS_PATH("22", BlogController.class.getResource("/").getPath()+"public/upload/blog/"),
-    PHOTOT_PATH("31", "./src/main/resources/public/upload/photo/"),
-    PHOTO_CLASS_PATH("32", PhotoController.class.getResource("/").getPath()+"public/upload/photo/"),
+    BLOG_PATH(21, "./src/main/resources/public/upload/blog/"),
+    BLOG_CLASS_PATH(22, BlogController.class.getResource("/").getPath()+"public/upload/blog/"),
+    PHOTOT_PATH(31, "./src/main/resources/public/upload/photo/"),
+    PHOTO_CLASS_PATH(32, PhotoController.class.getResource("/").getPath()+"public/upload/photo/"),
 
-    NOT_DELETE("0","未删除"),
-    DELETED("1","已删除"),
+    NOT_DELETE(0,"未删除"),
+    DELETED(1,"已删除"),
 
-    OBJECT_IP("127","127.0.0.1"),
-    OBJECT_PROT("80","80"),
+    OBJECT_IP(127,"127.0.0.1"),
+    OBJECT_PROT(80,"80"),
 
-    DATE_FULL_FORMAT("99", "yyyyMMddHHmmss");
+    DATE_FULL_FORMAT(99, "yyyyMMddHHmmss");
 
-    private String value;
+    private Integer value;
     private String text;
 
-    EnumUtil(String value, String text) {
+    EnumUtil(Integer value, String text) {
         this.value = value;
         this.text = text;
     }
 
-    public String value() {
+    public Integer value() {
         return value;
     }
 

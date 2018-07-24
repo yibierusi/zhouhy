@@ -1,13 +1,20 @@
 package com.zhou.photo.service.impl;
 
-import com.zhou.index.service.BaseService;
-import com.zhou.photo.domain.Photo;
+import com.zhou.photo.entity.Photo;
+import com.zhou.photo.dao.PhotoDao;
 import com.zhou.photo.service.PhotoService;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by zhouhy on 2018/1/4.
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author zhouhy
+ * @since 2018-07-06
  */
 @Service
-public class PhotoServiceImpl extends BaseService<Photo> implements PhotoService {
+public class PhotoServiceImpl extends ServiceImpl<PhotoDao, Photo> implements PhotoService {
+	
 }

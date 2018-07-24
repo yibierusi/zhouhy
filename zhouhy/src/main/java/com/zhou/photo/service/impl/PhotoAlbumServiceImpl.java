@@ -1,23 +1,20 @@
 package com.zhou.photo.service.impl;
 
-import com.zhou.index.service.BaseService;
-import com.zhou.photo.domain.PhotoAlbum;
+import com.zhou.photo.entity.PhotoAlbum;
+import com.zhou.photo.dao.PhotoAlbumDao;
 import com.zhou.photo.service.PhotoAlbumService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import com.zhou.photo.dao.PhotoAlbumMapper;
 
-/*
- * @作者：zhouhy
- * @描述：相册实现类
- * @时间：2018/1/5  10:45
+/**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
+ * @author zhouhy
+ * @since 2018-07-06
  */
 @Service
-public class PhotoAlbumServiceImpl extends BaseService<PhotoAlbum> implements PhotoAlbumService {
-    @Autowired
-    private PhotoAlbumMapper dao;
-
-    public void test(){
-    }
-
+public class PhotoAlbumServiceImpl extends ServiceImpl<PhotoAlbumDao, PhotoAlbum> implements PhotoAlbumService {
+	
 }

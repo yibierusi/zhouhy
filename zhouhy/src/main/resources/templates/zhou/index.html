@@ -6,9 +6,56 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="description" content="" />
 	<meta name="author" content="" />
-	<!--公共CSS、JS-->
-	<script src="/zhou/include/include.js" th:src="@{/zhou/include/include.js}"/>
 
+	<!--公共CSS、JS-->
+	<!--<script th:src="@{/zhou/include/include.js}"/>-->
+	<!-- Bootstrap core CSS -->
+	<link th:href="@{/zhou/css/bootstrap.min.css}" rel="stylesheet" />
+	<!-- Font Awesome -->
+	<link th:href="@{/zhou/css/font-awesome.min.css}" rel="stylesheet" />
+	<!-- ionicons -->
+	<link th:href="@{/zhou/css/ionicons.min.css}" rel="stylesheet" />
+	<!-- Morris -->
+	<link th:href="@{/index/css/morris.css}" rel="stylesheet"/>
+	<!-- Datepicker -->
+	<link th:href="@{/index/css/datepicker.css}" rel="stylesheet"/>
+	<!-- Animate -->
+	<link th:href="@{/index/css/animate.min.css}" rel="stylesheet" />
+	<!-- Owl Carousel -->
+	<link th:href="@{/index/css/owl.carousel.min.css}" rel="stylesheet" />
+	<link th:href="@{/index/css/owl.theme.default.min.css}" rel="stylesheet" />
+	<!-- index -->
+	<link th:href="@{/index/css/index.min.css}" rel="stylesheet" />
+	<!-- Jquery -->
+	<script th:src="@{/zhou/js/jquery.min.js}"></script>
+	<!-- Bootstrap -->
+	<script th:src="@{/zhou/js/bootstrap.min.js}"></script>
+	<!-- Flot -->
+	<script th:src="@{/zhou/js/jquery.flot.min.js}"></script>
+	<!-- Slimscroll -->
+	<script th:src="@{/zhou/js/jquery.slimscroll.min.js}"></script>
+	<!-- Morris -->
+	<script th:src="@{/index/js/rapheal.min.js}"></script>
+	<script th:src="@{/index/js/morris.min.js}"></script>
+	<!-- Datepicker -->
+	<script th:src="@{/index/js/datepicker.js}"></script>
+	<!-- Sparkline -->
+	<script th:src="@{/index/js/sparkline.min.js}"></script>
+	<!-- Skycons -->
+	<script th:src="@{/index/js/skycons.js}"></script>
+	<!-- Popup Overlay -->
+	<script th:src="@{/zhou/js/jquery.popupoverlay.min.js}"></script>
+	<!-- Easy Pie Chart -->
+	<script th:src="@{/zhou/js/jquery.easypiechart.min.js}"></script>
+	<!-- Sortable -->
+	<script th:src="@{/zhou/js/jquery.sortable.js}"></script>
+	<!-- Owl Carousel -->
+	<script th:src="@{/index/js/owl.carousel.min.js}"></script>
+	<!-- Modernizr -->
+	<script th:src="@{/index/js/modernizr.min.js}"></script>
+	<!-- index -->
+	<script th:src="@{/index/js/index.js}"></script>
+	<script th:src="@{/index/js/index_dashboard.js}"></script>
 </head>
 
 <body class="overflow-hidden">
@@ -49,7 +96,7 @@
 				<ul class="sidebar-list">
 					<li>
 						<a href="#" class="clearfix">
-							<img src="/index/images/1.jpg" class="img-circle" alt="user avatar"/>
+							<img src="/res/index/images/1.jpg" class="img-circle" alt="user avatar"/>
 							<div class="chat-detail m-left-sm">
 								<div class="chat-name">
 									John Doe
@@ -68,7 +115,7 @@
 					</li>
 					<li>
 						<a href="#" class="clearfix">
-							<img src="/index/images/1.jpg" class="img-circle" alt="user avatar"/>
+							<img src="/res/index/images/1.jpg" class="img-circle" alt="user avatar"/>
 							<div class="chat-detail m-left-sm">
 								<div class="chat-name">
 									Jane Doe
@@ -87,7 +134,7 @@
 					</li>
 					<li>
 						<a href="#" class="clearfix">
-							<img src="/index/images/1.jpg" class="img-circle" alt="user avatar"/>
+							<img src="/res/index/images/1.jpg" class="img-circle" alt="user avatar"/>
 							<div class="chat-detail m-left-sm">
 								<div class="chat-name">
 									John Doe
@@ -106,7 +153,7 @@
 					</li>
 					<li>
 						<a href="#" class="clearfix">
-							<img src="/index/images/1.jpg" class="img-circle" alt="user avatar"/>
+							<img src="/res/index/images/1.jpg" class="img-circle" alt="user avatar"/>
 							<div class="chat-detail m-left-sm">
 								<div class="chat-name">
 									John Doe
@@ -132,7 +179,7 @@
 				<ul class="sidebar-list">
 					<li>
 						<a href="#" class="clearfix">
-							<img src="/index/images/1.jpg" class="img-circle" alt="user avatar"/>
+							<img src="/res/index/images/1.jpg" class="img-circle" alt="user avatar"/>
 							<div class="chat-detail m-left-sm">
 								<div class="chat-name">
 									John Doe
@@ -151,7 +198,7 @@
 					</li>
 					<li>
 						<a href="#" class="clearfix">
-							<img src="/index/images/1.jpg" class="img-circle" alt="user avatar"/>
+							<img src="/res/index/images/1.jpg" class="img-circle" alt="user avatar"/>
 							<div class="chat-detail m-left-sm">
 								<div class="chat-name">
 									Jane Doe
@@ -170,7 +217,7 @@
 					</li>
 					<li>
 						<a href="#" class="clearfix">
-							<img src="/index/images/1.jpg" class="img-circle" alt="user avatar"/>
+							<img src="/res/index/images/1.jpg" class="img-circle" alt="user avatar"/>
 							<div class="chat-detail m-left-sm">
 								<div class="chat-name">
 									John Doe
@@ -189,7 +236,7 @@
 					</li>
 					<li>
 						<a href="#" class="clearfix">
-							<img src="/index/images/1.jpg" class="img-circle" alt="user avatar" />
+							<img src="/res/index/images/1.jpg" class="img-circle" alt="user avatar" />
 							<div class="chat-detail m-left-sm">
 								<div class="chat-name">
 									John Doe
@@ -225,7 +272,7 @@
 						<span class="badge badge-danger bounceIn">1</span>
 						<ul class="dropdown-menu dropdown-sm pull-right user-dropdown">
 							<li class="user-avatar">
-								<img src="/index/images/1.jpg" alt="" class="img-circle"/>
+								<img src="/res/index/images/1.jpg" alt="" class="img-circle"/>
 								<div class="user-content">
 									<h5 class="no-m-bottom">Jane Doe</h5>
 									<div class="m-top-xs">
@@ -283,7 +330,7 @@
 				<div class="pull-right m-right-sm">
 					<div class="user-block hidden-xs">
 						<a href="#" id="userToggle" data-toggle="dropdown">
-							<img src="/index/images/1.jpg" alt="" class="img-circle inline-block user-profile-pic"/>
+							<img src="/res/index/images/1.jpg" alt="" class="img-circle inline-block user-profile-pic"/>
 							<div class="user-detail inline-block" id="username"><i class="fa fa-angle-down"></i>
 							</div>
 						</a>
@@ -318,7 +365,7 @@
 								<li><a>你有1条未读消息</a></li>
 								<li>
 									<a class="clearfix" href="#">
-										<img src="/index/images/1.jpg" alt="User Avatar"/>
+										<img src="/res/index/images/1.jpg" alt="User Avatar"/>
 										<div class="detail">
 											<strong>John Doe</strong>
 											<p class="no-margin">

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.photo.dao.PhotoAlbumDao">
+
+	<!--&lt;!&ndash; 开启二级缓存 &ndash;&gt;-->
+	<!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+
+	<!--&lt;!&ndash; 通用查询映射结果 &ndash;&gt;-->
+	<!--<resultMap id="BaseResultMap" type="com.zhou.photo.entity.PhotoAlbum">-->
+		<!--<id column="id" property="id" />-->
+		<!--<result column="name" property="name" />-->
+		<!--<result column="content" property="content" />-->
+		<!--<result column="sys_user_id" property="sysUserId" />-->
+		<!--<result column="photo_id" property="photoId" />-->
+		<!--<result column="photo_path" property="photoPath" />-->
+		<!--<result column="reads" property="reads" />-->
+		<!--<result column="comments" property="comments" />-->
+		<!--<result column="create_time" property="createTime" />-->
+		<!--<result column="update_time" property="updateTime" />-->
+		<!--<result column="del_flag" property="delFlag" />-->
+	<!--</resultMap>-->
+
+    <!--&lt;!&ndash; 通用查询结果列 &ndash;&gt;-->
+    <!--<sql id="Base_Column_List">-->
+        <!--id, name, content, sys_user_id AS sysUserId, photo_id AS photoId, photo_path AS photoPath, reads, comments, create_time AS createTime, update_time AS updateTime, del_flag AS delFlag-->
+    <!--</sql>-->
+
+</mapper>

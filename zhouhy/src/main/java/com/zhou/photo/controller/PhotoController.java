@@ -1,12 +1,14 @@
 package com.zhou.photo.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.zhou.index.domain.Result;
-import com.zhou.index.domain.SysUser;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.zhou.index.entity.Result;
+import com.zhou.index.entity.SysUser;
 import com.zhou.index.util.EnumUtil;
 import com.zhou.index.util.FileUtil;
 import com.zhou.index.util.MsgEnumUtil;
-import com.zhou.photo.domain.Photo;
+import com.zhou.photo.entity.Photo;
+import com.zhou.photo.entity.PhotoAlbum;
 import com.zhou.photo.service.PhotoAlbumService;
 import com.zhou.photo.service.PhotoService;
 import org.apache.commons.io.FileUtils;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
-import com.zhou.photo.domain.PhotoAlbum;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -88,12 +89,12 @@ public class PhotoController {
      */
     @ResponseBody
     @RequestMapping(value = "/createPhotoAlbum")
-    public String createPhotoAlbum(PhotoAlbum photoAlbum,HttpServletRequest req){
+    public String createPhotoAlbum(PhotoAlbum photoAlbum, HttpServletRequest req){
         Result result = new Result();
         SysUser su=(SysUser)req.getSession().getAttribute("sysUser");
-        photoAlbum.setAuthorId(su.getId());
+        photoAlbum.setSysUserId(su.getId());
         try {
-            photoAlbumService.insertSelective(photoAlbum);
+            photoAlbumService.insert(photoAlbum);
         }catch (Exception e){
             e.printStackTrace();
             result.setCode(MsgEnumUtil.ERROR.code());
@@ -114,9 +115,11 @@ public class PhotoController {
     public String getMyselfPhotoAlbumList(PhotoAlbum photoAlbum,HttpServletRequest req){
         Result result = new Result();
         SysUser su=(SysUser)req.getSession().getAttribute("sysUser");
-        photoAlbum.setAuthorId(su.getId());
-        photoAlbum.setDelFlag("0");
-        List<PhotoAlbum> obj = photoAlbumService.select(photoAlbum);
+
+        EntityWrapper<PhotoAlbum> ew = new EntityWrapper<>();
+        ew.where("del_flag={0}","0");
+        ew.and("sys_user_id={0}",su.getId());
+        List<PhotoAlbum> obj = photoAlbumService.selectList(ew);
 
         if(obj==null||obj.size()<1){
             result.setCode(MsgEnumUtil.NO_ALBUMS_CREATED.code());
@@ -139,10 +142,10 @@ public class PhotoController {
     public String getMyselfPhotoList(@PathVariable String photoAlbumId, HttpServletRequest req){
         Result result = new Result();
         SysUser su=(SysUser)req.getSession().getAttribute("sysUser");
-        Photo photo = new Photo();
-        photo.setPhotoAlbumId(photoAlbumId);
-        photo.setDelFlag("0");
-        List<Photo> obj = photoService.select(photo);
+        EntityWrapper<PhotoAlbum> ew = new EntityWrapper<>();
+        ew.where("del_flag={0}","0");
+        ew.and("photo_album_id={0}",photoAlbumId);
+        List<PhotoAlbum> obj = photoAlbumService.selectList(ew);
 
         if(obj==null||obj.size()<1){
             result.setCode(MsgEnumUtil.NO_PHOTO_TO_UPLOAD.code());
@@ -195,7 +198,7 @@ public class PhotoController {
                 photo.setPath(url);
                 //photo.setSize1(mf.getSize());
                 photo.setSuffix(suffix);
-                photoService.insertSelective(photo);
+                photoService.insert(photo);
 
             } catch (Exception e) {
                 String errorMsg = "Upload file " + source.getAbsoluteFile() + " Error!" + e.getMessage();
@@ -215,12 +218,13 @@ public class PhotoController {
     @RequestMapping(value = "/deletePhoto/{photoId}")
     public String deletePhoto(@PathVariable String photoId,HttpServletRequest req){
         Result result = new Result();
-        Photo photo = new Photo();
+
+        Photo photo = photoService.selectById(photoId);
         photo.setId(photoId);
         photo.setDelFlag(EnumUtil.DELETED.value());
         photo.setUpdateTime(new Date());
-        photoService.updateByPrimaryKeySelective(photo);
 
+        photoService.updateById(photo);
 
         result.setCode(MsgEnumUtil.SUCCESS.code());
         result.setMsg(MsgEnumUtil.SUCCESS.msg());

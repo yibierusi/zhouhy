@@ -1,12 +1,14 @@
 package com.zhou.blog.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.zhou.blog.domain.Blog;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.zhou.blog.entity.Blog;
 import com.zhou.blog.service.BlogService;
-import com.zhou.index.domain.SysUser;
+import com.zhou.index.entity.SysUser;
 import com.zhou.index.util.DateUtil;
 import com.zhou.index.util.EnumUtil;
 import com.zhou.index.util.FileUtil;
+import com.zhou.index.util.UUIDUtil;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,10 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Title：
@@ -38,117 +37,156 @@ import java.util.Map;
 public class BlogController {
     @Autowired
     BlogService blogService;
+
     //编辑
-    @RequestMapping(value="/mdeditor")
-    public ModelAndView mdeditor(String id){
+    @RequestMapping(value = "/mdeditor")
+    public ModelAndView mdeditor(String id) {
         ModelAndView mav = new ModelAndView("/blog/mdeditor");
-        mav.addObject("id",id);
+        mav.addObject("id", id);
         return mav;
     }
 
-    @RequestMapping(value="/editor2")
-    public ModelAndView editor2(){
+    @RequestMapping(value = "/editor2")
+    public ModelAndView editor2() {
         ModelAndView mav = new ModelAndView("/blog/csdneditor");
         return mav;
     }
+
     //查看
-    @RequestMapping(value="/blog")
-    public ModelAndView blog(String id,HttpServletRequest request){
+    @RequestMapping(value = "/blog")
+    public ModelAndView blog(String id, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("/blog/blog");
-        SysUser su=(SysUser)request.getSession().getAttribute("sysUser");
-        Blog blog = blogService.queryBlogByIdAndUserId(id,su.getId());
-        if(!(blog==null||blog.getId()==null||"".equals(blog.getId()))){
-            mav.addObject("id",id);
+        SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
+
+        EntityWrapper<Blog> ew = new EntityWrapper<>();
+        ew.where("id={0}", id);
+        ew.and("sys_user_id", su.getId());
+        Blog blog = blogService.selectOne(ew);
+
+        if (!(blog == null || blog.getId() == null || "".equals(blog.getId()))) {
+            mav.addObject("id", id);
         }
         return mav;
     }
 
     //删除
-    @RequestMapping(value="/deleteBlog")
+    @RequestMapping(value = "/deleteBlog")
     @ResponseBody
-    public String deleteBlog(String id,HttpServletRequest request){
-        SysUser su=(SysUser)request.getSession().getAttribute("sysUser");
-        Blog blog = blogService.queryBlogByIdAndUserId(id,su.getId());
-        String filePath = EnumUtil.BLOG_PATH.text()+su.getUsername()+"/md/";
+    public String deleteBlog(String id, HttpServletRequest request) {
+        SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
+
+        EntityWrapper<Blog> ew = new EntityWrapper<>();
+        ew.where("id={0}", id);
+        ew.and("user_id", su.getId());
+        Blog blog = blogService.selectOne(ew);
+
+        String filePath = EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/";
         String fileName = blog.getContent();
-        boolean fileDelFlag = FileUtil.fileRename(filePath+fileName,
-                DateUtil.dateToString(new Date(),EnumUtil.DATE_FULL_FORMAT.text())+"_"+fileName);
-        int flag = blogService.deleteBlog(id,su.getId());
-        return ""+flag;
+        boolean fileDelFlag = FileUtil.fileRename(filePath + fileName,
+                DateUtil.dateToString(new Date(), EnumUtil.DATE_FULL_FORMAT.text()) + "_" + fileName);
+
+        boolean flag = blogService.delete(ew);
+        //todo 由之前的int  变为 boolean  前段为修改
+        return "" + flag;
     }
 
     //列表
-    @RequestMapping(value="/blogList")
-    public ModelAndView postList(){
+    @RequestMapping(value = "/blogList")
+    public ModelAndView postList() {
         ModelAndView mav = new ModelAndView("/blog/blogList");
         return mav;
     }
-    //发表
-    @RequestMapping(value="/postBlog")
-    @ResponseBody
-    public String postBlog(Blog b,HttpServletRequest request){
-        SysUser su=(SysUser)request.getSession().getAttribute("sysUser");
-        long ctmLong = System.currentTimeMillis();
-        FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text()+su.getUsername()+"/md/"+ctmLong+".md",b.getContent());
 
-        b.setContent(ctmLong+".md");
-        b.setSysUser(su);
-        blogService.addBlog(b);
+    //发表
+    @RequestMapping(value = "/postBlog")
+    @ResponseBody
+    public String postBlog(Blog b, HttpServletRequest request) {
+        SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
+        long ctmLong = System.currentTimeMillis();
+        FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + ctmLong + ".md", b.getContent());
+
+        b.setId(UUIDUtil.getUUID());
+        b.setSysUserId(su.getId());
+        b.setCreateTime(new Date());
+        b.setUpdateTime(new Date());
+        b.setContent(ctmLong + ".md");
+        blogService.insert(b);
         return b.getId();
     }
+
     //修改博客
-    @RequestMapping(value="/modifyBlog")
+    @RequestMapping(value = "/modifyBlog")
     @ResponseBody
-    public String modifyBlog(Blog b,HttpServletRequest request){
-        SysUser su=(SysUser)request.getSession().getAttribute("sysUser");
-        Blog blog = blogService.queryBlogByIdAndUserId(b.getId(),su.getId());
-        if(!(blog==null||blog.getId()==null||blog.getId().equals(""))){
-            FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text()+su.getUsername()+"/md/"+blog.getContent(),b.getContent());
-            blogService.modifyBlog(b);
+    public String modifyBlog(Blog b, HttpServletRequest request) {
+        SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
+
+        EntityWrapper<Blog> ew = new EntityWrapper<>();
+        ew.where("id={0}", b.getId());
+        ew.and("aithor_id={0}", su.getId());
+        Blog blog = blogService.selectOne(ew);
+
+        if (!(blog == null || blog.getId() == null || blog.getId().equals(""))) {
+            FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + blog.getContent(), b.getContent());
+
+            blog.setUpdateTime(new Date());
+            blog.setContent(b.getContent());
+            blog.setTitle(b.getTitle());
+            blogService.updateById(blog);
         }
         return b.getId();
     }
+
     //增加阅读量
-    @RequestMapping(value="/modifyBlogReadCountById")
+    @RequestMapping(value = "/modifyBlogReadCountById")
     @ResponseBody
-    public String modifyBlogReadCountById(String id,HttpServletRequest request){
-        int flag = blogService.modifyBlogReadCountById(id);
-        if(flag==1){
+    public String modifyBlogReadCountById(String id) {
+        Blog blog = blogService.selectById(id);
+        blog.setReads(blog.getReads() + 1);
+        boolean flag = blogService.updateById(blog);
+        if (flag) {
             System.out.println("阅读量+1");
-        }else
+        } else
             System.out.println("阅读量增加失败");
         return "";
     }
+
     //获取列表
-    @RequestMapping(value="/getBlogList")
+    @RequestMapping(value = "/getBlogList")
     @ResponseBody
-    public String getBlogList(HttpServletRequest request){
-        SysUser su=(SysUser)request.getSession().getAttribute("sysUser");
-        List<Blog> blogList = blogService.queryBlogListByAuthorId(su.getId());
+    public String getBlogList(HttpServletRequest request) {
+        SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
+
+        EntityWrapper<Blog> ew = new EntityWrapper<>();
+        ew.and("a.sys_user_id={0}", su.getId());
+        ew.and("a.del_flag={0}", EnumUtil.NOT_DELETE);
+        ew.orderBy("a.create_time", false);
+        List<Blog> blogList = blogService.selectBlog(ew);
+
         return JSON.toJSONString(blogList);
     }
+
     //获取博客信息
-    @RequestMapping(value="/getBlogContent")
+    @RequestMapping(value = "/getBlogContent")
     @ResponseBody
-    public String getBlogContent(String id,HttpServletRequest request){
-        SysUser su=(SysUser)request.getSession().getAttribute("sysUser");
-        Blog blog = blogService.queryBlogById(id);
-        String str = FileUtil.fileInputStreamFunc(EnumUtil.BLOG_PATH.text()+su.getUsername()+"/md/"+blog.getContent());
-        Map<String,Object> res = new HashMap<>();
-        res.put("md",str);
-        res.put("blog",blog);
+    public String getBlogContent(String id, HttpServletRequest request) {
+        SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
+        Blog blog = blogService.selectById(id);
+        String str = FileUtil.fileInputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + blog.getContent());
+        Map<String, Object> res = new HashMap<>();
+        res.put("md", str);
+        res.put("blog", blog);
         return JSON.toJSONString(res);
     }
 
     //上传图片
-    @RequestMapping(value="/editormdUploadFile",method=RequestMethod.POST)
+    @RequestMapping(value = "/editormdUploadFile", method = RequestMethod.POST)
     public void hello(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "editormd-image-file", required = false) MultipartFile attach) {
-        SysUser su = (SysUser)request.getSession().getAttribute("sysUser");
+        SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         long ctmLong = System.currentTimeMillis();
         try {
             request.setCharacterEncoding("utf-8");
             response.setHeader("Content-Type", "text/html");
-            String rootPath = EnumUtil.BLOG_PATH.text()+su.getUsername()+"/images/";
+            String rootPath = EnumUtil.BLOG_PATH.text() + su.getUsername() + "/images/";
 
             String fileName = ctmLong + "." + FileUtil.getFileSuffix(attach.getOriginalFilename());
             //最终文件名
@@ -157,12 +195,12 @@ public class BlogController {
             FileUtils.copyInputStreamToFile(attach.getInputStream(), realFile);
 
             //class文件下放一份
-            File classFile = FileUtil.mkdirParentFile(EnumUtil.BLOG_CLASS_PATH.text() +su.getUsername()+"/images/" + fileName);
+            File classFile = FileUtil.mkdirParentFile(EnumUtil.BLOG_CLASS_PATH.text() + su.getUsername() + "/images/" + fileName);
             FileUtils.copyInputStreamToFile(attach.getInputStream(), classFile);
 
-            String url = "/upload/blog/"+su.getUsername()+"/images/";
+            String url = "/upload/blog/" + su.getUsername() + "/images/";
             //下面response返回的json格式是editor.md所限制的，规范输出就OK
-            response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\""+EnumUtil.OBJECT_IP+":"+EnumUtil.OBJECT_PROT+""+url+fileName+"\"}");
+            response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"" + EnumUtil.OBJECT_IP + ":" + EnumUtil.OBJECT_PROT + "" + url + fileName + "\"}");
         } catch (Exception e) {
             try {
                 e.printStackTrace();

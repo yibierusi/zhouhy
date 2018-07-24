@@ -1,10 +1,16 @@
 package com.zhou.photo.service;
 
-import com.zhou.index.service.IService;
-import com.zhou.photo.domain.Photo;
+import com.zhou.photo.entity.Photo;
+import com.baomidou.mybatisplus.service.IService;
 
 /**
- * Created by zhouhy on 2018/1/4.
+ * <p>
+ *  服务类
+ * </p>
+ *
+ * @author zhouhy
+ * @since 2018-07-06
  */
 public interface PhotoService extends IService<Photo> {
+	
 }

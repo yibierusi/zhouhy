@@ -1,11 +1,12 @@
 package com.zhou.index.config;
 
-import com.zhou.index.interceptor.MyInterceptor;
+import com.zhou.index.config.interceptor.MyInterceptor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Title：
@@ -15,11 +16,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @create 2017-11-09 10:21
  **/
 @Configuration
-public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
-
+public class MyWebMvcConfigurerAdapter implements WebMvcConfigurer {
+//
+//      注释的代码为spring boot 2.0.x以下的写法  2.0.x以上静态资源会被默认拦截
+//
+//
 
     /**
      * 配置静态访问资源
+     *
      * @param registry
      */
     @Override
@@ -28,8 +33,9 @@ public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
         //registry.addResourceHandler("/my/**").addResourceLocations("classpath:/my/");
         //指向外部目录
         registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
-        super.addResourceHandlers(registry);
+        //super.addResourceHandlers(registry);
     }
+
 
     /**
      * 以前要访问一个页面需要先创建个Controller控制类，在写方法跳转到页面
@@ -39,19 +45,36 @@ public class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/toLogin").setViewName("zhou/login");
-        super.addViewControllers(registry);
+        registry.addViewController("/toLogin").setViewName("/zhou/login");
     }
 
     /**
-     * 拦截器
-     * @param registry
+     * @Author: zhouhy
+     * @Description:
+     * @Date: 15:15 2018/7/5
+     * @params: [registry]
+     * @returns: void
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // addPathPatterns 用于添加拦截规则
-        // excludePathPatterns 用户排除拦截
-        registry.addInterceptor(new MyInterceptor()).addPathPatterns("/**").excludePathPatterns("/toLogin","/login");
-        super.addInterceptors(registry);
+        List<String> excludePathPatterns = new ArrayList<>();
+        //登录
+        excludePathPatterns.add("/toLogin");
+        excludePathPatterns.add("/login");
+        //静态资源
+        excludePathPatterns.add("/*/css/**");
+        excludePathPatterns.add("/*/js/**");
+        excludePathPatterns.add("/*/css/**");
+        excludePathPatterns.add("/*/fonts/**");
+        excludePathPatterns.add("/*/images/**");
+        excludePathPatterns.add("/*/scss/**");
+        excludePathPatterns.add("/*/nuget/**");
+        excludePathPatterns.add("/*/themes/**");
+        excludePathPatterns.add("/*/lib/**");
+        excludePathPatterns.add("/*/include/**");
+        excludePathPatterns.add("/*/plugins/**");
+
+        registry.addInterceptor(new MyInterceptor()).addPathPatterns("/**")
+                .excludePathPatterns(excludePathPatterns);
     }
 }

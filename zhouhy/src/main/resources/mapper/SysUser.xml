@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.index.dao.SysUserDao">
+
+	<!--&lt;!&ndash; 开启二级缓存 &ndash;&gt;-->
+	<!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+
+	<!--&lt;!&ndash; 通用查询映射结果 &ndash;&gt;-->
+	<!--<resultMap id="BaseResultMap" type="com.zhou.index.entity.SysUser">-->
+		<!--<id column="id" property="id" />-->
+		<!--<result column="username" property="username" />-->
+		<!--<result column="password" property="password" />-->
+		<!--<result column="nickname" property="nickname" />-->
+		<!--<result column="sex" property="sex" />-->
+		<!--<result column="birth_date" property="birthDate" />-->
+		<!--<result column="ico" property="ico" />-->
+		<!--<result column="signature" property="signature" />-->
+		<!--<result column="email" property="email" />-->
+		<!--<result column="phone" property="phone" />-->
+		<!--<result column="mobile" property="mobile" />-->
+		<!--<result column="user_type" property="userType" />-->
+		<!--<result column="user_state" property="userState" />-->
+		<!--<result column="login_time" property="loginTime" />-->
+		<!--<result column="login_ip" property="loginIp" />-->
+		<!--<result column="registered_time" property="registeredTime" />-->
+		<!--<result column="registered_ip" property="registeredIp" />-->
+		<!--<result column="update_by" property="updateBy" />-->
+		<!--<result column="update_date" property="updateDate" />-->
+		<!--<result column="remarks" property="remarks" />-->
+		<!--<result column="del_flag" property="delFlag" />-->
+	<!--</resultMap>-->
+
+    <!--&lt;!&ndash; 通用查询结果列 &ndash;&gt;-->
+    <!--<sql id="Base_Column_List">-->
+        <!--id, username, password, nickname, sex, birth_date AS birthDate, ico, signature, email, phone, mobile, user_type AS userType, user_state AS userState, login_time AS loginTime, login_ip AS loginIp, registered_time AS registeredTime, registered_ip AS registeredIp, update_by AS updateBy, update_date AS updateDate, remarks, del_flag AS delFlag-->
+    <!--</sql>-->
+
+</mapper>

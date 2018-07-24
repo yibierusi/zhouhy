@@ -1,31 +1,20 @@
 package com.zhou.index.service.impl;
 
-import com.zhou.index.dao.SysUserMapper;
-import com.zhou.index.domain.SysUser;
-import com.zhou.index.service.BaseService;
+import com.zhou.index.entity.SysUser;
+import com.zhou.index.dao.SysUserDao;
 import com.zhou.index.service.SysUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
- * Title：
- * Description：
+ * <p>
+ *  服务实现类
+ * </p>
  *
- * @author: zhouhy
- * @create 2017-11-09 11:51
- **/
+ * @author zhouhy
+ * @since 2018-07-06
+ */
 @Service
-public class SysUserServiceImpl extends BaseService<SysUser> implements SysUserService {
-    @Autowired
-    SysUserMapper dao;
-
-    @Override
-    public SysUser querySysUserByUsernameAndPassword(String username, String password) {
-        return dao.querySysUserByUsernameAndPassword(username,password);
-    }
-
-    @Override
-    public String queryUserIdByUsernameAndPassword(String username, String password) {
-        return dao.queryUserIdByUsernameAndPassword(username,password);
-    }
+public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> implements SysUserService {
+	
 }

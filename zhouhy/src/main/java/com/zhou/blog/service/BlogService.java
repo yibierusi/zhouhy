@@ -1,32 +1,21 @@
 package com.zhou.blog.service;
 
-import com.zhou.blog.domain.Blog;
-import com.zhou.index.service.IService;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.zhou.blog.entity.Blog;
+import com.baomidou.mybatisplus.service.IService;
 
 import java.util.List;
 
 /**
- * Title：
- * Description：
+ * <p>
+ *  服务类
+ * </p>
  *
- * @author: zhouhy
- * @create 2017-11-12 20:56
- **/
-public interface BlogService extends IService<Blog>{
-
-    void addBlog(Blog blog);
-
-    Blog queryBlogById(String id);
-
-    Blog queryBlogByIdAndUserId(String id,String userId);
-
-    List<Blog> queryBlogListByAuthorId(String authorId);
-
-    int modifyBlogReadCountById(String id);
-
-    int modifyBlog(Blog blog);
-
-    int deleteBlog(String id,String userId);
-
-
+ * @author zhouhy
+ * @since 2018-07-06
+ */
+public interface BlogService extends IService<Blog> {
+    //查询blog
+    List<Blog> selectBlog(EntityWrapper<Blog> ew);
+	
 }

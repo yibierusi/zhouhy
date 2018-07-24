@@ -1,12 +1,16 @@
 package com.zhou.photo.service;
 
-import com.zhou.index.service.IService;
-import com.zhou.photo.domain.PhotoAlbum;
+import com.zhou.photo.entity.PhotoAlbum;
+import com.baomidou.mybatisplus.service.IService;
 
-/*
- * @作者：zhouhy
- * @描述：相册service
- * @时间：2018/1/5  10:44
+/**
+ * <p>
+ *  服务类
+ * </p>
+ *
+ * @author zhouhy
+ * @since 2018-07-06
  */
 public interface PhotoAlbumService extends IService<PhotoAlbum> {
+	
 }

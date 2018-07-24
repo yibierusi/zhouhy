@@ -1,16 +1,16 @@
 package com.zhou.index.service;
 
-import com.zhou.index.domain.SysUser;
+import com.zhou.index.entity.SysUser;
+import com.baomidou.mybatisplus.service.IService;
 
 /**
- * Title：
- * Description：
+ * <p>
+ *  服务类
+ * </p>
  *
- * @author: zhouhy
- * @create 2017-11-09 11:51
- **/
-public interface SysUserService extends IService<SysUser>{
-    SysUser querySysUserByUsernameAndPassword(String username, String password);
-
-    String queryUserIdByUsernameAndPassword(String username, String password);
+ * @author zhouhy
+ * @since 2018-07-06
+ */
+public interface SysUserService extends IService<SysUser> {
+	
 }

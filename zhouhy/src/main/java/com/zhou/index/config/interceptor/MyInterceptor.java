@@ -1,6 +1,6 @@
-package com.zhou.index.interceptor;
+package com.zhou.index.config.interceptor;
 
-import com.zhou.index.domain.SysUser;
+import com.zhou.index.entity.SysUser;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -14,15 +14,15 @@ import javax.servlet.http.HttpServletResponse;
  * @author: zhouhy
  * @create 2017-11-09 10:21
  **/
-public class MyInterceptor implements HandlerInterceptor{
+public class MyInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
-        boolean flag =true;
-        SysUser user=(SysUser)request.getSession().getAttribute("sysUser");
-        if(null==user){
-            response.sendRedirect("toLogin");
+        boolean flag = true;
+        SysUser user = (SysUser) request.getSession().getAttribute("sysUser");
+        if (null == user) {
+            response.sendRedirect("/toLogin");
             flag = false;
-        }else{
+        } else {
             flag = true;
         }
         return flag;

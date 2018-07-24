@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhou.blog.dao.BlogDao">
+
+	<!--&lt;!&ndash; 开启二级缓存 &ndash;&gt;-->
+	<!--<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>-->
+
+	<!--&lt;!&ndash; 通用查询映射结果 &ndash;&gt;-->
+	<!--<resultMap id="BaseResultMap" type="com.zhou.blog.entity.Blog">-->
+		<!--<id column="id" property="id" />-->
+		<!--<result column="title" property="title" />-->
+		<!--<result column="content" property="content" />-->
+		<!--<result column="sys_user_id" property="sysUserId" />-->
+		<!--<result column="reads" property="reads" />-->
+		<!--<result column="comments" property="comments" />-->
+		<!--<result column="create_time" property="createTime" />-->
+		<!--<result column="update_time" property="updateTime" />-->
+		<!--<result column="del_flag" property="delFlag" />-->
+	<!--</resultMap>-->
+
+    <!--&lt;!&ndash; 通用查询结果列 &ndash;&gt;-->
+    <!--<sql id="Base_Column_List">-->
+        <!--id, title, content, sys_user_id AS sysUserId, reads, comments, create_time AS createTime, update_time AS updateTime, del_flag AS delFlag-->
+    <!--</sql>-->
+
+	<sql id="blogColumns">
+		a.id as "id",
+		a.title as "title",
+		a.content as "content",
+		a.sys_user_id as "sysUserId",
+		a.reads as "reads",
+		a.comments as "comments",
+		a.create_time as "createTime",
+		a.update_time as "updateTime",
+		a.del_flag as "delFlag"
+	</sql>
+
+	<select id="selectBlog" resultType="com.zhou.blog.entity.Blog">
+		SELECT <include refid="blogColumns"/>
+		,su.id as "sysUser.id",su.username as "sysUser.username"
+		FROM blog a,sys_user su where a.sys_user_id=su.id
+		${ew.sqlSegment}
+	</select>
+
+</mapper>
