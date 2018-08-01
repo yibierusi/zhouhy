@@ -23,17 +23,19 @@ import java.util.Map;
 public class IndexController {
 
     @RequestMapping(value = "/")
-    public ModelAndView login(){
+    public ModelAndView index(HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("/zhou/index");
+        SysUser sysUser = (SysUser) request.getSession().getAttribute("sysUser");
+        mav.addObject("sysUser", sysUser);
         return mav;
     }
 
     @RequestMapping(value = "/getSysUser")
     @ResponseBody
-    public String getSysUser(HttpServletRequest request){
-        Map<String,Object> res = new HashMap<>();
-        SysUser su=(SysUser)request.getSession().getAttribute("sysUser");
-        res.put("su",su);
+    public String getSysUser(HttpServletRequest request) {
+        Map<String, Object> res = new HashMap<>();
+        SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
+        res.put("su", su);
         return JSON.toJSONString(res);
     }
 }

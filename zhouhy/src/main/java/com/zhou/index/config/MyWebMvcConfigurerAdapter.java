@@ -62,6 +62,9 @@ public class MyWebMvcConfigurerAdapter implements WebMvcConfigurer {
         excludePathPatterns.add("/toLogin");
         excludePathPatterns.add("/login");
         //静态资源
+        excludePathPatterns.add("/module/**");
+        excludePathPatterns.add("/plugins/**");
+
         excludePathPatterns.add("/*/css/**");
         excludePathPatterns.add("/*/js/**");
         excludePathPatterns.add("/*/css/**");

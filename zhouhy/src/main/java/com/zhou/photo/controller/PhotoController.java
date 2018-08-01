@@ -7,6 +7,7 @@ import com.zhou.index.entity.SysUser;
 import com.zhou.index.util.EnumUtil;
 import com.zhou.index.util.FileUtil;
 import com.zhou.index.util.MsgEnumUtil;
+import com.zhou.index.util.UUIDUtil;
 import com.zhou.photo.entity.Photo;
 import com.zhou.photo.entity.PhotoAlbum;
 import com.zhou.photo.service.PhotoAlbumService;
@@ -34,7 +35,7 @@ import java.util.List;
  * @create 2017-11-09 19:56
  **/
 @Controller
-@RequestMapping("photoAlbum")
+@RequestMapping("photo")
 public class PhotoController {
     @Autowired
     private PhotoAlbumService photoAlbumService;
@@ -45,9 +46,9 @@ public class PhotoController {
      * @描述：跳转相册列表
      * @时间：2018/1/5  10:31
      */
-    @RequestMapping(value = "/photoListAlbumView")
+    @RequestMapping(value = "/photoAlbum")
     public ModelAndView gotoPhotoListAlbumView(){
-        ModelAndView mav = new ModelAndView("/photo/photoAlbumList");
+        ModelAndView mav = new ModelAndView("/photo/photo_album_list");
         return mav;
     }
     /*
@@ -57,7 +58,7 @@ public class PhotoController {
     */
     @RequestMapping(value = "/photoListView/{photoAlbumId}")
     public ModelAndView gotoPhotoListView(@PathVariable String photoAlbumId){
-        ModelAndView mav = new ModelAndView("/photo/photoList");
+        ModelAndView mav = new ModelAndView("/photo/photo_list");
         mav.addObject("photoAlbumId",photoAlbumId);
         return mav;
     }
@@ -68,7 +69,7 @@ public class PhotoController {
      */
     @RequestMapping(value = "/uploadPhotoView/{photoAlbumId}")
     public ModelAndView gotoUploadPhoto(@PathVariable String photoAlbumId){
-        ModelAndView mav = new ModelAndView("/photo/uploadPhoto");
+        ModelAndView mav = new ModelAndView("/photo/upload_photo");
         mav.addObject("photoAlbumId",photoAlbumId);
         return mav;
     }
@@ -77,9 +78,9 @@ public class PhotoController {
      * @描述：跳转创建相册视图
      * @时间：2018/1/5  10:32
      */
-    @RequestMapping(value = "/createPhotoAlbumView")
+    @RequestMapping(value = "/newPhotoAlbum")
     public ModelAndView gotoCreatePhotoAlbum(){
-        ModelAndView mav = new ModelAndView("/photo/createPhotoAlbum");
+        ModelAndView mav = new ModelAndView("/photo/new_photo_album");
         return mav;
     }
     /*
@@ -88,11 +89,12 @@ public class PhotoController {
      * @时间：2018/1/5  10:32
      */
     @ResponseBody
-    @RequestMapping(value = "/createPhotoAlbum")
-    public String createPhotoAlbum(PhotoAlbum photoAlbum, HttpServletRequest req){
+    @RequestMapping(value = "/addPhotoAlbum")
+    public String addPhotoAlbum(PhotoAlbum photoAlbum, HttpServletRequest req){
         Result result = new Result();
         SysUser su=(SysUser)req.getSession().getAttribute("sysUser");
         photoAlbum.setSysUserId(su.getId());
+        photoAlbum.setId(UUIDUtil.getUUID());
         try {
             photoAlbumService.insert(photoAlbum);
         }catch (Exception e){
@@ -112,7 +114,7 @@ public class PhotoController {
          */
     @ResponseBody
     @RequestMapping(value = "/getMyselfPhotoAlbumList")
-    public String getMyselfPhotoAlbumList(PhotoAlbum photoAlbum,HttpServletRequest req){
+    public String getMyselfPhotoAlbumList(HttpServletRequest req){
         Result result = new Result();
         SysUser su=(SysUser)req.getSession().getAttribute("sysUser");
 
@@ -142,10 +144,10 @@ public class PhotoController {
     public String getMyselfPhotoList(@PathVariable String photoAlbumId, HttpServletRequest req){
         Result result = new Result();
         SysUser su=(SysUser)req.getSession().getAttribute("sysUser");
-        EntityWrapper<PhotoAlbum> ew = new EntityWrapper<>();
+        EntityWrapper<Photo> ew = new EntityWrapper<>();
         ew.where("del_flag={0}","0");
         ew.and("photo_album_id={0}",photoAlbumId);
-        List<PhotoAlbum> obj = photoAlbumService.selectList(ew);
+        List<Photo> obj = photoService.selectList(ew);
 
         if(obj==null||obj.size()<1){
             result.setCode(MsgEnumUtil.NO_PHOTO_TO_UPLOAD.code());
@@ -198,6 +200,7 @@ public class PhotoController {
                 photo.setPath(url);
                 //photo.setSize1(mf.getSize());
                 photo.setSuffix(suffix);
+                photo.setId(UUIDUtil.getUUID());
                 photoService.insert(photo);
 
             } catch (Exception e) {
@@ -207,7 +210,9 @@ public class PhotoController {
 
             }
         }
-        return "";
+        Result res = new Result(200,"上传成功",null);
+
+        return JSON.toJSONString(res);
     }
     /*
     * @作者：zhouhy

@@ -39,23 +39,17 @@ public class BlogController {
     BlogService blogService;
 
     //编辑
-    @RequestMapping(value = "/mdeditor")
-    public ModelAndView mdeditor(String id) {
-        ModelAndView mav = new ModelAndView("/blog/mdeditor");
+    @RequestMapping(value = "/edit")
+    public ModelAndView edit(String id) {
+        ModelAndView mav = new ModelAndView("/blog/edit");
         mav.addObject("id", id);
         return mav;
     }
 
-    @RequestMapping(value = "/editor2")
-    public ModelAndView editor2() {
-        ModelAndView mav = new ModelAndView("/blog/csdneditor");
-        return mav;
-    }
-
     //查看
-    @RequestMapping(value = "/blog")
-    public ModelAndView blog(String id, HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("/blog/blog");
+    @RequestMapping(value = "/query")
+    public ModelAndView query(String id, HttpServletRequest request) {
+        ModelAndView mav = new ModelAndView("/blog/query");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
 
         EntityWrapper<Blog> ew = new EntityWrapper<>();
@@ -70,14 +64,14 @@ public class BlogController {
     }
 
     //删除
-    @RequestMapping(value = "/deleteBlog")
+    @RequestMapping(value = "/delete")
     @ResponseBody
-    public String deleteBlog(String id, HttpServletRequest request) {
+    public String delete(String id, HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
 
         EntityWrapper<Blog> ew = new EntityWrapper<>();
         ew.where("id={0}", id);
-        ew.and("user_id", su.getId());
+        ew.and("sys_user_id", su.getId());
         Blog blog = blogService.selectOne(ew);
 
         String filePath = EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/";
@@ -91,16 +85,16 @@ public class BlogController {
     }
 
     //列表
-    @RequestMapping(value = "/blogList")
-    public ModelAndView postList() {
-        ModelAndView mav = new ModelAndView("/blog/blogList");
+    @RequestMapping(value = "/list")
+    public ModelAndView list() {
+        ModelAndView mav = new ModelAndView("/blog/list");
         return mav;
     }
 
     //发表
-    @RequestMapping(value = "/postBlog")
+    @RequestMapping(value = "/publish")
     @ResponseBody
-    public String postBlog(Blog b, HttpServletRequest request) {
+    public String publish(Blog b, HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         long ctmLong = System.currentTimeMillis();
         FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + ctmLong + ".md", b.getContent());
@@ -115,9 +109,9 @@ public class BlogController {
     }
 
     //修改博客
-    @RequestMapping(value = "/modifyBlog")
+    @RequestMapping(value = "/modify")
     @ResponseBody
-    public String modifyBlog(Blog b, HttpServletRequest request) {
+    public String modify(Blog b, HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
 
         EntityWrapper<Blog> ew = new EntityWrapper<>();
@@ -151,9 +145,9 @@ public class BlogController {
     }
 
     //获取列表
-    @RequestMapping(value = "/getBlogList")
+    @RequestMapping(value = "/getList")
     @ResponseBody
-    public String getBlogList(HttpServletRequest request) {
+    public String getList(HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
 
         EntityWrapper<Blog> ew = new EntityWrapper<>();
@@ -166,9 +160,9 @@ public class BlogController {
     }
 
     //获取博客信息
-    @RequestMapping(value = "/getBlogContent")
+    @RequestMapping(value = "/getContent")
     @ResponseBody
-    public String getBlogContent(String id, HttpServletRequest request) {
+    public String getContent(String id, HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         Blog blog = blogService.selectById(id);
         String str = FileUtil.fileInputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + blog.getContent());

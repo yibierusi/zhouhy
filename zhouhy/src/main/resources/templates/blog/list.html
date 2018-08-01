@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8"/>
+	<title>博客列表</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="description" content=""/>
+	<meta name="author" content=""/>
+
+	<link rel="stylesheet" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+	<!--图标-->
+	<link rel="stylesheet" th:href="@{/plugins/font-awesome/font-awesome.css}">
+	<script th:src="@{/plugins/jquery/jquery-2.1.1.js}"></script>
+	<!-- index -->
+	<link th:href="@{/index/css/index.min.css}" rel="stylesheet" />
+	<!--layui-->
+	<script th:src="@{/plugins/layui/layui.all.js}"></script>
+	<link th:href="@{/plugins/layui/css/layui.css}" rel="stylesheet" />
+
+
+</head>
+
+<body class="overflow-hidden">
+<div class="padding-md">
+	<ul class="breadcrumb">
+		<li><span class="primary-font"><i class="icon-home"></i></span><a href="#"> 主页</a></li>
+		<li id="navLi2">博客列表</li>
+	</ul>
+
+	<table class="table table-striped" id="dataTable">
+		<thead>
+		<tr>
+			<th>标题</th>
+			<th>时间</th>
+			<th>作者</th>
+			<th>阅读</th>
+			<th>评论</th>
+			<th>操作</th>
+		</tr>
+		</thead>
+		<tbody id="tbody"></tbody>
+	</table>
+</div><!-- ./padding-md -->
+	<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+        $(function()	{
+            init();
+        });
+
+        function init(){
+            $.ajax({
+                url: "/blog/getList",
+                dataType:"json",
+                type:"post",
+                data:{},
+                success: function (data) {
+                    var str = "";
+                    for(var i=0;i<data.length;i++){
+                        str += "<tr></tr><td><a href='/blog/query?id="+data[i].id+"' id='"+data[i].id+"'>"+data[i].title+"</a></td>";
+                        str += "<td>"+new Date(data[i].createTime).toLocaleString()+"</td>";
+                        str += "<td>"+data[i].sysUser.username+"</td>";
+                        str += "<td>"+data[i].reads+"</td>";
+                        str += "<td>"+data[i].comments+"</td>";
+                        str += "<td><a href='/blog/query?id="+data[i].id+"' style='margin-left:5px;'><span class='label label-success'>查看</span></a>";
+                        str += "<a href='#' onclick=\"editBlog('"+data[i].id+"')\" style='margin-left:5px;'><span class='label label-info'>编辑</span></a>";
+						str += "<a href='#' onclick=\"deleteBlog('"+data[i].id+"')\" style='margin-left:5px;'><span class='label label-danger'>删除</span></a>";
+                        str +="</td></tr>";
+                    }
+                    $("#tbody").html(str);
+                },
+                error:function (error) {
+                    layer.msg("获取博客列表失败");
+                }
+            });
+		}
+		function editBlog(id) {
+            window.location.href="/blog/edit?id="+id;
+        }
+		function deleteBlog(id) {
+            $.ajax({
+                url: "/blog/delete",
+                dataType:"text",
+                type:"post",
+                data:{"id":id},
+                success: function (data) {
+                    if(data==1||data=="1"){
+                        layer.msg("删除成功",{icon:1});
+                        init();
+					}else{
+                        layer.msg("删除失败",{icon:2});
+					}
+                }
+            });
+        }
+        /*]]>*/
+	</script>
+
+</body>
+</html>
