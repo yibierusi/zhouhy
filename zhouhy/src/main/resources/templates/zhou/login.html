@@ -2,9 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="description" content="登录界面" />
-<title>登录界面</title>
-    <link rel="stylesheet" th:href="@{/module/login/jq22.css}"  ></link>
+<meta name="description" content="用户登录" />
+<title>用户登录</title>
+    <link rel="stylesheet" th:href="@{/module/login/jq22.css}" />
 </head>
 <body>
 <!-- begin -->
@@ -35,13 +35,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-actions"><a href="#" tabindex="5" class="btn pull-left btn-link text-muted">Forgot password?</a><a href="#" tabindex="6" class="btn btn-link text-muted">Sign Up</a>
-                    <button type="button" id="doLogin" tabindex="4" class="btn btn-primary">Login</button>
+                <div class="form-actions"><a href="#" tabindex="5" class="btn pull-left btn-link text-muted">忘记密码？</a><a href="#" tabindex="6" class="btn btn-link text-muted">注册</a>
+                    <button type="button" id="doLogin" tabindex="4" class="btn btn-primary">登录</button>
                 </div>
             </form>
         </div>
     </div>
     <script th:src="@{/plugins/jquery/jquery-2.1.1.js}"></script>
+    <script th:src="@{/plugins/layer/layer.js}"></script>
+
     <script>
     $(function() {
         $('#login #password').focus(function() {

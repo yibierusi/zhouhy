@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>INSPINIA | Dashboard</title>
+    <title>ZH+</title>
 
     <link rel="stylesheet" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/plugins/font-awesome/font-awesome.css}"> <!--图标-->
@@ -44,24 +44,21 @@
                     <div class="logo-element">
                         ZH+
                     </div>
-                </li>
                 <li class="active">
-                    <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Dashboards</span> <span
+                    <a href="index.html"><i class="fa fa-edit"></i> <span class="nav-label">Dashboards</span> <span
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
-                        <li><a onclick="updateSrc('/blog/edit')">Edit
+                        <li><a onclick="updateSrc('/blog/list')">List
                             <span class="label label-primary pull-right">NEW</span>
                         </a></li>
-                        <li><a onclick="updateSrc('/blog/list')">List</a></li>
-                        <li><a onclick="updateSrc('/blog/view')">View</a></li>
-                        <li><a href="dashboard_5.html">Dashboard v.5 </a></li>
+                        <li><a onclick="updateSrc('/blog/edit')">Edit</a></li>
                     </ul>
                 </li>
                 <li>
                     <a href="layouts.html"><i class="fa fa-diamond"></i> <span class="nav-label">Layouts</span></a>
                 </li>
                 <li>
-                    <a href="index.html#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Graphs</span><span
+                    <a href="index.html#"><i class="fa fa-picture-o"></i> <span class="nav-label">Graphs</span><span
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
                         <li><a onclick="updateSrc('/photo/photoAlbum')">Photo Album</a></li>
@@ -91,7 +88,7 @@
                     <a href="widgets.html"><i class="fa fa-flask"></i> <span class="nav-label">Widgets</span></a>
                 </li>
                 <li>
-                    <a href="index.html#"><i class="fa fa-edit"></i> <span class="nav-label">Forms</span><span
+                    <a href="index.html#"><i class="fa fa-th-large"></i> <span class="nav-label">Forms</span><span
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
                         <li><a href="form_basic.html">Basic form</a></li>
@@ -215,7 +212,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="index.html#"><i class="fa fa-picture-o"></i> <span class="nav-label">Gallery</span><span
+                    <a href="index.html#"><i class="fa fa-bar-chart-o"></i> <span class="nav-label">Gallery</span><span
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
                         <li><a href="basic_gallery.html">Lightbox Gallery</a></li>
@@ -396,7 +393,7 @@
             </nav>
         </div>
     <div style="width:100%;height:100%">
-        <iframe id="iframe" src="/blog/edit" width="100%" height="1000px" style="border: 1px solid white"></iframe>
+        <iframe id="iframe" scrolling="no" frameborder="0"  src="/blog/list" width="100%" height="1000px" style="border: 1px solid white"></iframe>
     </div>
 
 

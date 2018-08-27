@@ -1,6 +1,6 @@
 #tomcat
 server:
-  port: 80
+  port: 12345
 
 # mybatis-plus_config
 mybatis-plus:

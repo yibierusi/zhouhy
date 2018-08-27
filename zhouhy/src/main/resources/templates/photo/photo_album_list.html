@@ -1,37 +1,43 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8"/>
-	<title>相册列表</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<meta name="description" content=""/>
-	<meta name="author" content=""/>
+    <meta charset="utf-8"/>
+    <title>相册列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
 
 
-	<!-- Jquery -->
-	<script th:src="@{/zhou/js/jquery.min.js}"></script>
-	<!-- Bootstrap core CSS -->
-	<link rel="stylesheet" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
-	<!-- index -->
-	<link th:href="@{/index/css/index.min.css}" rel="stylesheet" />
-	<link rel="stylesheet" th:href="@{/plugins/font-awesome/font-awesome.css}"> <!--图标-->
-	<!-- layer +layui -->
-	<script th:src="@{/plugins/layer/layer.js}"></script>
+    <!-- Jquery -->
+    <script th:src="@{/plugins/jquery/jquery-2.1.1.js}"></script>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <!-- index -->
+    <link th:href="@{/module/index/index.min.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/plugins/font-awesome/font-awesome.css}"> <!--图标-->
+    <!-- layer +layui -->
+    <script th:src="@{/plugins/layer/layer.js}"></script>
 
 </head>
 
 
 <body class="overflow-hidden">
 <div class="padding-md">
-	<div class="gallery-filter m-top-md">
-		<ul class="clearfix">
-			<li class="active"><a>所有相册</a></li>
-			<li id="newPhotoAlbum"><a>创建相册</a></li>
-			<!--<li><button class="layui-btn layui-btn-sm layui-btn-normal"></button></li>-->
-		</ul>
-	</div>
-	<div id="photoAlbumList" class="gallery-list js-masonry m-top-md">
-	</div><!-- ./gallery-list -->
+    <ul class="breadcrumb">
+        <li><span class="primary-font"><i class="icon-home"></i></span><a href="#"> 主页</a></li>
+        <li id="navLi2">所有相册</li>
+    </ul>
+    <div class="gallery-filter m-top-md">
+        <ul class="clearfix">
+            <li class="active"><a>所有相册</a></li>
+            <li id="newPhotoAlbum"><a>创建相册</a></li>
+            <!--<li><button class="layui-btn layui-btn-sm layui-btn-normal"></button></li>-->
+
+        </ul>
+    </div>
+    <div id="photoAlbumList" class="gallery-list js-masonry m-top-md">
+    </div><!-- ./gallery-list -->
 
 </div><!-- ./padding-md -->
 
@@ -39,8 +45,8 @@
 <!-- Le javascript
 ================================================== -->
 <script th:inline="javascript">
-	/*<![CDATA[*/
-    $(function()	{
+    /*<![CDATA[*/
+    $(function () {
         document.addEventListener("error", function (e) {
             var elem = e.target;
             if (elem.tagName.toLowerCase() == "img") {
@@ -51,56 +57,56 @@
         bingFunc();
         init();
     });
-	function init(){
+
+    function init() {
         $.ajax({
             url: "/photo/getMyselfPhotoAlbumList",
             dataType: "json",
             type: "post",
             success: function (data) {
-				if(data.code==0){
-				    var list = data.obj;
-				    var str = '';
-					for(var i=0;i<list.length;i++){
-                     	str += '<div class="gallery-item" onclick="enterPhotoAlbum(\''+list[i].id+'\')">';
-						str += '	<div class="gallery-wrapper">';
-						str += '		<a class="gallery-remove"><i class="fa fa-times"></i></a>';
-						str += '			<img src="'+list[i].photoPath+'" alt=""/>';
-						str += '			<div class="gallery-title">'+list[i].name+'</div>';
-						str += '	</div>';
-						str += '</div>';
-					}
-					alert(str);
-					$("#photoAlbumList").html(str);
-				}else if(data.code==2){
-                    layer.msg(data.msg,{icon:0});
-				}else if(data.code==1){
-				    layer.msg("获取相册列表失败",{icon:2});
-				}
+                if (data.code == 200) {
+                    var list = data.obj.photoAlbums;
+                    var str = '';
+                    for (var i = 0; i < list.length; i++) {
+                        str += '<div class="gallery-item" onclick="enterPhotoAlbum(\'' + list[i].id + '\')">';
+                        str += '	<div class="gallery-wrapper">';
+                        str += '		<a class="gallery-remove"><i class="fa fa-times"></i></a>';
+                        str += '			<img src="' + list[i].photoPath + '" alt=""/>';
+                        str += '			<div class="gallery-title">' + list[i].name + '</div>';
+                        str += '	</div>';
+                        str += '</div>';
+                    }
+                    $("#photoAlbumList").html(str);
+                } else if (data.code == 2) {
+                    layer.msg(data.msg, {icon: 0});
+                } else if (data.code == 1) {
+                    layer.msg("获取相册列表失败", {icon: 2});
+                }
             }
         });
-	}
-    function bingFunc(){
-		$("#newPhotoAlbum").click(function(){
+    }
+
+    function bingFunc() {
+        $("#newPhotoAlbum").click(function () {
             layer.open({
                 type: 2,
-                title: [""],
-                closeBtn: 0,
-                shade: [0.1],//背景透明度
-                area: ['70%', '50%'],//弹出页面的大小
-                shift: 2,
-                shadeClose: true,
-                content: ['/photo/newPhotoAlbum'],
+                title: ["创建相册"],
+                area: ['470px', '380px'],
+                fixed: false, //不固定
+                maxmin: true,
+                content: '/photo/newPhotoAlbum',
                 end: function () {           //关闭弹出层触发
-					init();
+                    init();
                 }
             });
-		})
-	};
-	function enterPhotoAlbum(id){
-       window.location.href="photoListView/"+id;
-	}
+        })
+    };
 
-	/*]]>*/
+    function enterPhotoAlbum(id) {
+        window.location.href = "photoListView/" + id;
+    }
+
+    /*]]>*/
 </script>
 </body>
 </html>

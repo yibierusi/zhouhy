@@ -13,10 +13,10 @@
 	<link rel="stylesheet" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
 	<link rel="stylesheet" th:href="@{/plugins/font-awesome/font-awesome.css}"> <!--图标-->
 
-	<link th:href="@{/index/css/index.min.css}" rel="stylesheet" />
+	<link th:href="@{/module/index/index.min.css}" rel="stylesheet" />
 
 	<!-- Jquery -->
-	<script th:src="@{/zhou/js/jquery.min.js}"></script>
+	<script th:src="@{/plugins/jquery/jquery-2.1.1.js}"></script>
 	<!--blog ide-->
 	<script th:src="@{/plugins/blog/js/editormd.min.js}"></script>
 	<script th:src="@{/plugins/blog/lib/marked.min.js}"></script>
@@ -68,7 +68,7 @@
             data:{"id":id},
             success: function (data) {
                 var testEditormdView = editormd.markdownToHTML("test-editormd-view", {
-                    markdown:data.md,
+                    markdown:data.obj.md,
                     htmlDecode      : "style,script,iframe",  // you can filter tags decode
                     emoji           : true,
                     taskList        : true,
@@ -93,11 +93,11 @@
 //                    flowChart: true,  // 默认不解析
 //                    sequenceDiagram: true,  // 默认不解析
 //                });
-                var blog = data.blog;
-                $("#title").html(query.title);
-                $("#createTime").html(new Date(query.createTime).toLocaleString());
-                $("#readCount").html(query.readCount);
-                $("#commentCount").html(query.commentCount);
+                var blog = data.obj.blog;
+                $("#title").html(blog.title);
+                $("#createTime").html(new Date(blog.createTime).toLocaleString());
+                $("#readCount").html(blog.readCount);
+                $("#commentCount").html(blog.commentCount);
             }
         });
 	}
@@ -107,7 +107,8 @@
             dataType:"json",
             type:"post",
             data:{"id":id},
-            success: function (data) {}
+            success: function (data) {
+			}
         });
 	}
 	/*]]>*/

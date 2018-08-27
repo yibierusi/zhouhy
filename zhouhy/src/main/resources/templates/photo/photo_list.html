@@ -1,37 +1,46 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8"/>
-	<title>图片列表</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<meta name="description" content=""/>
-	<meta name="author" content=""/>
+    <meta charset="utf-8"/>
+    <title>图片列表</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
 
-	<!-- Jquery -->
-	<script th:src="@{/plugins/jquery/jquery-2.1.1.js}"></script>
-	<!-- Bootstrap core CSS -->
-	<link rel="stylesheet" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
-	<!-- index -->
-	<link th:href="@{/index/css/index.min.css}" rel="stylesheet" />
-	<link rel="stylesheet" th:href="@{/plugins/font-awesome/font-awesome.css}"> <!--图标-->
+    <!-- Jquery -->
+    <script th:src="@{/plugins/jquery/jquery-2.1.1.js}"></script>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <!-- index -->
+    <link th:href="@{/module/index/index.min.css}" rel="stylesheet" />
+    <link rel="stylesheet" th:href="@{/plugins/font-awesome/font-awesome.css}"> <!--图标-->
 
-	<!-- layer +layui -->
-	<script th:src="@{/plugins/layer/layer.js}"></script>
+    <!-- layer +layui -->
+    <script th:src="@{/plugins/layer/layer.js}"></script>
+
+    <!-- 图片放大 -->
+    <script th:src="@{/plugins/blueimp/jquery.blueimp-gallery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/plugins/blueimp/blueimp-gallery.min.css}">
 
 </head>
 
 
 <body class="overflow-hidden">
 <div class="padding-md">
-	<div class="gallery-filter m-top-md">
-		<ul class="clearfix">
-			<li class="active"><a>所有图片</a></li>
-			<li id="uploadPhoto"><a>上传图片</a></li>
-			<!--<li><button class="layui-btn layui-btn-sm layui-btn-normal"></button></li>-->
-		</ul>
-	</div>
-	<div id="photoAlbumList" class="gallery-list js-masonry m-top-md">
-	</div><!-- ./gallery-list -->
+    <ul class="breadcrumb">
+        <li><span class="primary-font"><i class="icon-home"></i></span><a href="#"> 主页</a></li>
+        <li id="navLi2">所有图片</li>
+    </ul>
+    <div class="gallery-filter m-top-md">
+        <ul class="clearfix">
+            <li class="active"><a>所有图片</a></li>
+            <li id="uploadPhoto"><a>上传图片</a></li>
+        </ul>
+    </div>
+    <div id="photoAlbumList" class="gallery-list js-masonry m-top-md">
+    </div><!-- ./gallery-list -->
+
 
 </div><!-- ./padding-md -->
 
@@ -39,41 +48,53 @@
 <!-- Le javascript
 ================================================== -->
 <script th:inline="javascript">
-	/*<![CDATA[*/
-	var photoAlbumId = /*[[${photoAlbumId}]]*/;
-    $(function()	{
+    /*<![CDATA[*/
+    var photoAlbumId = /*[[${photoAlbumId}]]*/;
+    $(function () {
         bingFunc();
         init();
     });
-	function init(){
+
+    function init() {
         $.ajax({
-            url: "/photo/getMyselfPhotoList/"+photoAlbumId,
+            url: "/photo/getMyselfPhotoList/" + photoAlbumId,
             dataType: "json",
             type: "post",
             success: function (data) {
-				if(data.code==0){
-				    var list = data.obj;
-				    var str = '';
-					for(var i=0;i<list.length;i++){
-                     	str += '<div class="gallery-item">';
-						str += '	<div class="gallery-wrapper">';
-						str += '		<a class="gallery-remove" onclick="deletePhoto(\''+list[i].id+'\')"><i class="fa fa-times"></i></a>';
-						str += '			<img src="'+list[i].path+'" alt=""/>';
-						str += '			<div class="gallery-title">'+list[i].name+'</div>';
-						str += '	</div>';
-						str += '</div>';
-					}
-					$("#photoAlbumList").html(str);
-				}else if(data.code==3){
-                    layer.msg(data.msg,{icon:0});
-				}else if(data.code==1){
-				    layer.msg("获取图片列表失败",{icon:2});
-				}
+                if (data.code == 200) {
+                    var list = data.obj.photos;
+                    //图片方法之后的样式 左右滑动 缩略图等
+                    var str = '<div id="blueimp-gallery" class="blueimp-gallery">\n' +
+                        '        <div class="slides"></div>\n' +
+                        '        <h3 class="title"></h3>\n' +
+                        '        <a class="prev">‹</a>\n' +
+                        '        <a class="next">›</a>\n' +
+                        '        <a class="close">×</a>\n' +
+                        '        <a class="play-pause"></a>\n' +
+                        '        <ol class="indicator"></ol>\n' +
+                        '    </div>';
+
+                    for (var i = 0; i < list.length; i++) {
+                        str += '<div class="gallery-item">';
+                        str += '	<div class="gallery-wrapper">';
+                        str += '		<a class="gallery-remove" onclick="deletePhoto(\'' + list[i].id + '\')"><i class="fa fa-times"></i></a>';
+                        str += '			<a href="'+ list[i].path +'" title="' + list[i].name + '" data-gallery=""><img src="' + list[i].path + '" alt=""/></a>';
+                        str += '			<div class="gallery-title">' + list[i].name + '</div>';
+                        str += '	</div>';
+                        str += '</div>';
+                    }
+                    $("#photoAlbumList").html(str);
+                } else if (data.code == 3) {
+                    layer.msg(data.msg, {icon: 0});
+                } else if (data.code == 1) {
+                    layer.msg("获取图片列表失败", {icon: 2});
+                }
             }
         });
-	}
-    function bingFunc(){
-		$("#uploadPhoto").click(function(){
+    }
+
+    function bingFunc() {
+        $("#uploadPhoto").click(function () {
             layer.open({
                 type: 2,
                 title: [""],
@@ -82,31 +103,31 @@
                 area: ['70%', '50%'],//弹出页面的大小
                 shift: 2,
                 shadeClose: true,
-                content: ['/photo/uploadPhotoView/'+photoAlbumId],
+                content: ['/photo/uploadPhotoView/' + photoAlbumId],
                 end: function () {           //关闭弹出层触发
-					init();
+                    init();
                 }
             });
-		})
-	};
+        })
+    };
 
-	function deletePhoto(photoId){
+    function deletePhoto(photoId) {
         $.ajax({
             url: "/photo/deletePhoto/" + photoId,
             dataType: "json",
             type: "post",
             success: function (data) {
-				if(data.code==0){
-				    layer.msg("删除成功！！！",{icon:1});
+                if (data.code == 200) {
+                    layer.msg("删除成功！！！", {icon: 1});
                     init();
-				}else if(data.code==1){
-                    layer.msg("删除失败！！！",{icon:0});
-				}
+                } else{
+                    layer.msg(data.msg, {icon: 0});
+                }
             }
         });
-	}
+    }
 
-	/*]]>*/
+    /*]]>*/
 </script>
 </body>
 </html>

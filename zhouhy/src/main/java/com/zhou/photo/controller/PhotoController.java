@@ -28,12 +28,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Title：
- * Description：
- *
- * @author: zhouhy
- * @create 2017-11-09 19:56
- **/
+ * @Author: zhouhy
+ * @Description:
+ * @Date: 17:16 2018/8/23
+ */
 @Controller
 @RequestMapping("photo")
 public class PhotoController {
@@ -41,135 +39,132 @@ public class PhotoController {
     private PhotoAlbumService photoAlbumService;
     @Autowired
     private PhotoService photoService;
-    /*
-     * @作者：zhouhy
-     * @描述：跳转相册列表
-     * @时间：2018/1/5  10:31
+
+    /**
+     * @Author: zhouhy
+     * @Description: 跳转相册列表
+     * @Date: 17:16 2018/8/23
      */
     @RequestMapping(value = "/photoAlbum")
-    public ModelAndView gotoPhotoListAlbumView(){
+    public ModelAndView gotoPhotoListAlbumView() {
         ModelAndView mav = new ModelAndView("/photo/photo_album_list");
         return mav;
     }
-    /*
-    * @作者：zhouhy
-    * @描述：跳转图片列表
-    * @时间：2018/1/5  10:31
-    */
+
+    /**
+     * @Author: zhouhy
+     * @Description: 跳转图片列表
+     * @Date: 17:17 2018/8/23
+     */
     @RequestMapping(value = "/photoListView/{photoAlbumId}")
-    public ModelAndView gotoPhotoListView(@PathVariable String photoAlbumId){
+    public ModelAndView gotoPhotoListView(@PathVariable String photoAlbumId) {
         ModelAndView mav = new ModelAndView("/photo/photo_list");
-        mav.addObject("photoAlbumId",photoAlbumId);
+        mav.addObject("photoAlbumId", photoAlbumId);
         return mav;
     }
-    /*
-     * @作者：zhouhy
-     * @描述：跳转上传页面
-     * @时间：2018/1/5  10:32
+
+    /**
+     * @Author: zhouhy
+     * @Description: 跳转上传页面
+     * @Date: 17:17 2018/8/23
      */
     @RequestMapping(value = "/uploadPhotoView/{photoAlbumId}")
-    public ModelAndView gotoUploadPhoto(@PathVariable String photoAlbumId){
+    public ModelAndView gotoUploadPhoto(@PathVariable String photoAlbumId) {
         ModelAndView mav = new ModelAndView("/photo/upload_photo");
-        mav.addObject("photoAlbumId",photoAlbumId);
+        mav.addObject("photoAlbumId", photoAlbumId);
         return mav;
     }
-    /*
-     * @作者：zhouhy
-     * @描述：跳转创建相册视图
-     * @时间：2018/1/5  10:32
+
+    /**
+     *  @Author: zhouhy
+     *  @Description: 跳转创建相册视图
+     *  @Date: 17:17 2018/8/23
      */
     @RequestMapping(value = "/newPhotoAlbum")
-    public ModelAndView gotoCreatePhotoAlbum(){
+    public ModelAndView gotoCreatePhotoAlbum() {
         ModelAndView mav = new ModelAndView("/photo/new_photo_album");
         return mav;
     }
-    /*
-     * @作者：zhouhy
-     * @描述：创建相册
-     * @时间：2018/1/5  10:32
+
+    /**
+     *  @Author: zhouhy
+     *  @Description: 创建相册
+     *  @Date: 17:18 2018/8/23
      */
     @ResponseBody
     @RequestMapping(value = "/addPhotoAlbum")
-    public String addPhotoAlbum(PhotoAlbum photoAlbum, HttpServletRequest req){
-        Result result = new Result();
-        SysUser su=(SysUser)req.getSession().getAttribute("sysUser");
+    public Result addPhotoAlbum(PhotoAlbum photoAlbum, HttpServletRequest req) {
+        SysUser su = (SysUser) req.getSession().getAttribute("sysUser");
         photoAlbum.setSysUserId(su.getId());
         photoAlbum.setId(UUIDUtil.getUUID());
         try {
             photoAlbumService.insert(photoAlbum);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            result.setCode(MsgEnumUtil.ERROR.code());
-            result.setMsg(MsgEnumUtil.ERROR.msg());
-            return JSON.toJSONString(result);
+            return Result.create(MsgEnumUtil.STATEMENT_EXE_FAILED);
         }
-        result.setCode(MsgEnumUtil.SUCCESS.code());
-        result.setMsg(MsgEnumUtil.SUCCESS.msg());
-        return JSON.toJSONString(result);
+        return Result.ok();
     }
-    /*
-         * @作者：zhouhy
-         * @描述：获取自己的相册列表
-         * @时间：2018/1/5  10:32
-         */
+
+    /**
+     *  @Author: zhouhy
+     *  @Description: 获取自己的相册列表
+     *  @Date: 17:20 2018/8/23
+     */
     @ResponseBody
     @RequestMapping(value = "/getMyselfPhotoAlbumList")
-    public String getMyselfPhotoAlbumList(HttpServletRequest req){
-        Result result = new Result();
-        SysUser su=(SysUser)req.getSession().getAttribute("sysUser");
+    public Result getMyselfPhotoAlbumList(HttpServletRequest req) {
+        Result result;
+        SysUser su = (SysUser) req.getSession().getAttribute("sysUser");
 
         EntityWrapper<PhotoAlbum> ew = new EntityWrapper<>();
-        ew.where("del_flag={0}","0");
-        ew.and("sys_user_id={0}",su.getId());
-        List<PhotoAlbum> obj = photoAlbumService.selectList(ew);
+        ew.where("del_flag={0}", "0");
+        ew.and("sys_user_id={0}", su.getId());
+        List<PhotoAlbum> photoAlbums = photoAlbumService.selectList(ew);
 
-        if(obj==null||obj.size()<1){
-            result.setCode(MsgEnumUtil.NO_ALBUMS_CREATED.code());
-            result.setMsg(MsgEnumUtil.NO_ALBUMS_CREATED.msg());
-        }else{
-            result.setCode(MsgEnumUtil.SUCCESS.code());
-            result.setMsg(MsgEnumUtil.SUCCESS.msg());
-            result.setObj(obj);
+        if (photoAlbums == null || photoAlbums.size() == 0) {
+            result = Result.create(MsgEnumUtil.NO_ALBUMS_CREATED);
+        } else {
+            result = Result.ok();
+            result.put("photoAlbums", photoAlbums);
         }
-        return JSON.toJSONString(result);
+        return result;
     }
 
-    /*
-        * @作者：zhouhy
-        * @描述：获取自己的相册列表
-        * @时间：2018/1/5  10:32
-        */
+    /**
+     *  @Author: zhouhy
+     *  @Description: 获取自己的相册列表
+     *  @Date: 17:20 2018/8/23
+     */
     @ResponseBody
     @RequestMapping(value = "/getMyselfPhotoList/{photoAlbumId}")
-    public String getMyselfPhotoList(@PathVariable String photoAlbumId, HttpServletRequest req){
+    public Result getMyselfPhotoList(@PathVariable String photoAlbumId, HttpServletRequest req) {
         Result result = new Result();
-        SysUser su=(SysUser)req.getSession().getAttribute("sysUser");
+        SysUser su = (SysUser) req.getSession().getAttribute("sysUser");
         EntityWrapper<Photo> ew = new EntityWrapper<>();
-        ew.where("del_flag={0}","0");
-        ew.and("photo_album_id={0}",photoAlbumId);
-        List<Photo> obj = photoService.selectList(ew);
+        ew.where("del_flag={0}", "0");
+        ew.and("photo_album_id={0}", photoAlbumId);
+        List<Photo> photos = photoService.selectList(ew);
 
-        if(obj==null||obj.size()<1){
-            result.setCode(MsgEnumUtil.NO_PHOTO_TO_UPLOAD.code());
-            result.setMsg(MsgEnumUtil.NO_PHOTO_TO_UPLOAD.msg());
-        }else{
-            result.setCode(MsgEnumUtil.SUCCESS.code());
-            result.setMsg(MsgEnumUtil.SUCCESS.msg());
-            result.setObj(obj);
+        if (photos == null || photos.size() == 0) {
+            result = Result.create(MsgEnumUtil.NO_PHOTO_TO_UPLOAD);
+        } else {
+            result = Result.ok();
+            result.put("photos", photos);
         }
-        return JSON.toJSONString(result);
+        return result;
     }
 
 
-    /*
-     * @作者：zhouhy
-     * @描述：上传图片
-     * @时间：2018/1/5  10:33
+    /**
+     *  @Author: zhouhy
+     *  @Description: 上传图片
+     *  @Date: 17:20 2018/8/23
      */
     @ResponseBody
     @RequestMapping(value = "/uploadPhoto/{photoAlbumId}")
-    public String uploadPhoto(@PathVariable String photoAlbumId,HttpServletRequest req){
-        SysUser su=(SysUser)req.getSession().getAttribute("sysUser");
+    public Result uploadPhoto(@PathVariable String photoAlbumId, HttpServletRequest req) {
+        SysUser su = (SysUser) req.getSession().getAttribute("sysUser");
         long ctmLong = System.currentTimeMillis();
 
         MultipartFile mf = null;
@@ -185,12 +180,12 @@ public class PhotoController {
 
             String fileName = mf.getOriginalFilename();
             String suffix = FileUtil.getFileSuffix(fileName);
-            String tempPath = su.getUsername()+"/"+photoAlbumId+"/"+ctmLong+"."+ suffix;
-            String realPath = EnumUtil.PHOTOT_PATH.text()+tempPath;
-            String classPath = EnumUtil.PHOTO_CLASS_PATH.text()+tempPath;
+            String tempPath = su.getUsername() + "/" + photoAlbumId + "/" + ctmLong + "." + suffix;
+            String realPath = EnumUtil.PHOTOT_PATH.text() + tempPath;
+            String classPath = EnumUtil.PHOTO_CLASS_PATH.text() + tempPath;
             File source = FileUtil.mkdirParentFile(realPath);
             File source1 = FileUtil.mkdirParentFile(classPath);
-            String url = "/upload/photo/"+tempPath;
+            String url = "/upload/photo/" + tempPath;
             try {
                 FileUtils.copyInputStreamToFile(mf.getInputStream(), source);
                 FileUtils.copyInputStreamToFile(mf.getInputStream(), source1);
@@ -210,30 +205,24 @@ public class PhotoController {
 
             }
         }
-        Result res = new Result(200,"上传成功",null);
-
-        return JSON.toJSONString(res);
+        return Result.ok();
     }
-    /*
-    * @作者：zhouhy
-    * @描述：删除图片
-    * @时间：2018/1/5  10:33
-    */
+
+    /**
+     *  @Author: zhouhy
+     *  @Description: 删除图片
+     *  @Date: 17:22 2018/8/23
+     */
     @ResponseBody
     @RequestMapping(value = "/deletePhoto/{photoId}")
-    public String deletePhoto(@PathVariable String photoId,HttpServletRequest req){
-        Result result = new Result();
-
+    public Result deletePhoto(@PathVariable String photoId, HttpServletRequest req) {
         Photo photo = photoService.selectById(photoId);
         photo.setId(photoId);
         photo.setDelFlag(EnumUtil.DELETED.value());
         photo.setUpdateTime(new Date());
 
         photoService.updateById(photo);
-
-        result.setCode(MsgEnumUtil.SUCCESS.code());
-        result.setMsg(MsgEnumUtil.SUCCESS.msg());
-        return JSON.toJSONString(result);
+        return Result.ok();
     }
 
 

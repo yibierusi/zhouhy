@@ -13,18 +13,20 @@ import java.nio.charset.Charset;
 public class FileUtil {
 
     //输出流
-    public static void fileOutputStreamFunc(String filePath,String str){
+    public static boolean fileOutputStreamFunc(String filePath,String str){
         OutputStreamWriter osr = null;
         OutputStream out = null;
         try {
             File f = mkdirParentFile(filePath);
             out = new FileOutputStream(f);
-            osr = new OutputStreamWriter(out);//输出
+            //输出
+            osr = new OutputStreamWriter(out);
             osr.write(str);
             osr.flush();
             osr.close();
         }catch (Exception e){
             e.printStackTrace();
+            return false;
         }finally {
             try {
                 if (osr != null) {
@@ -37,6 +39,7 @@ public class FileUtil {
                 e.printStackTrace();
             }
         }
+        return true;
     }
 
     //输入流
@@ -88,9 +91,11 @@ public class FileUtil {
     //创建一个文件  若其父目录不存在 则创建
     public static File mkdirParentFile(String filePath){
         File f = new File(filePath);
-        if (!f.getParentFile().exists()) {//判断父目录路径是否存在，即test.txt前的I:\a\b\
+        //判断父目录路径是否存在，即test.txt前的I:\a\b\
+        if (!f.getParentFile().exists()) {
             try {
-                f.getParentFile().mkdirs();//不存在则创建父目录
+                //不存在则创建父目录
+                f.getParentFile().mkdirs();
                 f.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();

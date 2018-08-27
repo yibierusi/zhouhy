@@ -14,9 +14,9 @@
 	<!-- blog ide -->
 	<link th:href="@{/plugins/blog/css/editormd.min.css}" rel="stylesheet"/>
 	<!-- Bootstrap core CSS -->
-	<link th:href="@{/zhou/css/bootstrap.min.css}" rel="stylesheet" />
+	<link rel="stylesheet" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
 	<!-- index -->
-	<link th:href="@{/index/css/index.min.css}" rel="stylesheet" />
+	<link th:href="@{/module/index/index.min.css}" rel="stylesheet" />
 	<!-- layer +layui -->
 	<script th:src="@{/plugins/layer/layer.js}"></script>
 	<script th:src="@{/plugins/layui/layui.all.js}"></script>
@@ -63,9 +63,9 @@ function init() {
             type:"post",
             data:{"id":id},
             success: function (data) {
-                initEdit(data.md);
+                initEdit(data.obj.md);
                 $("#navLi2").html("编辑博客");
-                $("#title").val(data.blog.title);
+                $("#title").val(data.obj.blog.title);
             }
         });
 	}else {
@@ -96,12 +96,14 @@ function init() {
 function modify(blogId,title,content) {
     $.ajax({
         url: "/blog/modify",
-        dataType:"text",
+        dataType:"json",
         type:"post",
         data:{"title":title,"content":content,"id":blogId},
         success: function (data) {
-            layer.msg("修改成功！！！",{icon:1});
-            window.location.href="/blog/query?id="+data;
+            if (data.code == 200){
+                layer.msg("修改成功！！！",{icon:1});
+                window.location.href="/blog/blog?id="+data.obj.id;
+			}
         },
         error:function (error) {
             layer.msg("修改失败",{icon:2});
@@ -112,12 +114,12 @@ function modify(blogId,title,content) {
 function publish(title,content) {
     $.ajax({
         url: "/blog/publish",
-        dataType:"text",
+        dataType:"json",
         type:"post",
         data:{"title":title,"content":content},
         success: function (data) {
             layer.msg("发布成功！！！",{icon:1});
-            window.location.href="/blog/query?id="+data;
+            window.location.href="/blog/blog?id="+data.obj.id;
         },
         error:function (error) {
             layer.msg("发布失败",{icon:2});

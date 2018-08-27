@@ -1,27 +1,47 @@
 package com.zhou.index.entity;
 
+import com.zhou.index.util.MsgEnumUtil;
 import lombok.Data;
+import org.apache.coyote.OutputBuffer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * 作者： zhouhy
- * 时间：2018/1/5.
- * 说明：返回对象
+ * @Author: zhouhy
+ * @Description: 返回对象
+ * @Date: 14:06 2018/8/23
  */
-
 @Data
 public class Result {
     private Integer code;
     private String msg;
-    private Object obj;
+    private Map<String, Object> obj = new HashMap<>();
 
     public Result() {
         super();
     }
 
-    public Result(Integer code,String msg ,Object obj) {
+    public Result(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
-        this.obj = obj;
+    }
+
+    public static Result ok() {
+        return new Result(200, "success");
+    }
+
+    public static Result error() {
+        return new Result(500, "error");
+    }
+
+    public static Result create(MsgEnumUtil me) {
+        return new Result(me.code(), me.msg());
+    }
+
+    public Result put(String key, Object value) {
+        this.obj.put(key, value);
+        return this;
     }
 
 }

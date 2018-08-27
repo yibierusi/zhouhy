@@ -4,11 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.zhou.blog.entity.Blog;
 import com.zhou.blog.service.BlogService;
+import com.zhou.index.entity.Result;
 import com.zhou.index.entity.SysUser;
-import com.zhou.index.util.DateUtil;
-import com.zhou.index.util.EnumUtil;
-import com.zhou.index.util.FileUtil;
-import com.zhou.index.util.UUIDUtil;
+import com.zhou.index.util.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +36,11 @@ public class BlogController {
     @Autowired
     BlogService blogService;
 
-    //编辑
+    /**
+     * @Author: zhouhy
+     * @Description: 编辑
+     * @Date: 14:07 2018/8/23
+     */
     @RequestMapping(value = "/edit")
     public ModelAndView edit(String id) {
         ModelAndView mav = new ModelAndView("/blog/edit");
@@ -46,10 +48,14 @@ public class BlogController {
         return mav;
     }
 
-    //查看
-    @RequestMapping(value = "/query")
+    /**
+     * @Author: zhouhy
+     * @Description: 查看
+     * @Date: 14:08 2018/8/23
+     */
+    @RequestMapping(value = "/blog")
     public ModelAndView query(String id, HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("/blog/query");
+        ModelAndView mav = new ModelAndView("/blog/blog");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
 
         EntityWrapper<Blog> ew = new EntityWrapper<>();
@@ -63,10 +69,14 @@ public class BlogController {
         return mav;
     }
 
-    //删除
+    /**
+     * @Author: zhouhy
+     * @Description: 删除
+     * @Date: 14:09 2018/8/23
+     */
     @RequestMapping(value = "/delete")
     @ResponseBody
-    public String delete(String id, HttpServletRequest request) {
+    public Result delete(String id, HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
 
         EntityWrapper<Blog> ew = new EntityWrapper<>();
@@ -74,27 +84,42 @@ public class BlogController {
         ew.and("sys_user_id", su.getId());
         Blog blog = blogService.selectOne(ew);
 
+        if (blog == null) {
+            return Result.create(MsgEnumUtil.RESULT_SET_NOT_EXIST);
+        }
         String filePath = EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/";
         String fileName = blog.getContent();
         boolean fileDelFlag = FileUtil.fileRename(filePath + fileName,
                 DateUtil.dateToString(new Date(), EnumUtil.DATE_FULL_FORMAT.text()) + "_" + fileName);
 
         boolean flag = blogService.delete(ew);
-        //todo 由之前的int  变为 boolean  前段为修改
-        return "" + flag;
+
+        if (flag && fileDelFlag) {
+            return Result.ok();
+        } else {
+            return Result.create(MsgEnumUtil.RESULT_SET_NOT_EXIST);
+        }
     }
 
-    //列表
+    /**
+     * @Author: zhouhy
+     * @Description: 列表
+     * @Date: 14:23 2018/8/23
+     */
     @RequestMapping(value = "/list")
     public ModelAndView list() {
         ModelAndView mav = new ModelAndView("/blog/list");
         return mav;
     }
 
-    //发表
+    /**
+     * @Author: zhouhy
+     * @Description: 发表
+     * @Date: 14:23 2018/8/23
+     */
     @RequestMapping(value = "/publish")
     @ResponseBody
-    public String publish(Blog b, HttpServletRequest request) {
+    public Result publish(Blog b, HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         long ctmLong = System.currentTimeMillis();
         FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + ctmLong + ".md", b.getContent());
@@ -105,49 +130,66 @@ public class BlogController {
         b.setUpdateTime(new Date());
         b.setContent(ctmLong + ".md");
         blogService.insert(b);
-        return b.getId();
+        return Result.ok().put("id", b.getId());
     }
 
-    //修改博客
+    /**
+     * @Author: zhouhy
+     * @Description: 修改博客 如果修改的博客md文件不存在 则重新创建
+     * @Date: 17:06 2018/8/23
+     */
     @RequestMapping(value = "/modify")
     @ResponseBody
-    public String modify(Blog b, HttpServletRequest request) {
+    public Result modify(Blog b, HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
 
         EntityWrapper<Blog> ew = new EntityWrapper<>();
         ew.where("id={0}", b.getId());
-        ew.and("aithor_id={0}", su.getId());
+        ew.and("sys_user_id={0}", su.getId());
         Blog blog = blogService.selectOne(ew);
 
         if (!(blog == null || blog.getId() == null || blog.getId().equals(""))) {
-            FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + blog.getContent(), b.getContent());
+            boolean isSuccess = FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + blog.getContent(), b.getContent());
+            if (!isSuccess) {
+                long ctmLong = System.currentTimeMillis();
+                FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + ctmLong + ".md", b.getContent());
+                blog.setContent(ctmLong + ".md");
+            }
 
             blog.setUpdateTime(new Date());
-            blog.setContent(b.getContent());
             blog.setTitle(b.getTitle());
             blogService.updateById(blog);
         }
-        return b.getId();
+        return Result.ok().put("id", b.getId());
     }
 
-    //增加阅读量
+    /**
+     * @Author: zhouhy
+     * @Description: 增加阅读量
+     * @Date: 17:08 2018/8/23
+     */
     @RequestMapping(value = "/modifyBlogReadCountById")
     @ResponseBody
-    public String modifyBlogReadCountById(String id) {
+    public Result modifyBlogReadCountById(String id) {
         Blog blog = blogService.selectById(id);
         blog.setReads(blog.getReads() + 1);
         boolean flag = blogService.updateById(blog);
         if (flag) {
             System.out.println("阅读量+1");
-        } else
+        } else {
             System.out.println("阅读量增加失败");
-        return "";
+        }
+        return Result.ok();
     }
 
-    //获取列表
+    /**
+     * @Author: zhouhy
+     * @Description: 获取列表
+     * @Date: 17:09 2018/8/23
+     */
     @RequestMapping(value = "/getList")
     @ResponseBody
-    public String getList(HttpServletRequest request) {
+    public Result getList(HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
 
         EntityWrapper<Blog> ew = new EntityWrapper<>();
@@ -156,25 +198,30 @@ public class BlogController {
         ew.orderBy("a.create_time", false);
         List<Blog> blogList = blogService.selectBlog(ew);
 
-        return JSON.toJSONString(blogList);
+        return Result.ok().put("list", blogList);
     }
 
-    //获取博客信息
+    /**
+     * @Author: zhouhy
+     * @Description: 获取博客信息
+     * @Date: 17:11 2018/8/23
+     */
     @RequestMapping(value = "/getContent")
     @ResponseBody
-    public String getContent(String id, HttpServletRequest request) {
+    public Result getContent(String id, HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         Blog blog = blogService.selectById(id);
         String str = FileUtil.fileInputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + blog.getContent());
-        Map<String, Object> res = new HashMap<>();
-        res.put("md", str);
-        res.put("blog", blog);
-        return JSON.toJSONString(res);
+        return Result.ok().put("md", str).put("blog", blog);
     }
 
-    //上传图片
+    /**
+     *  @Author: zhouhy
+     *  @Description: 上传图片
+     *  @Date: 17:13 2018/8/23
+     */
     @RequestMapping(value = "/editormdUploadFile", method = RequestMethod.POST)
-    public void hello(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "editormd-image-file", required = false) MultipartFile attach) {
+    public void editormdUploadFile(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "editormd-image-file", required = false) MultipartFile attach) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         long ctmLong = System.currentTimeMillis();
         try {
