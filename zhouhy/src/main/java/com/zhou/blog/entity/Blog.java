@@ -27,6 +27,8 @@ public class Blog extends Model<Blog> {
 	private String id;
 	private String title;
 	private String content;
+	@TableField("file_name")
+	private String fileName;
 	@TableField("sys_user_id")
 	private String sysUserId;
 
@@ -53,8 +55,7 @@ public class Blog extends Model<Blog> {
     /**
      * 0：未删除  1：删除
      */
-	@TableField("del_flag")
-	private Integer delFlag;
+	private Integer state;
 
 	@Override
 	protected Serializable pkVal() {

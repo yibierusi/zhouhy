@@ -64,8 +64,7 @@ public class PhotoAlbum extends Model<PhotoAlbum> {
     /**
      * 0：未删除 1：删除
      */
-	@TableField("del_flag")
-	private Integer delFlag;
+	private Integer state;
 
 	@Override
 	protected Serializable pkVal() {

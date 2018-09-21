@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>消费记录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <!-- Animate -->
+    <link th:href="@{/plugins/animate/animate.css}" rel="stylesheet"/>
+    <!-- Jquery -->
+    <script th:src="@{/plugins/jquery/jquery-2.1.1.js}"></script>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <!-- Bootstrap -->
+    <script th:src="@{/plugins/bootstrap/bootstrap.min.js}"></script>
+    <!-- layer  -->
+    <script th:src="@{/plugins/layer/layer.js}"></script>
+    <!-- Data picker -->
+    <script th:src="@{/plugins/datapicker/bootstrap-datepicker.js}"></script>
+    <link th:href="@{/module/index/style.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/plugins/font-awesome/font-awesome.css}"> <!--图标-->
+    <!-- index -->
+    <link th:href="@{/module/index/index.min.css}" rel="stylesheet"/>
+    <!--选择控件-->
+    <link th:href="@{/plugins/iCheck/custom.css}" rel="stylesheet"/>
+    <!--<script th:src="@{/plugins/inspinia/inspinia.js}"></script>-->
+    <!--表格-->
+    <script th:src="@{/plugins/footable/footable.all.min.js}"></script>
+    <!-- FooTable -->
+    <link th:href="@{/plugins/footable/footable.core.css}" rel="stylesheet">
+    <link th:href="@{/plugins/datapicker/datepicker3.css}" rel="stylesheet">
+
+    <link th:href="@{/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css}" rel="stylesheet">
+</head>
+
+<body style="background-color: #f5f5f5">
+<div class="padding-md">
+    <ul class="breadcrumb">
+        <li><span class="primary-font"><i class="icon-home"></i></span><a href="#"> 账单</a></li>
+        <li id="navLi2">列表</li>
+    </ul>
+    <form method="get" class="form-horizontal">
+        <div class="form-group"><label class="col-sm-1 control-label">时间</label>
+            <div class="col-sm-10">
+                <input id="date" type="text" class="form-control">
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group"><label class="col-sm-1 control-label"> 类型 </label>
+            <div class="col-sm-10">
+                <div class="i-checks"><label> <input type="radio" value="1" name="type">
+                    <i></i> 支出 </label></div>
+                <div class="i-checks"><label> <input type="radio" value="2" name="type" checked=""> <i></i> 收入 </label></div>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group"><label class="col-sm-1 control-label"> 金额 </label>
+            <div id="money" class="has-warning"><label class="control-label"></label>
+                <div class="col-sm-10"><input type="text" class="form-control"></div>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group"><label class="col-sm-1 control-label">    </label>
+            <div class="col-sm-10">
+                <button type="submit" id="create" class="btn btn-block btn-outline btn-primary"
+                        style="color:#1ab394;background-color:transparent;border-color:#1ab394;">提交
+                </button>
+            </div>
+        </div>
+    </form>
+    <div class="hr-line-dashed"></div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <thead>
+                        <tr>
+                            <th data-sort-ignore="true">ID</th>
+                            <th>类型</th>
+                            <th>金额</th>
+                            <th data-sort-ignore="true">标签</th>
+                            <th data-sort-ignore="true">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:if="bds != null" th:each="billDetail, index :${bds}">
+                            <td th:text="${billDetail.id}"></td>
+                            <td>
+                                <span th:if="${billDetail.type == 1}" class="label label-danger">支出</span>
+                                <span th:if="${billDetail.type == 2}" class="label label-success">收入</span>
+                            </td>
+                            <td th:text="'￥'+${billDetail.money}"></td>
+                            <td th:text="${billDetail.billTagIds}"></td>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn-white btn btn-xs">修改</button>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <ul class="pagination pull-right"></ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        $('.footable').footable();
+        $('#date').datepicker({
+            language: "cn",
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true,
+            format: "yyyy年mm月dd日"
+        });
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+
+    });
+
+
+    /*]]>*/
+</script>
+</body>
+</html>

@@ -1,13 +1,12 @@
 package com.zhou.photo.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.zhou.index.entity.Result;
 import com.zhou.index.entity.SysUser;
-import com.zhou.index.util.EnumUtil;
-import com.zhou.index.util.FileUtil;
-import com.zhou.index.util.MsgEnumUtil;
-import com.zhou.index.util.UUIDUtil;
+import com.zhou.index.comm.util.EnumUtil;
+import com.zhou.index.comm.util.FileUtil;
+import com.zhou.index.comm.util.MsgEnumUtil;
+import com.zhou.index.comm.util.UUIDUtil;
 import com.zhou.photo.entity.Photo;
 import com.zhou.photo.entity.PhotoAlbum;
 import com.zhou.photo.service.PhotoAlbumService;
@@ -118,7 +117,7 @@ public class PhotoController {
         SysUser su = (SysUser) req.getSession().getAttribute("sysUser");
 
         EntityWrapper<PhotoAlbum> ew = new EntityWrapper<>();
-        ew.where("del_flag={0}", "0");
+        ew.where("state={0}", "0");
         ew.and("sys_user_id={0}", su.getId());
         List<PhotoAlbum> photoAlbums = photoAlbumService.selectList(ew);
 
@@ -142,7 +141,7 @@ public class PhotoController {
         Result result = new Result();
         SysUser su = (SysUser) req.getSession().getAttribute("sysUser");
         EntityWrapper<Photo> ew = new EntityWrapper<>();
-        ew.where("del_flag={0}", "0");
+        ew.where("state={0}", "0");
         ew.and("photo_album_id={0}", photoAlbumId);
         List<Photo> photos = photoService.selectList(ew);
 
@@ -181,8 +180,8 @@ public class PhotoController {
             String fileName = mf.getOriginalFilename();
             String suffix = FileUtil.getFileSuffix(fileName);
             String tempPath = su.getUsername() + "/" + photoAlbumId + "/" + ctmLong + "." + suffix;
-            String realPath = EnumUtil.PHOTOT_PATH.text() + tempPath;
-            String classPath = EnumUtil.PHOTO_CLASS_PATH.text() + tempPath;
+            String realPath = EnumUtil.PHOTOT_PATH.v() + tempPath;
+            String classPath = EnumUtil.PHOTO_CLASS_PATH.v() + tempPath;
             File source = FileUtil.mkdirParentFile(realPath);
             File source1 = FileUtil.mkdirParentFile(classPath);
             String url = "/upload/photo/" + tempPath;
@@ -218,7 +217,7 @@ public class PhotoController {
     public Result deletePhoto(@PathVariable String photoId, HttpServletRequest req) {
         Photo photo = photoService.selectById(photoId);
         photo.setId(photoId);
-        photo.setDelFlag(EnumUtil.DELETED.value());
+        photo.setState(EnumUtil.DELETED.k());
         photo.setUpdateTime(new Date());
 
         photoService.updateById(photo);

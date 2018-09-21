@@ -12,7 +12,7 @@
 	<!--blog ide-->
 	<script th:src="@{/plugins/blog/js/editormd.min.js}"></script>
 	<!-- blog ide -->
-	<link th:href="@{/plugins/blog/css/editormd.min.css}" rel="stylesheet"/>
+	<link th:href="@{/plugins/blog/css/edi	tormd.min.css}" rel="stylesheet"/>
 	<!-- Bootstrap core CSS -->
 	<link rel="stylesheet" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
 	<!-- index -->
@@ -21,6 +21,7 @@
 	<script th:src="@{/plugins/layer/layer.js}"></script>
 	<script th:src="@{/plugins/layui/layui.all.js}"></script>
 	<link th:href="@{/plugins/layui/css/layui.css}" rel="stylesheet" />
+
 
 </head>
 
@@ -40,11 +41,17 @@
 		<!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
 		<!--<textarea class="editormd-html-textarea" id="content"></textarea>-->
 	</div>
-</div>
-<!-- Le javascript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
 
+	<div style="margin-right: 8px;line-height: 32px;display: -ms-flexbox;display: flex;">
+		<span class="blogTag">aaaa</span><i class="fa fa-trash" style="line-height: 15px;height: 21px;">
+		<button type="button" id="type" class="btn btn-default btn-sm" style="height:40px;font-size:20px;line-height: 20px;">发表博客</button>
+	</div>
+
+</div>
+</div>
+
+
+</div>
 
 
 <script th:inline="javascript">
@@ -134,7 +141,7 @@ function initEdit(md) {
         //theme : "dark",   //styl//previewTheme : "dark",  //styl//editorTheme : "pastel-on-dark",  //styl
         markdown: md,
         codeFold: true,//syncScrolling : false,
-        //saveHTMLToTextarea: true,    // 保存 HTML 到 Textarea
+        saveHTMLToTextarea: true,    // 保存 HTML 到 Textarea  这个配置，方便post提交表单
         searchReplace: true,//watch : false,                // 关闭实时预览
         htmlDecode: "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启//toolbar  : false,             //关闭工具栏//previewCodeHighlight : false, // 关闭预览 HTML 的代码块高亮，默认开启
         emoji: true,
@@ -154,5 +161,24 @@ function initEdit(md) {
 }
 /*]]>*/
 </script>
+
+<style type="text/css">
+	span.blogTag{
+		margin-top: 5px;
+		display: block;
+		padding: 3px 8px;
+		font-size: 12px;
+		max-width: 480px;
+		background: #e9e9e9;
+		border-radius: 2px;
+		line-height: 15px;
+		height: 21px;
+		color: #4f4f4f;
+		overflow: hidden;
+		white-space: nowrap;
+		box-sizing: border-box;
+		outline: none;
+	}
+</style>
 </body>
 </html>

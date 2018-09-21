@@ -26,19 +26,21 @@
 	<sql id="blogColumns">
 		a.id as "id",
 		a.title as "title",
+		a.file_name as "fileName",
 		a.content as "content",
 		a.sys_user_id as "sysUserId",
 		a.reads as "reads",
 		a.comments as "comments",
 		a.create_time as "createTime",
 		a.update_time as "updateTime",
-		a.del_flag as "delFlag"
+		a.state as "state"
 	</sql>
 
 	<select id="selectBlog" resultType="com.zhou.blog.entity.Blog">
 		SELECT <include refid="blogColumns"/>
 		,su.id as "sysUser.id",su.username as "sysUser.username"
-		FROM blog a,sys_user su where a.sys_user_id=su.id
+		FROM blog a,sys_user su where a.state = 0 and
+		a.sys_user_id = su.id
 		${ew.sqlSegment}
 	</select>
 

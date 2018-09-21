@@ -1,12 +1,11 @@
 package com.zhou.blog.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.zhou.blog.entity.Blog;
 import com.zhou.blog.service.BlogService;
 import com.zhou.index.entity.Result;
 import com.zhou.index.entity.SysUser;
-import com.zhou.index.util.*;
+import com.zhou.index.comm.util.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -87,12 +86,15 @@ public class BlogController {
         if (blog == null) {
             return Result.create(MsgEnumUtil.RESULT_SET_NOT_EXIST);
         }
-        String filePath = EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/";
-        String fileName = blog.getContent();
-        boolean fileDelFlag = FileUtil.fileRename(filePath + fileName,
-                DateUtil.dateToString(new Date(), EnumUtil.DATE_FULL_FORMAT.text()) + "_" + fileName);
+        //更新文件名字
+        String filePath = EnumUtil.BLOG_PATH.v() + su.getUsername() + "/md/";
+        String fileName = blog.getFileName();
+        String newFileName = DateUtil.dateToString(new Date(), EnumUtil.DATE_FULL_FORMAT.v()) + "_" + fileName;
+        boolean fileDelFlag = FileUtil.fileRename(filePath + fileName,newFileName);
 
-        boolean flag = blogService.delete(ew);
+        blog.setFileName(newFileName);
+        blog.setState(EnumUtil.DELETED.k());
+        boolean flag = blogService.updateById(blog);
 
         if (flag && fileDelFlag) {
             return Result.ok();
@@ -122,13 +124,13 @@ public class BlogController {
     public Result publish(Blog b, HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         long ctmLong = System.currentTimeMillis();
-        FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + ctmLong + ".md", b.getContent());
+        b.setFileName(ctmLong + ".md");
+        FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.v() + su.getUsername() + "/md/" + b.getFileName(), b.getContent());
 
         b.setId(UUIDUtil.getUUID());
         b.setSysUserId(su.getId());
         b.setCreateTime(new Date());
         b.setUpdateTime(new Date());
-        b.setContent(ctmLong + ".md");
         blogService.insert(b);
         return Result.ok().put("id", b.getId());
     }
@@ -149,11 +151,11 @@ public class BlogController {
         Blog blog = blogService.selectOne(ew);
 
         if (!(blog == null || blog.getId() == null || blog.getId().equals(""))) {
-            boolean isSuccess = FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + blog.getContent(), b.getContent());
+            boolean isSuccess = FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.v() + su.getUsername() + "/md/" + blog.getFileName(), b.getContent());
             if (!isSuccess) {
                 long ctmLong = System.currentTimeMillis();
-                FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + ctmLong + ".md", b.getContent());
-                blog.setContent(ctmLong + ".md");
+                FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.v() + su.getUsername() + "/md/" + ctmLong + ".md", b.getContent());
+                blog.setFileName(ctmLong + ".md");
             }
 
             blog.setUpdateTime(new Date());
@@ -194,7 +196,7 @@ public class BlogController {
 
         EntityWrapper<Blog> ew = new EntityWrapper<>();
         ew.and("a.sys_user_id={0}", su.getId());
-        ew.and("a.del_flag={0}", EnumUtil.NOT_DELETE);
+        ew.and("a.state={0}", EnumUtil.NOT_DELETE);
         ew.orderBy("a.create_time", false);
         List<Blog> blogList = blogService.selectBlog(ew);
 
@@ -211,7 +213,7 @@ public class BlogController {
     public Result getContent(String id, HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         Blog blog = blogService.selectById(id);
-        String str = FileUtil.fileInputStreamFunc(EnumUtil.BLOG_PATH.text() + su.getUsername() + "/md/" + blog.getContent());
+        String str = FileUtil.fileInputStreamFunc(EnumUtil.BLOG_PATH.v() + su.getUsername() + "/md/" + blog.getFileName());
         return Result.ok().put("md", str).put("blog", blog);
     }
 
@@ -227,7 +229,7 @@ public class BlogController {
         try {
             request.setCharacterEncoding("utf-8");
             response.setHeader("Content-Type", "text/html");
-            String rootPath = EnumUtil.BLOG_PATH.text() + su.getUsername() + "/images/";
+            String rootPath = EnumUtil.BLOG_PATH.v() + su.getUsername() + "/images/";
 
             String fileName = ctmLong + "." + FileUtil.getFileSuffix(attach.getOriginalFilename());
             //最终文件名
@@ -236,12 +238,12 @@ public class BlogController {
             FileUtils.copyInputStreamToFile(attach.getInputStream(), realFile);
 
             //class文件下放一份
-            File classFile = FileUtil.mkdirParentFile(EnumUtil.BLOG_CLASS_PATH.text() + su.getUsername() + "/images/" + fileName);
+            File classFile = FileUtil.mkdirParentFile(EnumUtil.BLOG_CLASS_PATH.v() + su.getUsername() + "/images/" + fileName);
             FileUtils.copyInputStreamToFile(attach.getInputStream(), classFile);
 
             String url = "/upload/blog/" + su.getUsername() + "/images/";
             //下面response返回的json格式是editor.md所限制的，规范输出就OK
-            response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"" + EnumUtil.OBJECT_IP + ":" + EnumUtil.OBJECT_PROT + "" + url + fileName + "\"}");
+            response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"" + EnumUtil.DOMAIN_NAME.v() + "" + url + fileName + "\"}");
         } catch (Exception e) {
             try {
                 e.printStackTrace();

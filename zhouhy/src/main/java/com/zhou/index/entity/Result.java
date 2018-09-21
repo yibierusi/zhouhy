@@ -1,8 +1,7 @@
 package com.zhou.index.entity;
 
-import com.zhou.index.util.MsgEnumUtil;
+import com.zhou.index.comm.util.MsgEnumUtil;
 import lombok.Data;
-import org.apache.coyote.OutputBuffer;
 
 import java.util.HashMap;
 import java.util.Map;
