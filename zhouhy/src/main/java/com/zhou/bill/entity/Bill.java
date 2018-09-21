@@ -72,4 +72,14 @@ public class Bill extends Model<Bill> {
 		return this.id;
 	}
 
+
+	public String getYear(){
+		return date.toString().substring(0,4);
+	}
+	public String getMonth(){
+		return date.toString().substring(4,6);
+	}
+	public String getDay(){
+		return date.toString().substring(6,8);
+	}
 }

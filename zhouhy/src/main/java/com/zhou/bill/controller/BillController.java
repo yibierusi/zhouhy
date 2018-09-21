@@ -30,15 +30,14 @@ import java.util.List;
 public class BillController {
     @Autowired
     private BillService billService;
-    @Autowired
-    private BillDetailService billDetailService;
+
 
     /**
      * @Author: zhouhy
      * @Description: 列表
      * @Date: 14:08 2018/8/23
      */
-    @RequestMapping(value = "/bill")
+    @RequestMapping(value = "/index")
     public ModelAndView bill(BillListQueryParam param, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("/bill/bill_list");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
@@ -47,19 +46,7 @@ public class BillController {
         return mav;
     }
 
-    /**
-     * @Author: zhouhy
-     * @Description: 详情管理
-     * @Date: 14:08 2018/8/23
-     */
-    @RequestMapping(value = "/detail")
-    public ModelAndView detail(HttpServletRequest request, Integer date, String billId) {
-        ModelAndView mav = new ModelAndView("/bill/detail_manage");
-        SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
-        List<BillDetail> bds = billDetailService.getBillDetailListBySysUserIdAndDateOrDetailId(su.getId(), date, billId);
-        mav.addObject("bds", bds);
-        return mav;
-    }
+
 
 
 }

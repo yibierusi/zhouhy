@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface BillDetailService extends IService<BillDetail> {
     /**
-     * 获取详情数据  根据时间（或者账单ID） 用户ID
+     * 获取详情分页数据  根据账单ID
      */
-    List<BillDetail> getBillDetailListBySysUserIdAndDateOrDetailId(String sysUserId, Integer date, String billId);
+    List<BillDetail> getBillDetailListByBillId(String billId);
 }

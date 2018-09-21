@@ -8,6 +8,7 @@ import com.zhou.bill.dao.BillDetailDao;
 import com.zhou.bill.service.BillDetailService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.zhou.bill.service.BillService;
+import com.zhou.bill.service.BillTagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -26,25 +27,24 @@ import java.util.List;
 public class BillDetailServiceImpl extends ServiceImpl<BillDetailDao, BillDetail> implements BillDetailService {
     @Autowired
     private BillService billService;
+    @Autowired
+    private BillTagService billTagService;
 
     /**
-     * 获取详情分页数据  根据时间（或者账单ID） 用户ID
+     * 获取详情分页数据  根据账单ID
      */
     @Override
-    public List<BillDetail> getBillDetailListBySysUserIdAndDateOrDetailId(String sysUserId, Integer date, String billId) {
-        if (billId == null || StringUtils.isEmpty(billId)){
-            Bill bill = billService.getBillBySysUserIdAndDate(sysUserId,date);
-            //数据不存在
-            if (StringUtils.isEmpty(bill)) {
-                return null;
-            }
-            billId = bill.getId();
-        }
-
+    public List<BillDetail> getBillDetailListByBillId(String billId) {
         EntityWrapper<BillDetail> ew = new EntityWrapper<>();
-
         ew.eq("bill_id", billId);
-
-        return this.selectList(ew);
+        List<BillDetail> billDetails = this.selectList(ew);
+        if (billDetails == null || billDetails.size() == 0){
+            return null;
+        }
+        for (int i = 0; i < billDetails.size(); i++) {
+            BillDetail temp = billDetails.get(i);
+            temp.setBillTagIds(billTagService.getTagNames(temp.getBillTagIds()));
+        }
+        return billDetails;
     }
 }
