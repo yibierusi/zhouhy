@@ -83,11 +83,11 @@
                 <td th:text="${tag.explain}"></td>
                 <td>
                     <div class="btn-group">
-                        <button class="btn-white btn btn-xs"
+                        <button class="btn-white btn btn-xs" type="button"
                                 th:onclick="'javascript:updateBillTag(\''+ ${tag.id} +'\')'">
                             修改
                         </button>
-                        <button class="btn-white btn btn-xs"
+                        <button class="btn-white btn btn-xs" type="button"
                                 th:onclick="'javascript:deleteBillTag(\''+ ${tag.id} +'\')'">
                             删除
                         </button>

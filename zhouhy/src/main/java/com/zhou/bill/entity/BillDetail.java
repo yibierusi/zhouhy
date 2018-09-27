@@ -42,7 +42,7 @@ public class BillDetail extends Model<BillDetail> {
      * 标签ID
      */
 	@TableField("bill_tag_ids")
-	private String billTagIds = null;
+	private String billTagIds = "";
 
 	@Override
 	protected Serializable pkVal() {

@@ -32,31 +32,31 @@ public class Bill extends Model<Bill> {
     /**
      * 支出
      */
-	private Double paid;
+	private Double paid = 0d;
 	/**
 	 * 最大单笔支出
 	 */
 	@TableField("max_paid")
-	private Double maxPaid;
+	private Double maxPaid = 0d;
 	/**
 	 * 最大单笔支出说明
 	 */
 	@TableField("max_paid_explain")
-	private String maxPaidExplain;
+	private String maxPaidExplain = "";
     /**
      * 收入
      */
-	private Double income;
+	private Double income = 0d;
 	/**
 	 * 最大单笔支出
 	 */
 	@TableField("max_income")
-	private Double maxIncome;
+	private Double maxIncome = 0d;
 	/**
 	 * 最大单笔支出说明
 	 */
 	@TableField("max_income_explain")
-	private String maxIncomeExplain;
+	private String maxIncomeExplain = "";
 	/**
 	 * 状态  1：正常  2：异常  3：警告
 	 */

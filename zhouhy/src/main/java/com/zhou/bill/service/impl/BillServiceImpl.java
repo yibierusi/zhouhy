@@ -78,7 +78,7 @@ public class BillServiceImpl extends ServiceImpl<BillDao, Bill> implements BillS
         ew.eq("sys_user_id", sysUserId);
         ew.and("date >= {0}", param.getStartTime());
         ew.and("date <= {0}", param.getEndTime());
-
+        ew.orderBy("date");
         return this.selectPage(page, ew);
     }
 
@@ -98,7 +98,7 @@ public class BillServiceImpl extends ServiceImpl<BillDao, Bill> implements BillS
     }
 
     /**
-     * 查询账单根据用户ID和date
+     * 查询账单根据用户ID和date 查询账单，若不存在则新建
      *
      * @param sysUserId
      * @return

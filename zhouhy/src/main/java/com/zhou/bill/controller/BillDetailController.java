@@ -40,39 +40,41 @@ public class BillDetailController {
     private BillTagService billTagService;
 
     /**
-     * @Author: zhouhy
      * @Description: 详情管理
-     * mold :1 添加模式  mold :2 修改模式
-     * @Date: 14:08 2018/8/23
+     * @param request 获取用户对象
+     * @param date    时间字符串
+     * @param billId  账单对象  用来获取所有的账单详情
+     * @param billDetailId 账单详情ID  修改时 传入
+     * @param mold    mold :1 添加模式  mold :2 修改模式
+     * @return
      */
     @RequestMapping(value = "/index/{mold}")
     public ModelAndView detail(HttpServletRequest request, String date, String billId,
-                               String billDetail,
+                               String billDetailId,
                                @PathVariable("mold") Integer mold) {
         date = StringHelper.removeSymbol(date);
         ModelAndView mav = new ModelAndView("bill/detail_manage");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         Bill bill = null;
-        if (billId == null || StringUtils.isEmpty(billId)) {
+        if (StringUtils.isEmpty(billId)) {
+            //如果账单ID为空 根据date获取账单对象
             Integer dateInt = StringUtils.isEmpty(date) ? null : Integer.parseInt(date);
             bill = billService.getBillBySysUserIdAndDate(su.getId(), dateInt);
         } else {
             bill = billService.getBillBySysUserIdAndId(su.getId(), billId);
         }
-        if (bill == null) {
-            bill = new Bill();
-        }
+        //获取账单对象List
+        List<BillDetail> billDetails = billDetailService.getBillDetailListByBillId(bill.getId());
 
-        List<BillDetail> bds = billDetailService.getBillDetailListByBillId(bill.getId());
-        BillDetail bd = new BillDetail();
-        if (StringUtils.isNotEmpty(billDetail)) {
-            bd = billDetailService.selectById(billDetail);
+        BillDetail billDetail = new BillDetail();
+        if (StringUtils.isNotEmpty(billDetailId)) {
+            billDetail = billDetailService.selectById(billDetailId);
         }
 
         List<BillTag> tags = billTagService.getBillTagsBySysUserId(su.getId());
         mav.addObject("tags", tags);
-        mav.addObject("bd", bd);
-        mav.addObject("bds", bds);
+        mav.addObject("bd", billDetail);
+        mav.addObject("bds", billDetails);
         mav.addObject("bill", bill);
         mav.addObject("mold", mold);
         return mav;

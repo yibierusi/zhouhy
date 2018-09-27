@@ -39,7 +39,7 @@ public interface BillService extends IService<Bill> {
     Bill getBillBySysUserIdAndId(String sysUserId,String id);
 
     /**
-     * 查询账单根据用户ID和date
+     * 查询账单根据用户ID和date 查询账单，若不存在则新建
      * @param sysUserId
      * @paramdate
      * @return
