@@ -1,6 +1,6 @@
 package com.zhou.index.entity;
 
-import com.zhou.index.comm.util.MsgEnumUtil;
+import com.zhou.index.comm.util.MsgEnumHelper;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class Result {
         return new Result(500, "error");
     }
 
-    public static Result create(MsgEnumUtil me) {
+    public static Result create(MsgEnumHelper me) {
         return new Result(me.code(), me.msg());
     }
 

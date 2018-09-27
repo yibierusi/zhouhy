@@ -53,7 +53,7 @@
         })
     }
     var addtagsbox = function (e) {
-        if (e == '') throw'ID涓嶅瓨鍦紒';
+        if (e == '') throw'异常';
         var o = '#' + e;
         var t = $(o);
         var tags = t.find('input').val();

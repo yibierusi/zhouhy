@@ -20,7 +20,7 @@ public class TimeLineController {
 
     @RequestMapping(value = "/timeline")
     public ModelAndView timeline(SysUser su, HttpServletRequest request, HttpServletResponse response){
-        ModelAndView mav = new ModelAndView("/zhou/timeline");
+        ModelAndView mav = new ModelAndView("zhou/timeline");
         return mav;
     }
 }

@@ -11,7 +11,7 @@ import java.util.Date;
  * @author: zhouhy
  * @create 2017-11-15 11:40
  **/
-public class DateUtil {
+public class DateHelper {
 
     public static String dateToString(Date date, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);

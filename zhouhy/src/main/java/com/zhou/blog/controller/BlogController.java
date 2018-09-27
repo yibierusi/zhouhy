@@ -42,7 +42,7 @@ public class BlogController {
      */
     @RequestMapping(value = "/edit")
     public ModelAndView edit(String id) {
-        ModelAndView mav = new ModelAndView("/blog/edit");
+        ModelAndView mav = new ModelAndView("blog/edit");
         mav.addObject("id", id);
         return mav;
     }
@@ -54,7 +54,7 @@ public class BlogController {
      */
     @RequestMapping(value = "/blog")
     public ModelAndView query(String id, HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("/blog/blog");
+        ModelAndView mav = new ModelAndView("blog/blog");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
 
         EntityWrapper<Blog> ew = new EntityWrapper<>();
@@ -84,22 +84,22 @@ public class BlogController {
         Blog blog = blogService.selectOne(ew);
 
         if (blog == null) {
-            return Result.create(MsgEnumUtil.RESULT_SET_NOT_EXIST);
+            return Result.create(MsgEnumHelper.RESULT_SET_NOT_EXIST);
         }
         //更新文件名字
-        String filePath = EnumUtil.BLOG_PATH.v() + su.getUsername() + "/md/";
+        String filePath = EnumHelper.BLOG_PATH.v() + su.getUsername() + "/md/";
         String fileName = blog.getFileName();
-        String newFileName = DateUtil.dateToString(new Date(), EnumUtil.DATE_FULL_FORMAT.v()) + "_" + fileName;
-        boolean fileDelFlag = FileUtil.fileRename(filePath + fileName,newFileName);
+        String newFileName = DateHelper.dateToString(new Date(), EnumHelper.DATE_FULL_FORMAT.v()) + "_" + fileName;
+        boolean fileDelFlag = FileHelper.fileRename(filePath + fileName,newFileName);
 
         blog.setFileName(newFileName);
-        blog.setState(EnumUtil.DELETED.k());
+        blog.setState(EnumHelper.DELETED.k());
         boolean flag = blogService.updateById(blog);
 
         if (flag && fileDelFlag) {
             return Result.ok();
         } else {
-            return Result.create(MsgEnumUtil.RESULT_SET_NOT_EXIST);
+            return Result.create(MsgEnumHelper.RESULT_SET_NOT_EXIST);
         }
     }
 
@@ -110,7 +110,7 @@ public class BlogController {
      */
     @RequestMapping(value = "/list")
     public ModelAndView list() {
-        ModelAndView mav = new ModelAndView("/blog/list");
+        ModelAndView mav = new ModelAndView("blog/list");
         return mav;
     }
 
@@ -125,9 +125,9 @@ public class BlogController {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         long ctmLong = System.currentTimeMillis();
         b.setFileName(ctmLong + ".md");
-        FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.v() + su.getUsername() + "/md/" + b.getFileName(), b.getContent());
+        FileHelper.fileOutputStreamFunc(EnumHelper.BLOG_PATH.v() + su.getUsername() + "/md/" + b.getFileName(), b.getContent());
 
-        b.setId(UUIDUtil.getUUID());
+        b.setId(UUIDHelper.getUUID());
         b.setSysUserId(su.getId());
         b.setCreateTime(new Date());
         b.setUpdateTime(new Date());
@@ -151,10 +151,10 @@ public class BlogController {
         Blog blog = blogService.selectOne(ew);
 
         if (!(blog == null || blog.getId() == null || blog.getId().equals(""))) {
-            boolean isSuccess = FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.v() + su.getUsername() + "/md/" + blog.getFileName(), b.getContent());
+            boolean isSuccess = FileHelper.fileOutputStreamFunc(EnumHelper.BLOG_PATH.v() + su.getUsername() + "/md/" + blog.getFileName(), b.getContent());
             if (!isSuccess) {
                 long ctmLong = System.currentTimeMillis();
-                FileUtil.fileOutputStreamFunc(EnumUtil.BLOG_PATH.v() + su.getUsername() + "/md/" + ctmLong + ".md", b.getContent());
+                FileHelper.fileOutputStreamFunc(EnumHelper.BLOG_PATH.v() + su.getUsername() + "/md/" + ctmLong + ".md", b.getContent());
                 blog.setFileName(ctmLong + ".md");
             }
 
@@ -196,7 +196,7 @@ public class BlogController {
 
         EntityWrapper<Blog> ew = new EntityWrapper<>();
         ew.and("a.sys_user_id={0}", su.getId());
-        ew.and("a.state={0}", EnumUtil.NOT_DELETE);
+        ew.and("a.state={0}", EnumHelper.NOT_DELETE);
         ew.orderBy("a.create_time", false);
         List<Blog> blogList = blogService.selectBlog(ew);
 
@@ -213,7 +213,7 @@ public class BlogController {
     public Result getContent(String id, HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         Blog blog = blogService.selectById(id);
-        String str = FileUtil.fileInputStreamFunc(EnumUtil.BLOG_PATH.v() + su.getUsername() + "/md/" + blog.getFileName());
+        String str = FileHelper.fileInputStreamFunc(EnumHelper.BLOG_PATH.v() + su.getUsername() + "/md/" + blog.getFileName());
         return Result.ok().put("md", str).put("blog", blog);
     }
 
@@ -229,21 +229,21 @@ public class BlogController {
         try {
             request.setCharacterEncoding("utf-8");
             response.setHeader("Content-Type", "text/html");
-            String rootPath = EnumUtil.BLOG_PATH.v() + su.getUsername() + "/images/";
+            String rootPath = EnumHelper.BLOG_PATH.v() + su.getUsername() + "/images/";
 
-            String fileName = ctmLong + "." + FileUtil.getFileSuffix(attach.getOriginalFilename());
+            String fileName = ctmLong + "." + FileHelper.getFileSuffix(attach.getOriginalFilename());
             //最终文件名
-            File realFile = FileUtil.mkdirParentFile(rootPath + fileName);
+            File realFile = FileHelper.mkdirParentFile(rootPath + fileName);
             //文件名字：attach.getOriginalFilename();
             FileUtils.copyInputStreamToFile(attach.getInputStream(), realFile);
 
             //class文件下放一份
-            File classFile = FileUtil.mkdirParentFile(EnumUtil.BLOG_CLASS_PATH.v() + su.getUsername() + "/images/" + fileName);
+            File classFile = FileHelper.mkdirParentFile(EnumHelper.BLOG_CLASS_PATH.v() + su.getUsername() + "/images/" + fileName);
             FileUtils.copyInputStreamToFile(attach.getInputStream(), classFile);
 
             String url = "/upload/blog/" + su.getUsername() + "/images/";
             //下面response返回的json格式是editor.md所限制的，规范输出就OK
-            response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"" + EnumUtil.DOMAIN_NAME.v() + "" + url + fileName + "\"}");
+            response.getWriter().write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"" + EnumHelper.DOMAIN_NAME.v() + "" + url + fileName + "\"}");
         } catch (Exception e) {
             try {
                 e.printStackTrace();

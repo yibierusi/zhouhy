@@ -39,7 +39,7 @@ public class BillController {
      */
     @RequestMapping(value = "/index")
     public ModelAndView bill(BillListQueryParam param, HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("/bill/bill_list");
+        ModelAndView mav = new ModelAndView("bill/bill_list");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         Page<Bill> page = billService.getBillPageByBillListQueryParam(param, su.getId());
         mav.addObject("page", page);

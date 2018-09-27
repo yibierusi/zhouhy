@@ -45,7 +45,7 @@ public class MyWebMvcConfigurerAdapter implements WebMvcConfigurer {
      */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/toLogin").setViewName("/zhou/login");
+        registry.addViewController("/toLogin").setViewName("zhou/login");
     }
 
     /**

@@ -2,4 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhou.bill.dao.BillDetailDao">
 
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, type, money, bill_id AS billId, bill_tag_ids AS billTagIds
+    </sql>
+
+    <select id="getMaxMoney" resultType="com.zhou.bill.entity.BillDetail">
+      select <include refid="Base_Column_List"/>  from  bill_detail where bill_id = #{billId} and type = #{type} and
+         money = (select max(money) billTagIds from bill_detail where bill_id = #{billId} and type = #{type})
+        order by id desc limit 1
+    </select>
 </mapper>

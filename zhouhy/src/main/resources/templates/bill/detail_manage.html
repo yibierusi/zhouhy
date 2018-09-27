@@ -22,8 +22,13 @@
     <script th:src="@{/plugins/datapicker/bootstrap-datepicker.js}"></script>
     <link th:href="@{/plugins/datapicker/datepicker3.css}" rel="stylesheet">
 
+    <!-- Chosen -->
+    <script th:src="@{/plugins/chosen/chosen.jquery.js}"></script>
+    <link th:href="@{/plugins/chosen/chosen.css}" rel="stylesheet">
+
     <link th:href="@{/module/index/style.css}" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/plugins/font-awesome/font-awesome.css}"> <!--图标-->
+    <!--图标-->
+    <link rel="stylesheet" th:href="@{/plugins/font-awesome/font-awesome.css}">
     <!-- index -->
     <link th:href="@{/module/index/index.min.css}" rel="stylesheet"/>
 
@@ -32,106 +37,115 @@
     <script th:src="@{/plugins/footable/footable.all.min.js}"></script>
     <link th:href="@{/plugins/footable/footable.core.css}" rel="stylesheet">
 
-
     <link th:href="@{/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css}" rel="stylesheet">
-    <!--inputtag 标签-->
-    <link th:href="@{/plugins/inputtag/inputtag.css}" rel="stylesheet">
-    <script th:src="@{/plugins/inputtag/inputtag.js}"></script>
 </head>
 
 <body style="background-color: #f5f5f5">
 <div class="padding-md">
     <ul class="breadcrumb">
         <li><span class="primary-font"><i class="icon-home"></i></span><a href="#"> 账单</a></li>
-        <li id="navLi2">列表</li>
+        <li id="navLi2">消费记录</li>
     </ul>
-    <form method="get" class="form-horizontal">
+    <form id="form" class="form-horizontal">
         <div class="form-group"><label class="col-sm-1 control-label">时间</label>
             <div class="col-sm-10">
-                <input id="date" type="text" class="form-control"
+                <input id="date" type="text" name="dateStr" class="form-control"
                        th:value="${bill.year} + '-' + ${bill.month} + '-' + ${bill.day}">
+                <input type="hidden" name="billId" class="form-control"
+                       th:value="${bill.id}">
             </div>
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group"><label class="col-sm-1 control-label"> 类型 </label>
             <div class="col-sm-10">
-                <div class="i-checks"><label> <input type="radio" value="1" name="type">
+                <div class="i-checks"><label> <input type="radio" value="1" name="type" checked="checked">
                     <i></i> 支出 </label></div>
-                <div class="i-checks"><label> <input type="radio" value="2" name="type" checked=""> <i></i> 收入 </label>
+                <div class="i-checks"><label> <input type="radio" value="2" name="type">
+                    <i></i> 收入 </label>
                 </div>
             </div>
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group"><label class="col-sm-1 control-label"> 金额 </label>
             <div id="money" class="has-warning"><label class="control-label"></label>
-                <div class="col-sm-10"><input type="text" class="form-control"></div>
+                <div class="col-sm-10"><input name="money" type="text" class="form-control" th:value="${bd.money}"/>
+                </div>
             </div>
         </div>
         <div class="hr-line-dashed"></div>
         <div class="form-group"><label class="col-sm-1 control-label"> 标签 </label>
-            <div id="tag" class="has-warning"><label class="control-label"></label>
+
+            <div class="col-sm-10">
+                <select data-placeholder="选择标签" name="billTagIds" id="chosen-select" class="chosen-select" multiple
+                        tabindex="4">
+                    <option th:each="tag, index :${tags}" th:value="${tag.id}" th:text="${tag.name}"></option>
+                </select>
+            </div>
+
+
+            <div class="hr-line-dashed"></div>
+            <div class="form-group"><label class="col-sm-1 control-label"> </label>
                 <div class="col-sm-10">
-                    <div class="input_box" id="tags">
-                        <input type="hidden" name="tags" class="form-control">
-                    </div>
+                    <button type="button" onclick="save()" class="btn btn-block btn-outline btn-primary"
+                            style="color:#1ab394;background-color:transparent;border-color:#1ab394;">
+                        <span th:if="${mold == 1}">添加</span>
+                        <span th:if="${mold == 2}">修改</span>
+                    </button>
                 </div>
             </div>
         </div>
-
         <div class="hr-line-dashed"></div>
-        <div class="form-group"><label class="col-sm-1 control-label"> </label>
-            <div class="col-sm-10">
-                <button type="submit" id="create" class="btn btn-block btn-outline btn-primary"
-                        style="color:#1ab394;background-color:transparent;border-color:#1ab394;">提交
-                </button>
-            </div>
+        <div class="ibox-content">
+            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                <thead>
+                <tr>
+                    <th data-sort-ignore="true">ID</th>
+                    <th>类型</th>
+                    <th>金额</th>
+                    <th data-sort-ignore="true">标签</th>
+                    <th data-sort-ignore="true">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="bds != null" th:each="billDetail, index :${bds}">
+                    <td th:text="${billDetail.id}"></td>
+                    <td>
+                        <span th:if="${billDetail.type == 1}" class="label label-danger">支出</span>
+                        <span th:if="${billDetail.type == 2}" class="label label-success">收入</span>
+                    </td>
+                    <td th:text="'￥'+${billDetail.money}"></td>
+                    <td th:text="${billDetail.billTagIds}"></td>
+                    <td>
+                        <div class="btn-group">
+                            <button class="btn-white btn btn-xs"
+                                    th:onclick="'javascript:updateBillDetail(\''+ ${billDetail.id} +'\')'">
+                                修改
+                            </button>
+                            <button class="btn-white btn btn-xs"
+                                    th:onclick="'javascript:deleteBillDetail(\''+ ${billDetail.id} +'\')'">
+                                删除
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="7">
+                        <ul class="pagination pull-right"></ul>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+
         </div>
     </form>
-    <div class="hr-line-dashed"></div>
-    <div class="ibox-content">
-        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
-            <thead>
-            <tr>
-                <th data-sort-ignore="true">ID</th>
-                <th>类型</th>
-                <th>金额</th>
-                <th data-sort-ignore="true">标签</th>
-                <th data-sort-ignore="true">操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:if="bds != null" th:each="billDetail, index :${bds}">
-                <td th:text="${billDetail.id}"></td>
-                <td>
-                    <span th:if="${billDetail.type == 1}" class="label label-danger">支出</span>
-                    <span th:if="${billDetail.type == 2}" class="label label-success">收入</span>
-                </td>
-                <td th:text="'￥'+${billDetail.money}"></td>
-                <td th:text="${billDetail.billTagIds}"></td>
-                <td>
-                    <div class="btn-group">
-                        <button class="btn-white btn btn-xs">修改</button>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <td colspan="7">
-                    <ul class="pagination pull-right"></ul>
-                </td>
-            </tr>
-            </tfoot>
-        </table>
-
-    </div>
-</div>
 </div>
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(function () {
         $('.footable').footable();
-        $.FreeTags('tags');
+
         $('#date').datepicker({
             language: "cn",
             todayBtn: "linked",
@@ -140,13 +154,70 @@
             calendarWeeks: true,
             autoclose: true,
             format: "yyyy-mm-dd"
-        });
-        $('.i-checks').iCheck({
-            checkboxClass: 'icheckbox_square-green',
-            radioClass: 'iradio_square-green',
-        });
+        }).on("changeDate", changeDate);
+
+//        $('.i-checks').iCheck({
+//            checkboxClass: 'icheckbox_square-green',
+//            radioClass: 'iradio_square-green',
+//        });
+
+        var config = {
+            '#chosen-select': {}
+        }
+        for (var selector in config) {
+            $(selector).chosen(config[selector]);
+        }
     });
 
+    function changeDate() {
+        var date = $("#date").val();
+        window.location.href = "/detail/index/1?date=" + date;
+    }
+
+    function save() {
+        $.ajax({
+            type: 'POST',
+            url: "/detail/save",
+            dataType: "json",
+            data: $("#form").serialize(),
+            success: function (data) {
+                if (data.code == 200){
+                    layer.msg("保存成功！！！",{icon:1});
+                    changeDate();
+                }else {
+                    layer.msg(data.msg,{icon:2});
+                }
+            },
+            error:function (error) {
+                layer.msg("保存失败！！！",{icon:2});
+            }
+        });
+    }
+
+    function updateBillDetail(billDetail) {
+        var date = $("#date").val();
+        window.location.href = "/detail/index/2?date=" + date + "&billDetail=" + billDetail;
+    }
+
+    function deleteBillDetail(billDetailId) {
+        $.ajax({
+            type: 'POST',
+            url: "/detail/delete",
+            dataType: "json",
+            data: {"id": billDetailId},
+            success: function (data) {
+                if (data.code == 200){
+                    layer.msg("删除成功！！！",{icon:1});
+                    changeDate();
+                }else {
+                    layer.msg(data.msg,{icon:2});
+                }
+            },
+            error:function (error) {
+                layer.msg("删除失败！！！",{icon:2});
+            }
+        });
+    }
 
     /*]]>*/
 </script>

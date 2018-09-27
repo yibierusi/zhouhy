@@ -3,10 +3,10 @@ package com.zhou.photo.controller;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.zhou.index.entity.Result;
 import com.zhou.index.entity.SysUser;
-import com.zhou.index.comm.util.EnumUtil;
-import com.zhou.index.comm.util.FileUtil;
-import com.zhou.index.comm.util.MsgEnumUtil;
-import com.zhou.index.comm.util.UUIDUtil;
+import com.zhou.index.comm.util.EnumHelper;
+import com.zhou.index.comm.util.FileHelper;
+import com.zhou.index.comm.util.MsgEnumHelper;
+import com.zhou.index.comm.util.UUIDHelper;
 import com.zhou.photo.entity.Photo;
 import com.zhou.photo.entity.PhotoAlbum;
 import com.zhou.photo.service.PhotoAlbumService;
@@ -46,7 +46,7 @@ public class PhotoController {
      */
     @RequestMapping(value = "/photoAlbum")
     public ModelAndView gotoPhotoListAlbumView() {
-        ModelAndView mav = new ModelAndView("/photo/photo_album_list");
+        ModelAndView mav = new ModelAndView("photo/photo_album_list");
         return mav;
     }
 
@@ -57,7 +57,7 @@ public class PhotoController {
      */
     @RequestMapping(value = "/photoListView/{photoAlbumId}")
     public ModelAndView gotoPhotoListView(@PathVariable String photoAlbumId) {
-        ModelAndView mav = new ModelAndView("/photo/photo_list");
+        ModelAndView mav = new ModelAndView("photo/photo_list");
         mav.addObject("photoAlbumId", photoAlbumId);
         return mav;
     }
@@ -69,7 +69,7 @@ public class PhotoController {
      */
     @RequestMapping(value = "/uploadPhotoView/{photoAlbumId}")
     public ModelAndView gotoUploadPhoto(@PathVariable String photoAlbumId) {
-        ModelAndView mav = new ModelAndView("/photo/upload_photo");
+        ModelAndView mav = new ModelAndView("photo/upload_photo");
         mav.addObject("photoAlbumId", photoAlbumId);
         return mav;
     }
@@ -81,7 +81,7 @@ public class PhotoController {
      */
     @RequestMapping(value = "/newPhotoAlbum")
     public ModelAndView gotoCreatePhotoAlbum() {
-        ModelAndView mav = new ModelAndView("/photo/new_photo_album");
+        ModelAndView mav = new ModelAndView("photo/new_photo_album");
         return mav;
     }
 
@@ -95,12 +95,12 @@ public class PhotoController {
     public Result addPhotoAlbum(PhotoAlbum photoAlbum, HttpServletRequest req) {
         SysUser su = (SysUser) req.getSession().getAttribute("sysUser");
         photoAlbum.setSysUserId(su.getId());
-        photoAlbum.setId(UUIDUtil.getUUID());
+        photoAlbum.setId(UUIDHelper.getUUID());
         try {
             photoAlbumService.insert(photoAlbum);
         } catch (Exception e) {
             e.printStackTrace();
-            return Result.create(MsgEnumUtil.STATEMENT_EXE_FAILED);
+            return Result.create(MsgEnumHelper.STATEMENT_EXE_FAILED);
         }
         return Result.ok();
     }
@@ -122,7 +122,7 @@ public class PhotoController {
         List<PhotoAlbum> photoAlbums = photoAlbumService.selectList(ew);
 
         if (photoAlbums == null || photoAlbums.size() == 0) {
-            result = Result.create(MsgEnumUtil.NO_ALBUMS_CREATED);
+            result = Result.create(MsgEnumHelper.NO_ALBUMS_CREATED);
         } else {
             result = Result.ok();
             result.put("photoAlbums", photoAlbums);
@@ -146,7 +146,7 @@ public class PhotoController {
         List<Photo> photos = photoService.selectList(ew);
 
         if (photos == null || photos.size() == 0) {
-            result = Result.create(MsgEnumUtil.NO_PHOTO_TO_UPLOAD);
+            result = Result.create(MsgEnumHelper.NO_PHOTO_TO_UPLOAD);
         } else {
             result = Result.ok();
             result.put("photos", photos);
@@ -178,23 +178,23 @@ public class PhotoController {
             mf = multipartFiles.get(0);
 
             String fileName = mf.getOriginalFilename();
-            String suffix = FileUtil.getFileSuffix(fileName);
+            String suffix = FileHelper.getFileSuffix(fileName);
             String tempPath = su.getUsername() + "/" + photoAlbumId + "/" + ctmLong + "." + suffix;
-            String realPath = EnumUtil.PHOTOT_PATH.v() + tempPath;
-            String classPath = EnumUtil.PHOTO_CLASS_PATH.v() + tempPath;
-            File source = FileUtil.mkdirParentFile(realPath);
-            File source1 = FileUtil.mkdirParentFile(classPath);
+            String realPath = EnumHelper.PHOTOT_PATH.v() + tempPath;
+            String classPath = EnumHelper.PHOTO_CLASS_PATH.v() + tempPath;
+            File source = FileHelper.mkdirParentFile(realPath);
+            File source1 = FileHelper.mkdirParentFile(classPath);
             String url = "/upload/photo/" + tempPath;
             try {
                 FileUtils.copyInputStreamToFile(mf.getInputStream(), source);
                 FileUtils.copyInputStreamToFile(mf.getInputStream(), source1);
                 Photo photo = new Photo();
                 photo.setPhotoAlbumId(photoAlbumId);
-                photo.setName(FileUtil.removeFileSuffix(fileName));
+                photo.setName(FileHelper.removeFileSuffix(fileName));
                 photo.setPath(url);
                 //photo.setSize1(mf.getSize());
                 photo.setSuffix(suffix);
-                photo.setId(UUIDUtil.getUUID());
+                photo.setId(UUIDHelper.getUUID());
                 photoService.insert(photo);
 
             } catch (Exception e) {
@@ -217,7 +217,7 @@ public class PhotoController {
     public Result deletePhoto(@PathVariable String photoId, HttpServletRequest req) {
         Photo photo = photoService.selectById(photoId);
         photo.setId(photoId);
-        photo.setState(EnumUtil.DELETED.k());
+        photo.setState(EnumHelper.DELETED.k());
         photo.setUpdateTime(new Date());
 
         photoService.updateById(photo);

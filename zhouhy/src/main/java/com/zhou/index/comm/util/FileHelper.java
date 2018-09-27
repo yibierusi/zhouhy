@@ -10,7 +10,7 @@ import java.nio.charset.Charset;
  * @author: zhouhy
  * @create 2017-11-13 11:06
  **/
-public class FileUtil {
+public class FileHelper {
 
     //输出流
     public static boolean fileOutputStreamFunc(String filePath,String str){
@@ -183,9 +183,9 @@ public class FileUtil {
             System.out.println("删除文件失败:" + filePath + "不存在！");
         }else {
             if (file.isFile())
-                return FileUtil.deleteFile(filePath);
+                return FileHelper.deleteFile(filePath);
             else
-                return FileUtil.deleteDirectory(filePath);
+                return FileHelper.deleteDirectory(filePath);
         }
         return false;
     }

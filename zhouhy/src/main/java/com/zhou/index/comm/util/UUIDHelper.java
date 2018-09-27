@@ -8,7 +8,7 @@ import java.util.UUID;
  * @Date: Create in 11:49 2018/7/6
  * @Modified By
  */
-public class UUIDUtil {
+public class UUIDHelper {
     /**
      * 自动生成32位的UUid，对应数据库的主键id进行插入用。
      * @return

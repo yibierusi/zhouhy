@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhou.bill.dao.BillDao">
 
+
+    <update id="updateSum">
+        update bill b set b.paid = (select sum(bd.money) from bill_detail bd where bd.type = 1 and bd.bill_id = b.id),
+        b.income = (select sum(bd.money) from bill_detail bd where bd.type = 2 and bd.bill_id = b.id)
+    </update>
 </mapper>

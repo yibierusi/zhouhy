@@ -12,5 +12,5 @@ import com.zhou.bill.entity.Bill;
  * @since 2018-09-20
  */
 public interface BillDao extends BaseMapper<Bill> {
-
+    void updateSum();
 }

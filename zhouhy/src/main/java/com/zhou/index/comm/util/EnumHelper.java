@@ -10,7 +10,7 @@ import com.zhou.photo.controller.PhotoController;
  * @author: zhouhy
  * @create 2017-11-13 14:51
  **/
-public enum EnumUtil {
+public enum EnumHelper {
     BLOG_PATH(21, "./src/main/resources/public/upload/blog/"),
     BLOG_CLASS_PATH(22, BlogController.class.getResource("/").getPath()+"public/upload/blog/"),
     PHOTOT_PATH(31, "./src/main/resources/public/upload/photo/"),
@@ -28,7 +28,7 @@ public enum EnumUtil {
     private Integer k;
     private String v;
 
-    EnumUtil(Integer k, String v) {
+    EnumHelper(Integer k, String v) {
         this.k = k;
         this.v = v;
     }

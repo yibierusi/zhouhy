@@ -24,7 +24,7 @@ public class IndexController {
 
     @RequestMapping(value = "/")
     public ModelAndView index(HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("/zhou/index");
+        ModelAndView mav = new ModelAndView("zhou/index");
         SysUser sysUser = (SysUser) request.getSession().getAttribute("sysUser");
         mav.addObject("sysUser", sysUser);
         return mav;

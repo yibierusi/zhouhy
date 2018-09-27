@@ -38,19 +38,19 @@ public class BillTag extends Model<BillTag> {
      * 创建时间
      */
 	@TableField("create_time")
-	private Date createTime;
+	private Date createTime = new Date();
     /**
      * 更新时间
      */
 	@TableField("update_time")
-	private Date updateTime;
+	private Date updateTime = new Date();
 
 	/**
 	 * 用户id
 	 * @return
 	 */
 	@TableField("sys_user_id")
-	private Date sysUserId;
+	private String sysUserId;
 
 	@Override
 	protected Serializable pkVal() {

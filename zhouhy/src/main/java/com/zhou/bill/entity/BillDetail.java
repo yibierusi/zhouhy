@@ -32,7 +32,7 @@ public class BillDetail extends Model<BillDetail> {
     /**
      * 金额
      */
-	private Integer money;
+	private Double money = 0d;
     /**
      * 账单ID
      */
@@ -42,7 +42,7 @@ public class BillDetail extends Model<BillDetail> {
      * 标签ID
      */
 	@TableField("bill_tag_ids")
-	private String billTagIds;
+	private String billTagIds = null;
 
 	@Override
 	protected Serializable pkVal() {

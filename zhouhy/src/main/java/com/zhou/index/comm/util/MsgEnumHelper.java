@@ -7,7 +7,7 @@ package com.zhou.index.comm.util;
  * @author: zhouhy
  * @create 2017-11-13 14:51
  **/
-public enum MsgEnumUtil {
+public enum MsgEnumHelper {
     SUCCESS(0,"成功"),
     ERROR(1,"错误"),
     RESULT_SET_NOT_EXIST(501,"结果集不存在"),
@@ -18,7 +18,7 @@ public enum MsgEnumUtil {
     private Integer code;
     private String msg;
 
-    MsgEnumUtil(Integer code, String msg) {
+    MsgEnumHelper(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }

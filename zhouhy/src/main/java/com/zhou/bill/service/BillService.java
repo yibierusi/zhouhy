@@ -15,6 +15,14 @@ import com.zhou.bill.entity.BillListQueryParam;
  */
 public interface BillService extends IService<Bill> {
     /**
+     * 更新支出收入值总和、最大值、说明
+     */
+    void updateBillAll(String detailId);
+    /**
+     * 更新支出收入值总和、最大值、说明
+     */
+    void updateBillAll(Integer type,String id);
+    /**
      * 获取账单的分页数据  根据用户ID 开始结束时间 用户ID
      * @param param
      * @param sysUserId
@@ -38,5 +46,8 @@ public interface BillService extends IService<Bill> {
      */
     Bill getBillBySysUserIdAndDate(String sysUserId,Integer date);
 
-
+    /**
+     * 更新支付收入总和
+     */
+    void updateSum();
 }
