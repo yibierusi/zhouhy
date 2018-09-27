@@ -1,14 +1,16 @@
 package com.zhou.index.controller;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.zhou.index.entity.Result;
 import com.zhou.index.entity.SysUser;
 import com.zhou.index.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,16 +37,23 @@ public class SysUserController {
         if (StringUtils.isEmpty(su.getPassword().trim())) {
             return new Result(102, "密码不能为空");
         }
+        SysUser sysUser = sysUserService.getSysUserByUsernameAndPassword(su);
 
-        EntityWrapper<SysUser> ew = new EntityWrapper<>();
-        ew.where("username={0}", su.getUsername());
-        ew.where("password={0}", su.getPassword());
-        SysUser sysUser = sysUserService.selectOne(ew);
         if (sysUser != null) {
             request.getSession().setAttribute("sysUser", sysUser);
-            return new Result(200,"登陆成功");
-        } else
-            return new Result(201,"用户不存在");
+            return new Result(200, "登陆成功");
+        } else {
+            return new Result(201, "用户名或者密码错误");
+        }
+    }
+
+    /**
+     * 登出操作
+     **/
+    @GetMapping(value = "/logout")
+    public @ResponseBody Result logout(HttpServletRequest request) {
+        request.getSession().removeAttribute("sysUser");
+        return Result.ok();
     }
 
 

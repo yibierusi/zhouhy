@@ -26,7 +26,7 @@ CREATE TABLE `photo` (
   `path` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '路径',
   `suffix` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '后缀',
   `bytes` int(11) DEFAULT NULL COMMENT '大小',
-  `content` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `content` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '博客具体内容',
   `reads` int(7) NOT NULL DEFAULT '0' COMMENT '阅读数',
   `comments` int(7) NOT NULL DEFAULT '0' COMMENT '评论数',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2018-09-27 17:16:28
+Date: 2018-09-27 17:19:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS `bill_detail`;
 CREATE TABLE `bill_detail` (
   `id` varchar(64) COLLATE utf8_unicode_ci NOT NULL COMMENT '账单明细ID',
   `type` tinyint(1) DEFAULT NULL COMMENT '类型：1支出  2  收入',
-  `money` int(11) DEFAULT NULL COMMENT '金额',
+  `money` double(11,0) DEFAULT NULL COMMENT '金额',
   `bill_id` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '账单ID',
   `bill_tag_ids` text COLLATE utf8_unicode_ci COMMENT '标签ID',
   PRIMARY KEY (`id`)

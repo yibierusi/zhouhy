@@ -78,7 +78,7 @@ public class BillServiceImpl extends ServiceImpl<BillDao, Bill> implements BillS
         ew.eq("sys_user_id", sysUserId);
         ew.and("date >= {0}", param.getStartTime());
         ew.and("date <= {0}", param.getEndTime());
-        ew.orderBy("date");
+        ew.orderBy("date",false);
         return this.selectPage(page, ew);
     }
 

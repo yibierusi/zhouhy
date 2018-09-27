@@ -1,6 +1,7 @@
 package com.zhou.index.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.zhou.index.entity.Result;
 import com.zhou.index.entity.SysUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,10 +33,8 @@ public class IndexController {
 
     @RequestMapping(value = "/getSysUser")
     @ResponseBody
-    public String getSysUser(HttpServletRequest request) {
-        Map<String, Object> res = new HashMap<>();
+    public Result getSysUser(HttpServletRequest request) {
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
-        res.put("su", su);
-        return JSON.toJSONString(res);
+        return Result.ok().put("su", su);
     }
 }

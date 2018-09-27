@@ -24,7 +24,7 @@ CREATE TABLE `bill` (
   `date` int(8) DEFAULT NULL COMMENT '时间，20180920',
   `paid` double(7,0) DEFAULT '0' COMMENT '支出',
   `max_paid` double(7,0) DEFAULT NULL COMMENT '最大支出',
-  `max_paid_explain` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `max_paid_explain` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最大支出说明',
   `income` double(7,0) DEFAULT '0' COMMENT '收入',
   `max_income` double(7,0) DEFAULT NULL COMMENT '最大收入',
   `max_income_explain` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '最大收入说明',

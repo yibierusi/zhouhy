@@ -7,6 +7,7 @@ import com.zhou.index.entity.Result;
 import com.zhou.index.entity.SysUser;
 import com.zhou.index.comm.util.*;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,7 +71,7 @@ public class BlogController {
 
     /**
      * @Author: zhouhy
-     * @Description: 删除
+     * @Description: 删除 更新md文件名字  更新数据库状态
      * @Date: 14:09 2018/8/23
      */
     @RequestMapping(value = "/delete")
@@ -116,7 +117,7 @@ public class BlogController {
 
     /**
      * @Author: zhouhy
-     * @Description: 发表
+     * @Description: 发表 保存md文件 并插入数据库
      * @Date: 14:23 2018/8/23
      */
     @RequestMapping(value = "/publish")
@@ -149,8 +150,8 @@ public class BlogController {
         ew.where("id={0}", b.getId());
         ew.and("sys_user_id={0}", su.getId());
         Blog blog = blogService.selectOne(ew);
-
-        if (!(blog == null || blog.getId() == null || blog.getId().equals(""))) {
+        //如果存在
+        if (blog != null && StringUtils.isNotEmpty(blog.getId())) {
             boolean isSuccess = FileHelper.fileOutputStreamFunc(EnumHelper.BLOG_PATH.v() + su.getUsername() + "/md/" + blog.getFileName(), b.getContent());
             if (!isSuccess) {
                 long ctmLong = System.currentTimeMillis();
@@ -205,7 +206,7 @@ public class BlogController {
 
     /**
      * @Author: zhouhy
-     * @Description: 获取博客信息
+     * @Description: 获取博客信息 从md文件获取博客
      * @Date: 17:11 2018/8/23
      */
     @RequestMapping(value = "/getContent")

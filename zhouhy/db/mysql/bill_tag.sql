@@ -25,7 +25,7 @@ CREATE TABLE `bill_tag` (
   `explain` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '标签说明',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `sys_user_id` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sys_user_id` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '用户ID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

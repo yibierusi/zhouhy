@@ -31,14 +31,13 @@
                         <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold"
                                                                                      th:text="${sysUser.nickname}"></strong>
-                             </span> <span class="text-muted text-xs block">称号 <b
-                                    class="caret"></b></span> </span> </a>
+                             </span> <span class="text-muted text-xs block"> 称号 <b class="caret"></b></span> </span> </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
                             <li><a href="profile.html">Profile</a></li>
                             <li><a href="contacts.html">Contacts</a></li>
                             <li><a href="mailbox.html">Mailbox</a></li>
                             <li class="divider"></li>
-                            <li><a href="login.html">退出</a></li>
+                            <li><a onclick="logout()">退出</a></li>
                         </ul>
                     </div>
                     <div class="logo-element">
@@ -191,7 +190,7 @@
 
 
                     <li>
-                        <a href="login.html">
+                        <a onclick="logout()">
                             <i class="fa fa-sign-out"></i> 退出
                         </a>
                     </li>
@@ -719,6 +718,11 @@
 
     function updateSrc(url){
         $("#iframe").attr("src",url);
+    }
+    function logout(){
+        $.get("/logout", function(result){
+            window.location.href="/";
+        });
     }
     /*]]>*/
 </script>
