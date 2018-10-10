@@ -6,5 +6,6 @@
     <update id="updateSum">
         update bill b set b.paid = (select sum(bd.money) from bill_detail bd where bd.type = 1 and bd.bill_id = b.id),
         b.income = (select sum(bd.money) from bill_detail bd where bd.type = 2 and bd.bill_id = b.id)
+        <!-- 需增加sysUsrId 条件 -->
     </update>
 </mapper>

@@ -47,7 +47,7 @@
                         <label class="control-label" for="start_time">开始时间</label>
                         <div class="input-group date">
                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input
-                                id="start_time" type="text" class="form-control" placeholder="请选择开始时间">
+                                id="start_time" type="text" th:value="${param.startTime}" class="form-control" placeholder="请选择开始时间">
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                         <label class="control-label" for="end_time">结束时间</label>
                         <div class="input-group date">
                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input
-                                id="end_time" type="text" class="form-control" placeholder="请选择结束时间">
+                                id="end_time" type="text" th:value="${param.endTime}" class="form-control" placeholder="请选择结束时间">
                         </div>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
 
             </div>
             <div class="row">
-                <button type="button" id="create" class="btn btn-block btn-outline btn-primary"
+                <button type="button" onclick="query()" class="btn btn-block btn-outline btn-primary"
                         style="color:#1ab394;background-color:transparent;border-color:#1ab394;">查询
                 </button>
             </div>
@@ -84,7 +84,7 @@
                 <div class="ibox">
                     <div class="ibox-content">
 
-                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10">
                             <thead>
                             <tr>
                                 <th data-sort-ignore="true">ID</th>
@@ -100,7 +100,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:if="page.records != null" th:each="bill, index :${page.records}">
+                            <tr th:if="bills != null" th:each="bill, index :${bills}">
                                 <td th:text="${bill.id}"></td>
                                 <td th:text="${bill.date}"></td>
                                 <td th:text="'￥'+${bill.paid == null ? 0 : bill.paid}"></td>
@@ -111,8 +111,8 @@
                                 <td th:text="${bill.maxIncomeExplain}"></td>
                                 <td>
                                     <span th:if="${bill.status == 1}" class="label label-success">正常</span>
-                                    <span th:if="${bill.status == 2}" class="label label-warning">异常</span>
-                                    <span th:if="${bill.status == 3}" class="label label-danger">警告</span>
+                                    <span th:if="${bill.status == 2}" class="label label-danger">警告</span>
+                                    <span th:if="${bill.status == 3}" class="label label-warning">异常</span>
                                 </td>
                                 <td>
                                     <div class="btn-group">
@@ -123,7 +123,7 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                <td colspan="7">
+                                <td colspan="12">
                                     <ul class="pagination pull-right"></ul>
                                 </td>
                             </tr>
@@ -164,7 +164,11 @@
     function gotoBillDetail(date){
         window.location.href = "/detail/index/1?date=" + date;
     }
-
+    function query() {
+        var st = $("#start_time").val();
+        var et = $("#end_time").val();
+        window.location.href = "/bill/index?startTime=" + st + "&endTime=" + et;
+    }
 
     /*]]>*/
 </script>

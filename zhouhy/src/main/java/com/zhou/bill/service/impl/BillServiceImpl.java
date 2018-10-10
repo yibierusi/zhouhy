@@ -11,9 +11,12 @@ import com.zhou.bill.service.BillDetailService;
 import com.zhou.bill.service.BillService;
 import com.zhou.bill.service.BillTagService;
 import com.zhou.index.comm.util.DateHelper;
+import com.zhou.index.comm.util.StringHelper;
 import com.zhou.index.comm.util.UUIDHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -80,6 +83,23 @@ public class BillServiceImpl extends ServiceImpl<BillDao, Bill> implements BillS
         ew.and("date <= {0}", param.getEndTime());
         ew.orderBy("date",false);
         return this.selectPage(page, ew);
+    }
+
+    /**
+     * 获取账单的数据  根据用户ID 开始结束时间 用户ID
+     *
+     * @param param
+     * @param sysUserId
+     * @return
+     */
+    @Override
+    public List<Bill> getBillListByBillListQueryParam(BillListQueryParam param, String sysUserId) {
+        EntityWrapper<Bill> ew = new EntityWrapper<>();
+        ew.eq("sys_user_id", sysUserId);
+        ew.and("date >= {0}", StringHelper.removeSymbol(param.getStartTime()));
+        ew.and("date <= {0}", StringHelper.removeSymbol(param.getEndTime()));
+        ew.orderBy("date",false);
+        return this.selectList(ew);
     }
 
     /**

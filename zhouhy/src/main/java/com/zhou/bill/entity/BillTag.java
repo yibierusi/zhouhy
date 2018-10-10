@@ -34,6 +34,10 @@ public class BillTag extends Model<BillTag> {
      * 标签说明
      */
 	private String explain;
+	/**
+	 * 权重
+	 */
+	private int weight;
     /**
      * 创建时间
      */

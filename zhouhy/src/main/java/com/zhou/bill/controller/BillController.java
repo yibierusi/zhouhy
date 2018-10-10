@@ -41,8 +41,9 @@ public class BillController {
     public ModelAndView bill(BillListQueryParam param, HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("bill/bill_list");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
-        Page<Bill> page = billService.getBillPageByBillListQueryParam(param, su.getId());
-        mav.addObject("page", page);
+        List<Bill> bills = billService.getBillListByBillListQueryParam(param, su.getId());
+        mav.addObject("bills", bills);
+        mav.addObject(param);
         return mav;
     }
 

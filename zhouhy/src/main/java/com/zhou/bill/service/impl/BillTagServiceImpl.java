@@ -80,6 +80,7 @@ public class BillTagServiceImpl extends ServiceImpl<BillTagDao, BillTag> impleme
     @Override
     public List<BillTag> getBillTagsBySysUserId(String sysUserId) {
         EntityWrapper<BillTag> ew = new EntityWrapper<>();
+        ew.orderBy("weight", true);
         ew.eq("sys_user_id", sysUserId);
         return this.selectList(ew);
     }

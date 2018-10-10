@@ -67,10 +67,10 @@
     </form>
     <div class="hr-line-dashed"></div>
     <div class="ibox-content">
-        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+        <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10">
             <thead>
             <tr>
-                <th data-sort-ignore="true">ID</th>
+                <th >权重</th>
                 <th data-sort-ignore="true">名字</th>
                 <th data-sort-ignore="true">说明</th>
                 <th data-sort-ignore="true">操作</th>
@@ -78,7 +78,7 @@
             </thead>
             <tbody>
             <tr th:if="bds != null" th:each="tag, index :${billTags}">
-                <td th:text="${tag.id}"></td>
+                <td th:text="${tag.weight}"></td>
                 <td th:text="${tag.name}"></td>
                 <td th:text="${tag.explain}"></td>
                 <td>

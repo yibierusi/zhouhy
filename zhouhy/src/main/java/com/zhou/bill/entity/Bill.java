@@ -58,7 +58,7 @@ public class Bill extends Model<Bill> {
 	@TableField("max_income_explain")
 	private String maxIncomeExplain = "";
 	/**
-	 * 状态  1：正常  2：异常  3：警告
+	 * 状态 1：正常  2：警告  3：异常
 	 */
 	private int status;
     /**
