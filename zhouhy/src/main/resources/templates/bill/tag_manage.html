@@ -70,7 +70,7 @@
         <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10">
             <thead>
             <tr>
-                <th >权重</th>
+                <th>权重</th>
                 <th data-sort-ignore="true">名字</th>
                 <th data-sort-ignore="true">说明</th>
                 <th data-sort-ignore="true">操作</th>
@@ -83,10 +83,10 @@
                 <td th:text="${tag.explain}"></td>
                 <td>
                     <div class="btn-group">
-                        <button class="btn-white btn btn-xs" type="button"
-                                th:onclick="'javascript:updateBillTag(\''+ ${tag.id} +'\')'">
+                        <a data-toggle="modal" href="#update-form" class="btn-white btn btn-xs"
+                           th:onclick="'javascript:getBillTagById(\''+ ${tag.id} +'\')'">
                             修改
-                        </button>
+                        </a>
                         <button class="btn-white btn btn-xs" type="button"
                                 th:onclick="'javascript:deleteBillTag(\''+ ${tag.id} +'\')'">
                             删除
@@ -103,9 +103,37 @@
             </tr>
             </tfoot>
         </table>
-
+        <!-- 弹出框 -->
+        <div class="ibox-content">
+            <div id="update-form" class="modal fade" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12"><h3 class="m-t-none m-b"> 标签修改 </h3>
+                                    <p id="tagId"> 标签ID </p>
+                                    <div class="form-group"><label>标签名称</label> <input id="tagName" type="name"
+                                                                                       placeholder="标签名称"
+                                                                                       class="form-control"></div>
+                                    <div class="form-group"><label>标签说明</label> <input id="tagExplain" type="explain"
+                                                                                       placeholder="标签说明"
+                                                                                       class="form-control"></div>
+                                    <div class="form-group"><label> 权重 </label> <input id="tagWeight" type="weight"
+                                                                                       placeholder="权重"
+                                                                                       class="form-control"></div>
+                                    <div>
+                                        <button th:onclick="'javascript:updateBillTag()'"
+                                                class="btn btn-sm btn-primary pull-right m-t-n-xs" type="button">
+                                            <strong> 修改 </strong></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 </div>
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -125,12 +153,46 @@
             }
         });
     }
+
     function f5() {
         window.location.href = "/tag/index"
     }
-    function updateBillTag(billDetail) {
-        var date = $("#date").val();
-        window.location.href = "/detail/index/2?date=" + date + "&billDetail=" + billDetail;
+
+    function updateBillTag() {
+        $.ajax({
+            type: 'get',
+            url: "/tag/update",
+            dataType: "json",
+            data: {
+                "id": $("#tagId").html(),
+                "name": $("#tagName").val(),
+                "explain": $("#tagExplain").val(),
+                "weight": $("#tagWeight").val()
+            },
+            success: function (data) {
+                if (data.code == 200) {
+                    f5();
+                }
+            }
+        });
+    }
+
+    function getBillTagById(id) {
+        $.ajax({
+            type: 'get',
+            url: "/tag/queryById",
+            dataType: "json",
+            data: {"id": id},
+            success: function (data) {
+                if (data.code == 200) {
+                    var tag = data.obj.billTag;
+                    $("#tagId").html(tag.id);
+                    $("#tagName").val(tag.name);
+                    $("#tagExplain").val(tag.explain);
+                    $("#tagWeight").val(tag.weight);
+                }
+            }
+        });
     }
 
     function deleteBillTag(id) {

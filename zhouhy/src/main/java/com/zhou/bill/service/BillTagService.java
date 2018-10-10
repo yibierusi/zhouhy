@@ -39,4 +39,9 @@ public interface BillTagService extends IService<BillTag> {
      * 删除
      */
     boolean deleteTagByIdAndSysUserId(String id, String sysUserId);
+
+    /**
+     * 查询
+     */
+    BillTag getTagByIdAndSysUserId(String id, String sysUserId);
 }

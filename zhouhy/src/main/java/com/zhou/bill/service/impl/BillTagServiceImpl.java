@@ -92,4 +92,12 @@ public class BillTagServiceImpl extends ServiceImpl<BillTagDao, BillTag> impleme
         ew.eq("id", id);
         return this.delete(ew);
     }
+
+    @Override
+    public BillTag getTagByIdAndSysUserId(String id, String sysUserId) {
+        EntityWrapper<BillTag> ew = new EntityWrapper<>();
+        ew.eq("id", id);
+        ew.eq("sys_user_id", sysUserId);
+        return this.selectOne(ew);
+    }
 }

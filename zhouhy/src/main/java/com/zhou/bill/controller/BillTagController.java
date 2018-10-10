@@ -1,19 +1,13 @@
 package com.zhou.bill.controller;
 
 
-import com.zhou.bill.entity.Bill;
-import com.zhou.bill.entity.BillDetail;
 import com.zhou.bill.entity.BillTag;
 import com.zhou.bill.service.BillTagService;
-import com.zhou.index.comm.util.StringHelper;
 import com.zhou.index.entity.Result;
 import com.zhou.index.entity.SysUser;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -48,26 +42,46 @@ public class BillTagController {
 
 
     /**
-     * 标签管理添加
+     * 标签管理-标签添加
      */
     @ResponseBody
     @RequestMapping(value = "/insert")
     public Result insert(HttpServletRequest request, String tagNames) {
-        ModelAndView mav = new ModelAndView("bill/tag_manage");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         billTagService.batchInsert(su.getId(), tagNames);
         return Result.ok();
     }
 
     /**
-     * 标签管理删除
+     * 标签管理-标签更新
+     */
+    @ResponseBody
+    @RequestMapping(value = "/update")
+    public Result update(HttpServletRequest request, BillTag tag) {
+        SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
+        billTagService.updateById(tag);
+        return Result.ok();
+    }
+
+    /**
+     * 标签管理-标签删除
      */
     @ResponseBody
     @RequestMapping(value = "/delete")
     public Result delete(HttpServletRequest request, String id) {
-        ModelAndView mav = new ModelAndView("bill/tag_manage");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         billTagService.deleteTagByIdAndSysUserId(id, su.getId());
         return Result.ok();
+    }
+
+    /**
+     * 标签管理-标签获取
+     */
+    @ResponseBody
+    @RequestMapping(value = "/queryById")
+    public Result queryById(HttpServletRequest request, String id) {
+        SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
+        BillTag billTag = billTagService.getTagByIdAndSysUserId(id, su.getId());
+        return Result.ok().put("billTag", billTag);
     }
 }
