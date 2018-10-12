@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/detail")
-public class BillDetailController {
+public class DetailController {
     @Autowired
     private BillService billService;
     @Autowired
@@ -53,7 +53,7 @@ public class BillDetailController {
                                String billDetailId,
                                @PathVariable("mold") Integer mold) {
         date = StringHelper.removeSymbol(date);
-        ModelAndView mav = new ModelAndView("bill/detail_manage");
+        ModelAndView mav = new ModelAndView("bill/detail");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         Bill bill = null;
         if (StringUtils.isEmpty(billId)) {
@@ -65,12 +65,12 @@ public class BillDetailController {
         }
         //获取账单对象List
         List<BillDetail> billDetails = billDetailService.getBillDetailListByBillId(bill.getId());
-
+        //详情
         BillDetail billDetail = new BillDetail();
         if (StringUtils.isNotEmpty(billDetailId)) {
             billDetail = billDetailService.selectById(billDetailId);
         }
-
+        //所有标签
         List<BillTag> tags = billTagService.getBillTagsBySysUserId(su.getId());
         mav.addObject("tags", tags);
         mav.addObject("bd", billDetail);

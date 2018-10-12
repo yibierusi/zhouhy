@@ -2,6 +2,9 @@ package com.zhou.bill.dao;
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.zhou.bill.entity.Bill;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,13 @@ import com.zhou.bill.entity.Bill;
  */
 public interface BillDao extends BaseMapper<Bill> {
     void updateSum();
+
+    /**
+     * 查询某月的支出数据
+     * @param st
+     * @param et
+     * @param sysUserId
+     * @return
+     */
+    List<Bill> getCertainMonthData(@Param("st")String st,@Param("et")String et,@Param("sysUserId")String sysUserId);
 }

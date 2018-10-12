@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/tag")
-public class BillTagController {
+public class TagController {
     @Autowired
     private BillTagService billTagService;
 
@@ -33,7 +33,7 @@ public class BillTagController {
      */
     @RequestMapping(value = "/index")
     public ModelAndView index(HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("bill/tag_manage");
+        ModelAndView mav = new ModelAndView("bill/tag");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         List<BillTag> billTags = billTagService.getBillTagsBySysUserId(su.getId());
         mav.addObject("billTags", billTags);

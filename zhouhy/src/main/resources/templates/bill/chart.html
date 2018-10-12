@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>账单查询</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+
+    <!-- Jquery -->
+    <script th:src="@{/plugins/jquery/jquery-2.1.1.js}"></script>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" th:href="@{/plugins/bootstrap/bootstrap.min.css}">
+    <!-- Bootstrap -->
+    <script th:src="@{/plugins/bootstrap/bootstrap.min.js}"></script>
+    <!-- layer  -->
+    <script th:src="@{/plugins/layer/layer.js}"></script>
+    <!--表格-->
+    <script th:src="@{/plugins/footable/footable.all.min.js}"></script>
+    <!-- FooTable -->
+    <link th:href="@{/plugins/footable/footable.core.css}" rel="stylesheet">
+    <link th:href="@{/plugins/datapicker/datepicker3.css}" rel="stylesheet">
+    <!--图标-->
+    <link rel="stylesheet" th:href="@{/plugins/font-awesome/font-awesome.css}">
+    <!-- index -->
+    <link th:href="@{/module/index/style.css}" rel="stylesheet">
+    <link th:href="@{/module/index/index.min.css}" rel="stylesheet"/>
+    <!--  图表-->
+    <script th:src="@{/plugins/echarts/echarts.js}"></script>
+</head>
+
+<body style="background-color: #f5f5f5">
+<div class="padding-md">
+    <ul class="breadcrumb">
+        <li><span class="primary-font"><i class="icon-home"></i></span><a href="#"> 账单</a></li>
+        <li id="navLi2">图表分析</li>
+    </ul>
+    <div class="wrapper wrapper-content animated fadeInRight ecommerce" style="padding: 0px;width: 100%">
+        <div class="row">
+            <div id="lineChart" style="height: 600px; padding: 10px"></div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function () {
+        initEcharts();
+    });
+    function initEcharts(){
+        var dom = document.getElementById("lineChart");
+        var myChart = echarts.init(dom);
+        var option = null;
+        option = {
+            title: {
+                text: '对比图',
+                subtext: '上月/本月'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:['上月','本月']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar']},
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: ['1','2','3','4','5','6','7','8','9','10',
+                    '11','12','13','14','15','16','17','18','19','20',
+                    '21','22','23','24','25','26','27','28','29','30','31']
+            },
+            yAxis: {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} °C'
+                }
+            },
+            series: [
+                {
+                    name:'上月',
+                    type:'line',
+                    data:[[${last}]],
+                    markPoint: {
+                        data: [
+                            {type: 'max', name: '最高值'},
+                            {type: 'min', name: '最低值'}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'}
+                        ]
+                    }
+                },
+                {
+                    name:'本月',
+                    type:'line',
+                    data:[[${current}]],
+                    markPoint: {
+                        data: [
+                            {name: '最低值', value: -2, xAxis: 2, yAxis: 2}
+                        ]
+                    },
+                    markLine: {
+                        data: [
+                            {type: 'average', name: '平均值'},
+                            [{
+                                symbol: 'none',
+                                x: '90%',
+                                yAxis: 'max'
+                            }, {
+                                symbol: 'circle',
+                                label: {
+                                    normal: {
+                                        position: 'start',
+                                        formatter: '最高值'
+                                    }
+                                },
+                                type: 'max',
+                                name: '最高点'
+                            }]
+                        ]
+                    }
+                }
+            ]
+        };
+        ;
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+        //图表自适应
+        window.onresize = myChart.resize;
+    }
+    /*]]>*/
+</script>
+</body>
+</html>

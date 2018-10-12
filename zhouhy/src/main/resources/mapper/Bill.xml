@@ -8,4 +8,11 @@
         b.income = (select sum(bd.money) from bill_detail bd where bd.type = 2 and bd.bill_id = b.id)
         <!-- 需增加sysUsrId 条件 -->
     </update>
+
+    <!-- 查询某月的支出数据 -->
+    <select id="getCertainMonthData" resultType="com.zhou.bill.entity.Bill">
+        <![CDATA[
+          select right(date,2) as date,paid from bill where date >= #{st} and date < #{et} and sys_user_id = #{sysUserId} order by date
+        ]]>
+    </select>
 </mapper>

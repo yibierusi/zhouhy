@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/bill")
-public class BillController {
+public class MainController {
     @Autowired
     private BillService billService;
 
@@ -39,7 +39,7 @@ public class BillController {
      */
     @RequestMapping(value = "/index")
     public ModelAndView bill(BillListQueryParam param, HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("bill/bill_list");
+        ModelAndView mav = new ModelAndView("bill/bill");
         SysUser su = (SysUser) request.getSession().getAttribute("sysUser");
         List<Bill> bills = billService.getBillListByBillListQueryParam(param, su.getId());
         mav.addObject("bills", bills);

@@ -81,7 +81,7 @@ public class BillServiceImpl extends ServiceImpl<BillDao, Bill> implements BillS
         ew.eq("sys_user_id", sysUserId);
         ew.and("date >= {0}", param.getStartTime());
         ew.and("date <= {0}", param.getEndTime());
-        ew.orderBy("date",false);
+        ew.orderBy("date", false);
         return this.selectPage(page, ew);
     }
 
@@ -98,7 +98,7 @@ public class BillServiceImpl extends ServiceImpl<BillDao, Bill> implements BillS
         ew.eq("sys_user_id", sysUserId);
         ew.and("date >= {0}", StringHelper.removeSymbol(param.getStartTime()));
         ew.and("date <= {0}", StringHelper.removeSymbol(param.getEndTime()));
-        ew.orderBy("date",false);
+        ew.orderBy("date", false);
         return this.selectList(ew);
     }
 
@@ -144,4 +144,41 @@ public class BillServiceImpl extends ServiceImpl<BillDao, Bill> implements BillS
         return bill;
     }
 
+    /**
+     * 查询某月的支出数据
+     *
+     * @param month     0 当前月  1 下月  -1 上月
+     * @param sysUserId
+     * @return
+     */
+    @Override
+    public List<Bill> getCertainMonthData(int month, String sysUserId) {
+        String st = DateHelper.getYMDStr(0, month, 0, 1);
+        String et = DateHelper.getYMDStr(0, month + 1, 0, 1);
+        return dao.getCertainMonthData(StringHelper.removeSymbol(st), StringHelper.removeSymbol(et), sysUserId);
+    }
+
+    /**
+     * 没有记录的补0
+     *
+     * @param bills
+     * @return
+     */
+    @Override
+    public double[] completionMonthData(List<Bill> bills, int[] x) {
+        double[] array = new double[31];
+        for (int i = 0; i < x.length; i++) {
+            if (bills.size() != 0) {
+                Bill bill = bills.get(0);
+                if (bill.getDate() == x[i]) {
+                    array[i] = bill.getPaid();
+                    bills.remove(0);
+                } else {
+                    array[i] = 0d;
+                }
+            }
+            break;
+        }
+        return array;
+    }
 }

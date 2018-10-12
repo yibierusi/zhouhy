@@ -45,6 +45,18 @@ public class DateHelper {
         return year * 10000 + month * 100 + day;
     }
 
+
+    /**
+     * 获取1-31的数组；
+     */
+    public static int[] get31Array() {
+        int[] array = new int[31];
+        for (int i = 0; i < 31; i++) {
+            array[i] = i+1;
+        }
+        return array;
+    }
+
     public static void main(String[] args) {
         System.out.println(getYMDStr(0, 0, 0,2));
     }
