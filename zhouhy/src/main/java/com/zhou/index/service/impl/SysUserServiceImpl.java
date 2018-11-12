@@ -30,8 +30,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
     @Override
     public SysUser getSysUserByUsernameAndPassword(String username, String password) {
         EntityWrapper<SysUser> ew = new EntityWrapper<>();
-        ew.where("username={0}", username);
-        ew.where("password={0}", password);
+        ew.and("username", username);
+        ew.and("password", password);
+        return this.selectOne(ew);
+    }
+
+    /**
+     * 根据用户名获取SysUser
+     * @param username
+     * @return
+     */
+    @Override
+    public SysUser getSysUserByUsername(String username) {
+        EntityWrapper<SysUser> ew = new EntityWrapper<>();
+        ew.and("username", username);
         return this.selectOne(ew);
     }
 }

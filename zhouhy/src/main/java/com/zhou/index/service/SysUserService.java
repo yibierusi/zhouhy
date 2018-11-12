@@ -19,5 +19,17 @@ public interface SysUserService extends IService<SysUser> {
      */
     SysUser getSysUserByUsernameAndPassword(SysUser su);
 
+    /**
+     * 根据用户名密码查询SysUser 对象
+     *
+     * @return
+     */
     SysUser getSysUserByUsernameAndPassword(String username, String password);
+
+    /**
+     * 根据用户名获取SysUser
+     * @param username
+     * @return
+     */
+    SysUser getSysUserByUsername(String username);
 }

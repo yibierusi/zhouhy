@@ -3,7 +3,9 @@ package com.zhou.index.config;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.baomidou.mybatisplus.MybatisConfiguration;
 import com.baomidou.mybatisplus.MybatisXMLLanguageDriver;
+import com.baomidou.mybatisplus.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.plugins.PaginationInterceptor;
+import com.baomidou.mybatisplus.plugins.PerformanceInterceptor;
 import com.baomidou.mybatisplus.spring.MybatisSqlSessionFactoryBean;
 import com.baomidou.mybatisplus.spring.boot.starter.MybatisPlusProperties;
 import com.baomidou.mybatisplus.spring.boot.starter.SpringBootVFS;
@@ -88,6 +90,14 @@ public class MybatisPlusConfig {
         if (!ObjectUtils.isEmpty(this.properties.resolveMapperLocations())) {
             mybatisPlus.setMapperLocations(this.properties.resolveMapperLocations());
         }
+        /**
+         * plus 的性能优化  sql日志
+         */
+        mybatisPlus.setPlugins(new Interceptor[]{
+                new PaginationInterceptor(),
+                new PerformanceInterceptor(),
+                new OptimisticLockerInterceptor()
+        });
         return mybatisPlus;
     }
 
